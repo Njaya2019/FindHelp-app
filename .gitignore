@@ -1,0 +1,13 @@
+/__pycache__/
+/.pytest_cache/
+/.vscode/
+/.env
+/.coverage
+/app/__pycache__/
+/app/blueprints/__pycache__/
+/app/errors/__pycache__/
+/app/models/__pycache__/
+/app/tests/__pycache__/
+/app/validators/__pycache__/
+/instance
+/app/image_uploads
