@@ -4,7 +4,7 @@ python:
   - "3.6"
   
 env:
-  TDB_URL: "dbname=test_db user=postgres host=localhost password=''"
+  TDB_URL:"dbname=test_db user=postgres host=localhost password=''"
 
 install:
  - pip install -r requirements.txt
@@ -12,7 +12,7 @@ install:
  - pip install coveralls
  - pip install pytest pytest-cov
 
-services:
+serives:
  - postgresql
 
 before_script:
