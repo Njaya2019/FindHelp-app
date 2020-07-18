@@ -16,7 +16,7 @@ def signup():
     """An endpoint to rigister new memmbers"""
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     if request.method == 'POST':
-        userData = request.get_json()
+        userData = request.form.to_dict()
         dataAvailable = jsonvalues.emptyValues(**userData)
         keysAvailable = jsonvalues.jsonKeys(**userData)
         requiredKeys = ("username", "email", "role", "password", "confirmpassword")
@@ -62,7 +62,7 @@ def signup():
 def login():
     ''' A view function for users to login to their accounts'''
     if request.method == 'POST':
-        loginData = request.get_json()
+        loginData = request.form.to_dict()
         # loginData = request.authorization
         dataEmpty = jsonvalues.emptyValues(**loginData)
         loginKeys = ('email', 'password')

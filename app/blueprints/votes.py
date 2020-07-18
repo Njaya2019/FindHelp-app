@@ -7,7 +7,7 @@ from app.models.dataBase import db
 votes_blueprint = Blueprint('votes', __name__)
 
 
-@votes_blueprint.route('/upvote/<int:answerid>/answer', methods =['GET', 'POST'])
+@votes_blueprint.route('/upvote/<int:answerid>/answer', methods =['POST'])
 @token_required
 def up_vote(current_user_id, answerid):
     """ An endpoint to add an upvote to an answer"""
@@ -20,9 +20,9 @@ def up_vote(current_user_id, answerid):
             return jsonify({'status':400, 'error':'You can not upvote an answer twice'}), 400
         else:
             return jsonify({'status':201, 'userandupvote':{'userid':votedUpAnswer['userid'], 'answerid':votedUpAnswer['answerid'], 'upvote':votedUpAnswer['upvote']}}), 201
-    return jsonify({'status':200, '':'Vote an answer up'})
+    # return jsonify({'status':200, '':'Vote an answer up'})
         
-@votes_blueprint.route('/downvote/<int:answerid>/answer', methods =['GET', 'POST'])
+@votes_blueprint.route('/downvote/<int:answerid>/answer', methods =['POST'])
 @token_required
 def down_vote(current_user_id, answerid):
     """ An endpoint to add an upvote to an answer"""
@@ -35,4 +35,4 @@ def down_vote(current_user_id, answerid):
             return jsonify({'status':400, 'error':'You can not downvote an answer twice'}), 400
         else:
             return jsonify({'status':201, 'useranddownvote':{'userid':votedDownAnswer['userid'], 'answerid':votedDownAnswer['answerid'], 'upvote':votedDownAnswer['downvote']}}), 201
-    return jsonify({'status':200, '':'Vote down an answer'}), 200
+    # return jsonify({'status':200, '':'Vote down an answer'}), 200

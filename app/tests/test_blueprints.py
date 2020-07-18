@@ -14,8 +14,8 @@ class TestSignUp():
     @staticmethod
     def test_invalid_role(client):
         """ Tests for a valid roles, it raises an error if the role is invalid """
-        response=client.post("/signup",data=json.dumps(dict(username=TestSignUp.username,email = 'paulbaltimore@gmail.com',
-        role='Admin',password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup",data=dict(username=TestSignUp.username,email = 'paulbaltimore@gmail.com',
+        role='Admin',password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == "Please provide a valid boolean role"
@@ -32,8 +32,8 @@ class TestSignUp():
     @staticmethod
     def test_signedUp_user(client):
         """ Tests for a user successfuly registered """
-        response=client.post("/signup",data=json.dumps(dict(username=TestSignUp.username,
-        email='stevekerr@gmail.com',role=TestSignUp.role, password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup",data=dict(username=TestSignUp.username,
+        email='stevekerr@gmail.com',role=TestSignUp.role, password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==201
         assert data["user"]["fullname"]== "Andrew Njaya"
@@ -44,8 +44,8 @@ class TestSignUp():
     @staticmethod
     def test_email_exists(client):
         """ Tests if email exists the user should choose an alternative email"""
-        response=client.post("/signup",data=json.dumps(dict(username=TestSignUp.username,
-        email=TestSignUp.email,role=TestSignUp.role, password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup",data=dict(username=TestSignUp.username,
+        email=TestSignUp.email,role=TestSignUp.role, password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==409
         assert data["error"] == "The email already exists"
@@ -53,17 +53,17 @@ class TestSignUp():
     @staticmethod
     def test_empty_values(client):
         """ Tests if user has submitted all required data """
-        response=client.post("/signup",data=json.dumps(dict(username='',
-        email=TestSignUp.email,role='', password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup", data=dict(username="", email=TestSignUp.email, role="", password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
+        print(data)
         assert response.status_code==400
         assert data["error"] == "username, email, role, password or confirmpassword value is missing"
 
     @staticmethod
     def test_missing_key(client):
         """ Tests if any data key is missing """
-        response=client.post("/signup",data=json.dumps(dict(email=TestSignUp.email,role=TestSignUp.role, 
-        password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup",data=dict(email=TestSignUp.email,role=TestSignUp.role, 
+        password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == "Please provide username, email, role, password or confirmpassword"
@@ -71,8 +71,8 @@ class TestSignUp():
     @staticmethod
     def test_confirm_password(client):
         """ Tests if password and confirm password are the same before submitting """
-        response=client.post("/signup",data=json.dumps(dict(username=TestSignUp.username,email=TestSignUp.email,
-        role=TestSignUp.role,password='123', confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup",data=dict(username=TestSignUp.username,email=TestSignUp.email,
+        role=TestSignUp.role,password='123', confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == "password and confirmpassword do not match"
@@ -80,8 +80,8 @@ class TestSignUp():
     @staticmethod
     def test_invalid_email(client):
         """ Tests for a valid email string """
-        response=client.post("/signup",data=json.dumps(dict(username=TestSignUp.username,email='njayaandrew@gmail',
-        role=TestSignUp.role,password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup",data=dict(username=TestSignUp.username,email='njayaandrew@gmail',
+        role=TestSignUp.role,password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == "Please provide a valid email"
@@ -89,8 +89,8 @@ class TestSignUp():
     @staticmethod
     def test_space_characters(client):
         """ Test if any of data submitted is a space character """
-        response=client.post("/signup",data=json.dumps(dict(username='  ',
-        email=TestSignUp.email,role='  ', password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword)), content_type="application/json")
+        response=client.post("/signup",data=dict(username='  ',
+        email=TestSignUp.email,role='  ', password=TestSignUp.password, confirmpassword=TestSignUp.confirmpassword), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == "username, email, role, password or confirmpassword values can not be space characters"

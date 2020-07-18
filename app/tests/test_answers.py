@@ -15,8 +15,8 @@ class TestAnswers():
     @staticmethod
     def test_signedUp_user(client):
         """ Tests for a user successfuly registered """
-        response=client.post("/signup",data = dumps(dict(username='Andrew Njaya',
-        email='njayaandrew@gmail.com',role='true', password='1234', confirmpassword='1234')), content_type="application/json")
+        response=client.post("/signup",data=dict(username='Andrew Njaya',
+        email='njayaandrew@gmail.com',role='true', password='1234', confirmpassword='1234'), content_type="multipart/form-data")
         data = loads(response.data)
         assert response.status_code==201
         assert data["user"]["fullname"]== 'Andrew Njaya'
