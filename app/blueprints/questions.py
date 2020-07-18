@@ -125,8 +125,12 @@ def view_questions():
                 # Loop through the answers and create a dictionary of the answers, 
                 # name of the user as key and the answer as value.
                 for useranswer in quest_ion["usersandanswers"]:
+                    print(useranswer)
                     user_and_answer_list = useranswer.rsplit(":")
-                    users_and_answers_dictionary.update({user_and_answer_list[0]:user_and_answer_list[1], 'upvotes':user_and_answer_list[2], 'downvotes':user_and_answer_list[3]})
+                    total_votes = int(user_and_answer_list[4])-int(user_and_answer_list[4])
+                    # 'upvotes':user_and_answer_list[2], 'downvotes':user_and_answer_list[3]
+                    answer_id = int(user_and_answer_list[0])
+                    users_and_answers_dictionary.update({'answerid':answer_id,'userwhoanswered':user_and_answer_list[1], 'answer':user_and_answer_list[2], 'votes':total_votes})
                     users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
                     users_and_answers_list.append(users_and_answers_dictionary_copy)
                 new_question_dictionary.update({'userid':quest_ion['userid'], 'whoposted':quest_ion['fullname'], 'questionid':quest_ion['questionid'], 'title':quest_ion['questiontitle'], 'description':quest_ion['questiondescription'], 'timeposted':timePassed, 'answers':users_and_answers_list})
