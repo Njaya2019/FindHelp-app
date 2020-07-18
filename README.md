@@ -39,5 +39,5 @@ It's an API where users posts questions and others users may provide answers to 
 [Andrew Njaya](https://github.com/Njaya2019)
 
 ## References
-[Python](https://docs.python.org/3.6/)
-[Flask framework](https://flask.palletsprojects.com/en/1.1.x/quickstart/)
+- [Python](https://docs.python.org/3.6/)
+- [Flask framework](https://flask.palletsprojects.com/en/1.1.x/quickstart/)
