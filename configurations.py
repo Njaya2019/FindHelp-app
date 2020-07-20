@@ -11,13 +11,14 @@ class Config(object):
 
 class ProductionConfig(Config):
     DEBUG = False
-    
+    SEND_FILE_MAX_AGE_DEFAULT = 0
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
     DEVELOPMENT = True
     UPLOAD_FOLDER = "instance\\image_uploads"
+    SEND_FILE_MAX_AGE_DEFAULT = 0
 
 class TestingConfig(Config):
     DEBUG = True

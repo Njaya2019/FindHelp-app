@@ -1,0 +1,316 @@
+/* ================ login page body tag =================*/
+html{
+    height: 100vh;
+}
+body{
+    margin: 0;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+    height: 100vh;
+}
+
+/*=================== Login container ====================*/
+.login-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px auto 40px;
+    grid-row-gap: 10px;
+    height: 100vh;
+    overflow: auto;
+    padding: 0px;
+    /* border: 1px solid red; */
+
+}
+
+/* ====================== Login page container ======================*/
+#login-navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    background-color: lightblue;
+    box-shadow: 15px 15px 10px lightslategray;
+    border: 1px solid lightblue;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+#login-navbar a{
+    text-decoration-line: none;
+    color: black;
+}
+
+#login-navbar #login-homelink{
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+#login-navbar #login-signuplink{
+    font-size: 15px;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 2px;
+    transition: 0.4s ease-in-out;
+    background-color: rgba(0, 0, 255, 0.4);
+    color: white;
+}
+
+#login-navbar #login-signuplink:hover{
+    background-color: blue;
+}
+
+/* =================== Login details ====================*/
+#login-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+/* Login text title */
+#login-body h1{
+    font-size: 27px;
+    color: rgba(0, 0, 255, 0.4);
+}
+
+/* Login error container */
+#login-body #login-errors{
+    margin: 0px 0 5px 0;
+    padding: 0px 0 5px 0;
+    display: none;
+}
+
+#login-body #login-errors li{
+    color: rgba(255, 0, 0, 0.7);
+}
+
+
+/* Form container.  The login form.*/
+#login-body #login-form{
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 220px;
+    grid-auto-rows: 20px 40px 20px 40px 40px 20px 20px;
+    grid-row-gap: 2px;
+    grid-template-areas: 
+    "emailLabel" 
+    "emailBox"
+    "passwordLabel"
+    "passwordBox"
+    "submitButton"
+    "resetpassword-link"
+    "signup-link";
+    padding: 10px;
+    
+}
+
+#login-body #login-form #email-label-div{
+ grid-area: emailLabel;
+}
+   
+#login-body #login-form #email-textbox-div{
+ grid-area: emailBox;
+}
+
+#login-body #login-form #password-label-div{
+    grid-area: passwordLabel;
+}
+
+#login-body #login-form #password-textbox-div{
+    grid-area: passwordBox;
+}
+
+#login-body #login-form #submitdiv{
+    grid-area: submitButton;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+}
+#login-body #login-form #email-label-div label{
+    font-size: 12px;
+    font-weight: bold;
+    color:rgba(0, 0, 0, 0.9);
+}
+
+#login-body #login-form #password-label-div label{
+    font-size: 12px;
+    font-weight: bold;
+
+    color:rgba(0, 0, 0, 0.9);
+}
+
+#login-body #login-form #reset-password-div{
+    grid-area: resetpassword-link;
+    text-align: center;
+}
+#login-body #login-form #signup-div{
+    grid-area: signup-link;
+    text-align: center;
+    margin-top: 10px;
+}
+
+#login-body #login-form #password-textbox-div input{
+    border: 1px solid black;
+    width: 216px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 3px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+/* #login-body #login-form div{
+    border: 1px solid black;
+
+} */
+#login-body #login-form #email-textbox-div input{
+    border: 1px solid black;
+    width: 216px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 3px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+}
+
+#login-body #login-form #reset-password-div a{
+    text-decoration-line: none;
+    color: black;
+    transition: 0.6s ease-in-out;
+    font-size: 12px;
+    color: blue;
+}
+
+#login-body #login-form #signup-div a{
+    text-decoration-line: none;
+    color: black;
+    transition: 0.6s ease-in-out;
+    font-size: 12px;
+    color: blue;
+}
+
+#login-body #login-form #submitdiv input{
+    background-color: rgba(0, 0, 255, 0.5);;
+    border: 1px solid rgba(0, 0, 255, 0.5);;
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
+    padding: 8px;
+    transition: 0.6s ease-in-out;
+}
+#login-body #login-form #submitdiv input:hover{
+    background-color: blue;
+}
+
+#login-body #login-form #reset-password-div a:hover{
+    color: black;
+    text-decoration-line: underline;
+}
+
+#login-body #login-form #signup-div a:hover{
+    color: black;
+    text-decoration-line: underline;
+}
+
+
+
+
+/* =================== Login footer ================== */
+#login-footer{
+    border: 1px solid lightblue;
+    background-color: lightblue;
+    text-align: center;
+    padding: 10px;
+}
+
+#login-footer li{
+    list-style-type: none;
+}
+
+/*==================== Media query for screens above 768px ====================*/
+@media (min-width: 768px){
+
+    /* Login text title */
+    #login-body h1{
+        font-size: 30px;
+        color: rgba(0, 0, 255, 0.5);
+    }
+
+    #login-body #login-form{
+        grid-template-columns: 60px 280px;
+        grid-template-rows: 50px 50px 30px 15px 15px;
+        grid-template-areas:
+        "emailLabel emailBox" 
+        "passwordLabel passwordBox"
+        ". submitButton"
+        "resetpassword-link resetpassword-link"
+        "signup-link signup-link";
+        grid-column-gap: 0px;
+        grid-row-gap: 5px;
+        padding: 10px;
+    }
+    #login-body #login-form div{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+    
+    }
+    #login-body #login-form #password-textbox-div input{
+        width: 270px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+    }
+
+    #login-body #login-form #email-textbox-div input{
+        width: 270px;
+        padding-top: 8px;
+        padding-bottom: 8px
+    }
+
+    #login-body #login-form #email-label-div label{
+        font-size: 13px;
+        font-weight: bold;
+    }
+    #login-body #login-form #password-label-div label{
+        font-size: 13px;
+        font-weight: bold;
+    }
+    #login-body #login-form #reset-password-div{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+    }
+    #login-body #login-form #signup-div{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;       
+    }
+    #login-body #login-form #reset-password-div a{
+        font-size: 12px;
+        font-weight: bold;
+        color: blue;
+    }
+    #login-body #login-form #signup-div a{
+        font-size: 12px;
+        font-weight: bold;
+        color: blue;
+    }
+
+    #login-body #login-form #submitdiv input{
+        padding-top: 10px;
+        padding-bottom: 10px;
+        width: 70px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+    
+}

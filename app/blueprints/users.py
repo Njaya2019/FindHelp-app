@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, current_app
+from flask import Blueprint, jsonify, request, current_app, render_template
 from app.validators.validate import jsonvalues, regularExValidation
 from app.models.usersmodel import users
 from app.models.dataBase import db
@@ -9,7 +9,7 @@ import datetime
 
 # A blueprint named 'users' to register and login in users
 
-signin = Blueprint('signin', __name__)
+signin = Blueprint('signin', __name__, template_folder="templates")
 
 @signin.route('/signup', methods = ['GET', 'POST'])
 def signup():
@@ -63,7 +63,6 @@ def login():
     ''' A view function for users to login to their accounts'''
     if request.method == 'POST':
         loginData = request.form.to_dict()
-        # loginData = request.authorization
         dataEmpty = jsonvalues.emptyValues(**loginData)
         loginKeys = ('email', 'password')
         validKeys = jsonvalues.validKeys(*loginKeys, **loginData)
@@ -77,15 +76,16 @@ def login():
         else:
             loginStrings = (loginData['email'], loginData['password'])
             validString = jsonvalues.validString(*loginStrings)
-            con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
-            loginUser = users.userLogin(con_cur, loginData['email'], loginData['password'])
             if not validString:
                 return jsonify({'staus':400, 'error':'Please provide email and password as valid strings values.'}), 400
             else:
+                con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+                loginUser = users.userLogin(con_cur, loginData['email'], loginData['password'])
                 spaceCharacters = jsonvalues.absoluteSpaceCharacters(*loginStrings)
                 if spaceCharacters:
                     return jsonify({"status":401, "error":"email and password values can not be space characters"}), 401
                 elif type(loginUser) == str:
+                    
                     # Please implement the 401 error, it means that the credentials you entered were invalid 
                     return jsonify({'status':401, 'error':loginUser}), 401
                 else:
@@ -96,4 +96,4 @@ def login():
                     decodedToken = token.decode('UTF-8')
                     return jsonify({'status':200, 'token':decodedToken}), 200
 
-    return jsonify({'status':200, 'message':'Welcome! Login to your account'}), 200
+    return render_template('signin.html')

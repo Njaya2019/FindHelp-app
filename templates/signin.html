@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FindHelp-Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css' ) }}">
+</head>
+<body>
+    <!-- Container to hold all login details -->
+    <div class="login-container">
+        <!-- Login navigation bar -->
+        <div id="login-navbar">
+            <a id="login-homelink" href="../homepage.html">FindHelp</a>
+            <a id="login-signuplink" href="signup.html">SignUp</a>
+        </div>
+        <!-- Login form -->
+        <div id="login-body">
+                <!-- Login title -->
+                <h1>Login</h1>
+                <!-- errors -->
+                <div id="login-errors">
+                    <li></li>
+                </div>
+                <!-- Form -->
+                <form method="post" enctype="multipart/form-data" id="login-form">
+                    <!-- Email -->
+                    <div id="email-label-div">
+                        <label for="email" id="email-label">Email:</label>
+                    </div>
+                    <div id="email-textbox-div">
+                        <input type="text" name="email" id="email">
+                    </div>
+                    <!-- Password -->
+                    <div id="password-label-div">
+                        <label for="password" id="password-label">Password:</label>
+                    </div>
+                    <div id="password-textbox-div">
+                        <input type="password" name="password" id="password">
+                    </div>
+                    <!-- Submit button -->
+                    <div id="submitdiv">
+                        <input type="submit" value="Login" id="submit">
+                    </div>
+                    <!-- Reset password and signup links-->
+                    <div id="reset-password-div">
+                        <a href="resetpassword.html" id="resetpassword">Forgot password ?</a>
+                    </div>
+                    <div id="signup-div">
+                        <a href="signup.html" id="signedup">Already a member ?</a>
+                    </div>
+                </form>
+        </div>
+        <!-- Login page footer -->
+        <div id="login-footer">
+             <li>&#9400; Find-Help 2020</li>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/signin.js' ) }}"></script>
+</body>
+</html>

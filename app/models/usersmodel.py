@@ -26,8 +26,7 @@ class users():
             print(err)
         finally:
             pass
-            # if con is not None:
-            #     con.close()
+
     @staticmethod
     def userLogin(con_cur, email, password):
         '''A method to check the authenicity of the user'''
@@ -42,17 +41,9 @@ class users():
                 check_password = check_password_hash(authent_user['passwords'], password)
                 if check_password:
                     return authent_user
-                else:
+                else: 
                     return 'Wrong password'
             else:
                 return 'The user with email {} dosen\'t exists. Check the email and try again'.format(email)
         except Exception as err:
             print(err)
-        finally:
-            if con is not None:
-                con.close()
-
-
-
-# d=users.addUser("Andrew Njaya Odhiambo", "njayaandrew@ande.com", "Admin", "1234")
-# print(d)

@@ -1,5 +1,6 @@
 from flask import Flask, escape, url_for, request, jsonify
-from configurations import ProductionConfig
+from livereload import Server
+from configurations import ProductionConfig, DevelopmentConfig
 from app.blueprints.users import signin
 from app.blueprints.questions import questions_blueprint
 from app.blueprints.answers import answers_blueprint
@@ -68,5 +69,6 @@ if __name__ == "__main__":
     con_cur = db.connectToDatabase(app.config['DATABASE_URI'])
     db.createTables(con_cur)
     # db.dropTables()
-    
-    app.run()
+    # server = Server(app.wsgi_app)
+    app.run(host='0.0.0.0')
+    # server.serve()
