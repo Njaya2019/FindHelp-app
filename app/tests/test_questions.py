@@ -18,23 +18,23 @@ class TestAskQuetions():
         assert response.status_code==400
         assert data["error"] == 'Please provide values for title, description and userid'
 
-    @staticmethod
-    def test_missing_keys(client, token):
-        """ Tests if any question data key is missing """
-        TestAskQuetions.headers['x-access-token'] = token
-        response=client.post("/questions", headers = TestAskQuetions.headers, data=dict(description=TestAskQuetions.description), content_type="multipart/form-data")
-        data=json.loads(response.data)
-        assert response.status_code==400
-        assert data["error"] == 'please provide a valid question title, description and userid'
+    # @staticmethod
+    # def test_missing_keys(client, token):
+    #     """ Tests if any question data key is missing """
+    #     TestAskQuetions.headers['x-access-token'] = token
+    #     response=client.post("/questions", headers = TestAskQuetions.headers, data=dict(description=TestAskQuetions.description), content_type="multipart/form-data")
+    #     data=json.loads(response.data)
+    #     assert response.status_code==400
+    #     assert data["error"] == 'please provide a valid question title, description and userid'
     
-    @staticmethod
-    def test_valid_keys(client, token):
-        """ Test if all required question keys were submitted """
-        TestAskQuetions.headers['x-access-token'] = token
-        response=client.post("/questions", headers = TestAskQuetions.headers, data=dict(questiontitle=TestAskQuetions.title, description=TestAskQuetions.description), content_type="multipart/form-data")
-        data=json.loads(response.data)
-        assert response.status_code==400
-        assert data["error"] == 'please provide a valid question title, description and userid'
+    # @staticmethod
+    # def test_valid_keys(client, token):
+    #     """ Test if all required question keys were submitted """
+    #     TestAskQuetions.headers['x-access-token'] = token
+    #     response=client.post("/questions", headers = TestAskQuetions.headers, data=dict(questiontitle=TestAskQuetions.title, description=TestAskQuetions.description), content_type="multipart/form-data")
+    #     data=json.loads(response.data)
+    #     assert response.status_code==400
+    #     assert data["error"] == 'please provide a valid question title, description and userid'
     
     # @staticmethod
     # def test_title_description(client, token):
