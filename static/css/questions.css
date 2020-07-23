@@ -1,0 +1,703 @@
+/* === Body section === */
+body{
+    margin: 0;
+    font-family: 'Times New Roman', Times, serif;
+    color: black;
+}
+
+/* ============================= Container ======================*/
+#questions-body{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px auto auto auto 40px;
+    grid-row-gap: 5px;
+    grid-template-areas: 
+    "nav"
+    "questions"
+    "profile"
+    "topics"
+    "footer";
+    height: 100vh;
+}
+
+/* ============== Container components =============== */
+/* #questions-body div{
+    border: 1px solid black;
+} */
+#questions-body #questions-nav{
+    grid-area: nav;
+    /* background-color: rgba(34, 167, 240, 0.8); */
+    background-color: lightblue;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 6px 6px 5px lightslategray;
+}
+
+#questions-body #my-profile-links{
+    grid-area: profile;
+    /* border: 1px solid black; */
+}
+
+#questions-body #questions-topics{
+    grid-area: topics;
+    /* border: 1px solid black; */
+}
+
+#questions-body #questions{
+    grid-area: questions;
+    /* border: 1px solid red; */
+}
+
+#questions-body #footer{
+    grid-area: footer;
+    background-color: lightblue;
+}
+
+/* ================== Navigation components ==================== */
+#questions-body #questions-nav #left-nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    height: 35px;
+    width: 200px;
+    margin-right: 5px;
+}
+
+/* Right navigation link */
+#questions-body #questions-nav h3{
+    color: rgba(0,0,0,0.8);
+}
+#questions-body #questions-nav h3 a{
+    text-decoration-line: none;
+    color: rgba(0,0,0,0.8);
+}
+/* profile link */
+#questions-body #questions-nav #left-nav #profile-link{
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-template-rows: 35px;
+    grid-column-gap: 3px;
+    align-items: center;
+    /* border:1px solid black; */
+}
+/* Navigation profile image*/
+#questions-body #questions-nav #left-nav img{
+    height: 25px;
+    width: 25px;
+    border: 2px solid rgba(0, 0, 255, 0.5);
+    border-radius: 2px;
+    padding: 2px;
+    background-color: white;
+    cursor: pointer;
+}
+/* Profile link name */
+#questions-body #questions-nav #left-nav a{
+    text-decoration-line: none;
+    color: rgba(0,0,0,0.8);
+    font-weight: bolder;
+    font-size: 13px;
+}
+
+/* Profile link name on hover*/
+#questions-body #questions-nav #left-nav a:hover{
+    color: black;
+}
+/* Notification bell container*/
+#questions-body #questions-nav #left-nav div{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    position: relative;
+}
+/* #questions-body #questions-nav #left-nav div img{
+    width: 20px;
+} */
+/* Notification bell */
+#questions-body #questions-nav #left-nav div #bell-div{
+    cursor: pointer;
+    border:1px solid rgba(0, 0, 255, 0.5);
+}
+/* Notification bell badge */
+#questions-body #questions-nav #left-nav div #badge{
+    position: absolute;
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    text-align: center;
+    font-size: 10px;
+    padding: 2px;
+    position: absolute;
+    top: 1px;
+    left: 13px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* ================================= Question body components ======================= */
+textarea:focus, input:focus{
+    outline: none;
+}
+
+/* Post and posted questions headings */
+#questions-body #questions #post-question-heading h3{
+    border-bottom:1px solid rgba(192,192,192,0.8);
+    padding-bottom: 5px;
+    font-size: 19px;
+    color: rgba(0,0,0,0.7);
+}
+
+#questions-body #questions #question-errors{
+    margin-bottom: 5px;
+    max-height: 0;
+    padding: 0;
+    overflow: hidden;
+    transition: 0.5s ease-in-out;
+}
+/* Posting a question errors  */
+#questions-body #questions #question-errors li{
+    color: rgba(255, 0, 0, 0.7);
+    margin-bottom: 3px;
+    font-size: 12px;
+    font-size: 15px;
+}
+/* Div component for posting a question */
+#questions-body #questions #post-question-form{
+    border: 1px solid rgba(0,0,0,0.2);
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns:1fr;
+    grid-template-rows: 40px auto 40px;
+    grid-row-gap: 15px;
+    padding: 10px;
+    grid-template-areas: 
+    "title-input"
+    "description-textarea"
+    "submit-question-button";
+
+}
+
+/* Question title input div */
+#questions-body #questions #post-question #post-question-form #question-title-input{
+    grid-area: title-input;
+    display: flex;
+    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+/* Question title input */
+#questions-body #questions #post-question #post-question-form #question-title-input input{
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.4);
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+/* Question description Textarea div */
+#questions-body #questions #post-question #post-question-form #question-description-textarea{
+    grid-area: description-textarea;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+/* Question description Textarea */
+#questions-body #questions #post-question #post-question-form #question-description-textarea textarea{
+    resize: none;
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+/* Uploads and submit button div */
+#questions-body #questions #post-question #post-question-form #submit-question-button{
+    grid-area: submit-question-button;
+    display: grid;
+    grid-template-columns: 122px 60px;
+    grid-template-rows: 37px;
+    grid-column-gap: 20px;
+    grid-row-gap: 5px;
+    grid-row-gap: 0;
+}
+
+/* Submit button button */
+#questions-body #questions #post-question #post-question-form #submit-question-button #submit-question{
+    background-color: rgba(0, 0, 255, 0.5);
+    border: 1px solid rgba(0, 0, 255, 0.5);
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    color: white;
+    transition: 0.4s ease-in-out;
+}
+
+/* Submit button on hover */
+#questions-body #questions #post-question #post-question-form #submit-question-button #submit-question:hover{
+    background-color: blue;
+}
+
+#questions-body #questions #post-question #post-question-form #submit-question-button div{
+    overflow: hidden;
+    border-radius: 2px;
+}
+/* Upload file input element */
+#questions-body #questions #post-question #post-question-form #submit-question-button div input{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+    cursor: pointer;
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+    display: inline-block;
+    background-color: rgba(0, 0, 255, 0.5);
+}
+
+/* Upload file label element*/
+#questions-body #questions #post-question #post-question-form #submit-question-button div label{
+    font-size: 15px;
+    font-weight: 700;
+    background-color: black;
+    display: inline-block;
+    cursor: pointer;
+    border: 1px solid rgba(0, 0, 255, 0.5);
+    height: 35px;
+    background-color: rgba(0, 0, 255, 0.5);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    overflow: initial;
+    color: white;
+    border-radius: 5px;
+    transition: 0.4s ease-in-out;
+}
+
+#questions-body #questions #post-question #post-question-form #submit-question-button div label:hover{
+    background-color: blue;
+}
+
+/* Div parent element of input file upload element */
+#questions-body #questions #post-question #post-question-form #submit-question-button div .upload-image{
+    background-image: url(../img/upload.png);
+    background-repeat: no-repeat;
+    /* background-size: contain; */
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+    margin-left: 5px;
+    background-color: white;
+    border-radius: 5px;
+    padding: 1px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+#questions-body #questions #post-question #post-question-form #submit-question-button div .upload-image img{
+    width: 25px;
+    height: 25px;
+}
+
+/* =================================== Posted questions =================================== */
+/* Posted questions container */
+#questions-body #questions #posted-questions{
+    display: grid;
+    grid-row-gap: 10px;
+}
+
+/* Posted question div */
+#questions-body #questions #posted-questions .posted-question{
+   border: 1px solid rgba(0,0,0,0.3);;
+   border-radius: 5px;
+}
+
+/* Posted question top section */
+#questions-body #questions #posted-questions .posted-question .upper-section{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 30px;
+    /* border: 1px solid red; */
+}
+
+/* Posted question name section*/
+#questions-body #questions #posted-questions .posted-question .upper-section .name{
+    /* border: 1px solid blue; */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 30px;
+    grid-template-areas: "anchortag paragraph . .";
+    align-items: center;
+}
+
+/* Time posted paragraph element */
+#questions-body #questions #posted-questions .posted-question .upper-section .name p{
+    font-size: 11px;
+    grid-area: paragraph;
+}
+
+/* Posted question top section, name section anchor tag*/
+#questions-body #questions #posted-questions .posted-question .upper-section .name a{
+    text-decoration-line: none;
+    color: rgba(0, 0, 255, 0.7);
+    font-weight: bold;
+    font-size: 13px;
+    transition: 0.4s ease-in-out;
+    grid-area: anchortag;
+}
+
+/* on hover */
+#questions-body #questions #posted-questions .posted-question .upper-section .name a:hover{
+    color: blue;
+    text-decoration: underline;
+}
+
+/* Posted question top section, options section*/
+#questions-body #questions #posted-questions .posted-question .upper-section .options{
+    /* border: 1px solid yellow; */
+    position: relative; 
+}
+
+/* Posted question top section, options section three vertically aligned black dots */
+#questions-body #questions #posted-questions .posted-question .upper-section .options .three-dots{
+    font-weight: bold;
+    font-size: 27px;
+    cursor: pointer;
+    float: right;
+    color: rgba(0,0,0,0.6);
+    transition: 0.4s ease-in-out;
+}
+/* three vertical dots on hover */
+#questions-body #questions #posted-questions .posted-question .upper-section .options .three-dots:hover{
+    color: black;
+}
+
+/* Action options ul tag */
+#questions-body #questions #posted-questions .posted-question .upper-section .options ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0px;
+    border: 1px solid rgba(0,0,0,0.5);
+    display: flex;
+    flex-direction: column;
+    width: 100px;
+    border-radius: 2px;
+    background-color: white;
+    position: absolute;
+    top: 25px;
+    right: 0;
+    display: none;
+    border-radius: 3px;
+}
+
+/* Action options list tags */
+#questions-body #questions #posted-questions .posted-question .upper-section .options ul li{
+    border-bottom: 1px solid rgba(0,0,0,0.5);
+    padding: 5px;
+    text-align: center;
+    color: black;
+    transition: 0.4s ease-in-out;
+    cursor: pointer;
+    margin: 0;
+}
+
+/* edit option on hover */
+#questions-body #questions #posted-questions .posted-question .upper-section .options .edit-question:hover{
+    background-color: rgba(255,255,255, 1);
+    font-size: 16px;
+    color: rgba(0,0,0,0.7);
+}
+
+/* delete option on hover */
+#questions-body #questions #posted-questions .posted-question .upper-section .options .delete-question:hover{
+    background-color: rgba(255,255,255, 1);
+    color: rgba(255,0,0,0.7);
+    font-size: 16px;
+}
+
+/* Posted question body */
+#questions-body #questions #posted-questions .posted-question .question-body{
+    /* border: 1px solid black; */
+    padding: 3px;
+    max-height: auto;
+    overflow: hidden;
+    transition: max-height 0.9s ease-out;
+    margin-left: -8px;
+    margin-right: -8px;
+
+}
+/* Posted question title, anchor tag */
+#questions-body #questions #posted-questions .posted-question .question-body a{
+    font-size: 19px;
+    font-weight: bolder;
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration-line: none;
+    transition: 0.4s ease-in-out;
+}
+/* Posted question title, anchor tag  on hover*/
+#questions-body #questions #posted-questions .posted-question .question-body a:hover{
+    text-decoration: underline;
+    color: blue;
+}
+/* Posted question body paragraph tag */
+#questions-body #questions #posted-questions .posted-question .question-body *{
+    padding: 0;
+    margin: 3px 0 3px 0;
+}
+
+/* Total answers */
+#questions-body #questions #posted-questions .posted-question .question-body p:last-child{
+    margin-top: 10px;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    color: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px;
+}
+
+/* ======================================================== Edit question =============================================================== */
+/* Edit question div parent element */
+/* #questions-body #questions #posted-questions .posted-question .edit-div{
+    display: none;
+} */
+
+/* Editing posted question errors */
+#questions-body #questions #posted-questions .posted-question .edit-form .edit-question-errors{
+    color: rgba(255, 0, 0, 0.7);
+    font-size: 14px;
+    display: none;
+}
+
+/* Edit question form */
+#questions-body #questions #posted-questions .posted-question .edit-form{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 20px, 30px, 30px 30px;
+    grid-row-gap: 10px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.9s ease-out;
+    padding: 0px 5px 0px 5px;
+}
+
+/* Edit question title input text */
+#questions-body #questions #posted-questions .posted-question .edit-form .edit-question-title{
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid rgba(0,0,0,0.4);
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+}
+
+/* Edit question description textarea */
+#questions-body #questions #posted-questions .posted-question .edit-form .edit-question-description{
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    border-bottom: 1px solid rgba(0,0,0,0.4);
+    resize: none;
+    padding: 0;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 14px;
+}
+/* cancel and save button div */
+#questions-body #questions #posted-questions .posted-question .edit-form .cancel-submit{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* Cancel edited question button */
+#questions-body #questions #posted-questions .posted-question .edit-form .cancel-submit .cancel-button{
+    margin-right: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid lightgrey;;
+    margin-bottom: 5px;
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+/* Cancel edited question button on hover */
+#questions-body #questions #posted-questions .posted-question .edit-form .cancel-submit .cancel-button:hover{
+    background-color: blue;
+    border: 1px solid blue;
+    color: white;
+}
+
+/* Submit edited question button */
+#questions-body #questions #posted-questions .posted-question .edit-form .cancel-submit .submit-edited-question{
+    margin-right: 5px;
+    padding: 11px;
+    border-radius: 5px;
+    font-weight: bold;
+    border: 1px solid green;
+    margin-bottom: 5px;
+    background-color: green;
+    color: white;
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+}
+
+/* Submit edited question button on hover*/
+#questions-body #questions #posted-questions .posted-question .edit-form .cancel-submit .submit-edited-question:hover{
+    background-color: lightblue;
+    border: 1px solid lightblue;
+    color: blue;
+}
+
+/* ==================== Confirm delete ==================== */
+
+/* confirm delete background */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background{
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    
+}
+
+/* Confirm delete container */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete{
+    width: 300px;
+    border-top: 1px solid lightblue;
+    border-bottom: 1px solid lightblue;
+    border-right: 1px solid lightblue;
+    border-left: 1px solid lightblue;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px 60px 40px;
+    border-radius: 2px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -150px;
+    margin-top: -50px;
+
+}
+
+/* Confirm delete title container */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid lightblue;
+    background-color: lightblue;
+    color: blue;;
+}
+
+/* Confirm delete body container */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-body{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: 1px solid lightblue;
+    background-color: white;
+}
+
+/* Confirm delete footer container */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    background-color: lightblue;
+}
+
+/* Confirm delete cancel button */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-footer .delete-question-cancel{
+    padding: 5px;
+    border: 1px solid lightgray;
+    margin: 3px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.7s ease-in-out;
+}
+/* Cancel button on hover */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-footer .delete-question-cancel:hover{
+    background-color:rgba(128,128,128, 0.7);
+}
+
+/*  Confirm delete delete button  */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-footer .delete-question-delete{
+    padding: 8px;
+    border: 1px solid lightgray;
+    font-weight: bold;
+    background-color: red;
+    margin: 3px;
+    color: white;
+    cursor: pointer;
+    transition: 0.7s ease-in-out;
+}
+/* confirm delete on hover */
+#questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-footer .delete-question-delete:hover{
+    background-color: rgba(255, 0, 0, 0.5);
+}
+/* ==================================================== Media queries ========================================================================= */
+
+@media (min-width: 768px){
+    #questions-body{
+        display: grid;
+        grid-template-columns: 200px 1fr 200px;
+        grid-template-rows: 40px auto 40px;
+        grid-row-gap: 5px;
+        grid-template-areas: 
+        "nav nav nav"
+        "profile questions topics"
+        "footer footer footer";
+        height: 100vh;
+    }
+    #questions-body #my-profile-links{
+        grid-area: profile;
+    }
+    
+    #questions-body #questions-topics{
+        grid-area: topics;
+    }
+
+    /* Posted question div */
+    #questions-body #questions #posted-questions .posted-question{
+        padding: 5px;
+    }
+
+    /* Posted question name section*/
+    #questions-body #questions #posted-questions .posted-question .upper-section .name{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+}

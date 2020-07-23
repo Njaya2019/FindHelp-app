@@ -160,7 +160,7 @@ class jsonvalues():
                 image.save(image_path)
                 return image_path
             else:
-                return False
+                return 'invalid extension'
 
   
 # pract_dict={'a':1,'b':''}

@@ -1,12 +1,10 @@
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, render_template
 from app.validators.validate import jsonvalues, regularExValidation
 from app.models.questionsmodel import question
 from app.models.dataBase import db
 import json
 from app.decorators import token_required
 from app.validators.validate import timefunctions
-
-
 
 
 questions_blueprint = Blueprint('questions', __name__)
@@ -25,7 +23,7 @@ def askQuestion(current_user_id):
         keysAvailable = jsonvalues.jsonKeys(**questionData)
         requiredKeys = ('title', 'description')
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **questionData)
-        if not dataAvailable:
+        if not questionData['title'] or not questionData['description']:
             return jsonify({'status':400, 'error':'Please provide values for title, description and userid'}), 400
         elif not keysAvailable:
             return jsonify({'status':400, 'error':'Please provide question title, description and userid'}), 400
@@ -43,7 +41,14 @@ def askQuestion(current_user_id):
             else:
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
                 if not image_url:
-                    return jsonify({"status":400, "error":"The file key doesn't exist"}), 400
+                    return jsonify({"status":400, "error":"The image key doesn't exist"}), 400
+                if image_url == 'invalid extension':
+                    return jsonify(
+                        {
+                            "status":400, 
+                            "error": "Please provide an image with the following extensions, 'png', 'jpg', 'jpeg' or 'gif'"
+                        }
+                    ), 400             
                 newQuestion = question.postQuestion(con_cur, questionData['title'], questionData['description'], image_url, current_user_id)
                 if type(newQuestion) == str:
                     return jsonify({'status':404, 'error':newQuestion}), 404
@@ -52,8 +57,7 @@ def askQuestion(current_user_id):
                 dt_nai = dt_msa.strftime('%B %d, %Y')
                 postedQuestion = {'questionId':newQuestion['questionid'], 'title':newQuestion['questiontitle'], 'description':newQuestion['questiondescription'], 'posted_at':dt_nai, 'user':newQuestion['userid']}
                 return jsonify({'status':201,'question':postedQuestion}), 201
-            
-    # return 'Ask a question'
+
 
 @questions_blueprint.route('/questions/<int:questionid>', methods = ['PUT'])
 @token_required
@@ -144,6 +148,7 @@ def view_questions():
         return jsonify({'status':200, 'Questions':new_questions_list}), 200
     return jsonify({'status':404, 'error':'Sorry there are no questions yet'}), 404
 
+
 # An endpoint to view a question.
 @questions_blueprint.route('/questions/<int:questionid>', methods = ['GET'])
 def view_question(questionid):
@@ -175,6 +180,38 @@ def view_question(questionid):
         # return jsonify({'status':200, 'Question':{'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'postedat':datePosted_StringTimeZoneAware, 'userid':aQuestion['userid']}}), 200
     return jsonify({'status':404, 'error':'Sorry the question doesn\'t exist'}), 404
 
+# A user views all questions and the their counted answers
+@questions_blueprint.route('/questions/answers_count/', methods = ['GET'])
+@token_required
+def all_questions_count_answers(current_user_id):
+    """ 
+        A view fuction to display all questions and the figure of
+        answers they have
+    """
+    con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+    questions = question.view_questions_count_answers(con_cur)
+    new_question_dictionary = {}
+    new_question_dictionary_copy = {}
+    all_questions_list = []
+    if questions:
+        for posted_question in questions:
+            timepassed = timefunctions.calculateTimePassed(
+                posted_question['timeposted']
+            )
+            new_question_dictionary.update(
+                {
+                    'userid':posted_question['userid'], 'whoposted':posted_question['fullname'],
+                    'questionid':posted_question['questionid'], 'title':posted_question['questiontitle'],
+                    'description':posted_question['questiondescription'], 'timeposted':timepassed,
+                    'answers': posted_question['count']
+                }
+            )
+            new_question_dictionary_copy = new_question_dictionary.copy()
+            all_questions_list.append(new_question_dictionary_copy)
+        return jsonify({'status': 200, 'questions': all_questions_list}), 200
+    return jsonify({'status':404, 'error':'Sorry there are no questions yet'}), 404
+
+
 # An endpoint to delete a question.
 @questions_blueprint.route('/questions/<int:questionid>', methods = ['DELETE'])
 @token_required
@@ -187,4 +224,11 @@ def delete_question(current_user_id, questionid):
         # 204 The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.
         return jsonify({'status':404, 'error':'Sorry the question you are trying to delete doesn\'t exist'}), 404
     return jsonify({'status':204, 'message':'The question has been successfully deleted'}), 204
-    
+
+@questions_blueprint.route('/questions/', methods = ['GET'])
+@token_required
+def home_view_questions(current_user_id):
+    ''' This is a view function to display a page, where
+        a user can create, view, edit and delete a question.
+    '''
+    return render_template('questions.html')

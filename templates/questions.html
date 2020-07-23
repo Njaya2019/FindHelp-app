@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/questions.css') }}">
+    <title>questions</title>
+</head>
+<body>
+    <!-- A container for all components -->
+    <div id="questions-body">
+        <!-- Navigation -->
+        <div id="questions-nav">
+            <h3><a href="../homepage.html">FindHelp</a></h3>
+            <!-- name and photo -->
+            <div id="left-nav">
+                <div>
+                    <!-- &#128276; -->
+                    <div id="bell-div">
+                        <img src="{{ url_for('static', filename='img/bell.png') }}" alt="Nofication bell">
+                    </div>
+                    <div id="badge">3</div>
+                </div>
+                <div id="profile-link">
+                    <img src="{{ url_for('static', filename='img/man.jpg') }}" alt="profile-photo">
+                    <a href="{{ url_for('signin.profile') }}" ><h4>Andrew Njaya</h4></a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Left side bar -->
+        <div id="my-profile-links">
+
+        </div>
+        <!-- Right side bar -->
+        <div id="questions-topics">
+
+        </div>
+        <!-- Quentions body -->
+        <div id="questions">
+            <!--posting a question header -->
+            <div id="post-question-heading">
+                <h3>Post a question</h3>
+            </div>
+            <!-- errors -->
+            <div id="question-errors">
+                <li></li>
+            </div>
+            <!-- question form -->
+            <div id="post-question">
+                <form enctype="multipart/form-data" method="post" id="post-question-form">
+                    <!-- Question title -->
+                    <div id="question-title-input">
+                        <input type="text" name="title" id="" placeholder="Post a question...">
+                    </div>
+                    <!-- Description -->
+                    <div id="question-description-textarea">
+                        <textarea name="description" placeholder="Question description..." id="question-description" cols="0" rows="8"></textarea>
+                    </div>
+                    <!-- Submit question button -->
+                    <div id="submit-question-button">
+                        <div>
+                            <input type="file" name="image" id="question-image">
+                            <label for="question-image">
+                                <div class="upload-image">
+                                    <img src="{{ url_for('static', filename='img/upload.png') }}" alt="upload image" srcset="">
+                                </div>  
+                                Choose...
+                            </label>
+                        </div>
+                        <input type="submit" name="submit-question" value="Post" id="submit-question">
+                    </div>
+                </form>
+            </div>
+            <!--posting an answer header -->
+            <div id="post-question-heading">
+                <h3>Posted questions</h3>
+            </div>
+            <!-- ============================ Posted questions ======================-->
+            <div id="posted-questions">
+                <!-- =============== First posted question ======================= -->
+                <div class="posted-question">
+                    <!-- Upper section -->
+                    <div class="upper-section">
+                        <!-- user's name -->
+                        <div class="name">
+                            <a href="#" class="user-name">Andrew Njaya</a>
+                            <p>3 hours</p>
+                        </div>
+                        <!-- Action options -->
+                        <div class="options">
+                            <!-- Three dots -->
+                            <div class="three-dots">&#8942;</div>
+                            <!-- Action options -->
+                            <ul class="ul-options">
+                                <li class="edit-question">&#x270E; Edit</li>
+                                <li class="delete-question">&#10060; Delete</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Question posted body -->
+                    <div class="question-body">
+                        <!-- question title -->
+                        <a href="questionanswers.html" class="question-title">How do you create classes in python ?</a>
+                        <!-- Question description -->
+                        <p>I want to create an Animal class and it's subclasses. I can do this in Java but I'm a python beginner.</p>
+                        <p>1 answer</p>
+                    </div>
+                    <!-- Edit question div -->
+                    <div class="edit-div">
+                        <form action="#" class="edit-form">
+                            <div class="edit-question-errors">
+                                <li>Provide values for both title and description</li>
+                                <li>Space values are not valid values</li>
+                            </div>
+                            <input type="text" name="title" class="edit-question-title" placeholder="Edit question title...">
+                            <textarea class="edit-question-description" name="description" placeholder="Edit question description..." cols="30" rows="12"></textarea>
+                            <div class="cancel-submit">
+                                <input type="button" class="cancel-button" value="cancel">
+                                <input type="submit" name="submit-edited-question" class="submit-edited-question" value="save">
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End of edit question div -->
+                    
+                    <!-- Confirm delete -->
+                    <div class="confirm-question-delete-background">
+                        <!-- Confirm delete question dialog box -->
+                        <div class="confirm-question-delete">
+                            <div class="confirm-question-delete-title">
+                                <h4>Delete question</h4>
+                            </div>
+                            <div class="confirm-question-delete-body">
+                                <h5>Are you sure you want to delete the question ?</h5>
+                            </div>
+                            <div class="confirm-question-delete-footer">
+                                <input type="button" class="delete-question-cancel" value="cancel">
+                                <input type="button" class="delete-question-delete" value="delete">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--=== End of first posted question=== -->
+                <!-- =======================Second posted question================= -->
+                <div class="posted-question">
+                    <!-- Upper section -->
+                    <div class="upper-section">
+                        <!-- user's name -->
+                        <div class="name">
+                            <a href="#" class="user-name">Andrew Njaya</a>
+                            <p>1 day ago</p>
+                        </div>
+                        <!-- Action options -->
+                        <div class="options">
+                            <!-- Three dots -->
+                            <div class="three-dots">&#8942;</div>
+                            <!-- Action options -->
+                            <ul class="ul-options">
+                                <li class="edit-question">&#x270E; Edit</li>
+                                <li class="delete-question">&#10060; Delete</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- Question posted body -->
+                    <div class="question-body">
+                        <!-- question title -->
+                        <a href="questionanswers.html" class="question-title">How do you create classes in python ?</a>
+                        <!-- Question description -->
+                        <p>I want to create an Animal class and it's subclasses. I can do this in Java but I'm a python beginner.</p>
+                        <p>1 answer</p>
+                    </div>
+                    <!-- Edit question div -->
+                    <div class="edit-div">
+                        <form action="#" class="edit-form">
+                            <div class="edit-question-errors">
+                                <li>Provide values for both title and description</li>
+                                <li>Space values are not valid values</li>
+                            </div>
+                            <input type="text" name="title" class="edit-question-title" placeholder="Edit question title...">
+                            <textarea class="edit-question-description" name="description" placeholder="Edit question description..." cols="30" rows="10"></textarea>
+                            <div class="cancel-submit">
+                                <input type="button" class="cancel-button" value="cancel">
+                                <input type="submit" name="submit-edited-question" class="submit-edited-question" value="save">
+                            </div>
+                        </form>
+                    </div>
+                    <!-- End of edit question div -->
+                </div>
+                <!-- ====End of second posted question==== -->    
+            </div>
+            <!-- End of posted questions -->
+        </div>
+        <!-- End of questions body -->
+        <!-- footer -->
+        <div id="footer">
+
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/questions.js' ) }}"></script>
+</body>
+</html>

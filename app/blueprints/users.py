@@ -1,4 +1,4 @@
-from flask import Blueprint, jsonify, request, current_app, render_template
+from flask import Blueprint, jsonify, request, current_app, render_template, session
 from app.validators.validate import jsonvalues, regularExValidation
 from app.models.usersmodel import users
 from app.models.dataBase import db
@@ -94,6 +94,12 @@ def login():
                     # serializable by the jsonify function. Otherwise jsonify won't serialize bytes data type.
                     # serialize - is the process of translating data structures or object state into a format that can be stored (for example, in a file or memory buffer)
                     decodedToken = token.decode('UTF-8')
+                    session['x-access-token'] = decodedToken
                     return jsonify({'status':200, 'token':decodedToken}), 200
-
     return render_template('signin.html')
+
+
+@signin.route('/profile')
+@token_required
+def profile(current_user_id):
+    return render_template('profile.html')

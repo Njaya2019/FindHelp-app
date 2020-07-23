@@ -19,48 +19,46 @@ class LoginFunctions{
         // Open the request
         xhr.onload = function(onloadevent) {
             if (xhr.status == 200) {
+              // Login was successful
               const response = JSON.parse(this.responseText);
-              console.log(response);
+              // console.log(this.responseURL);
+              localStorage.setItem('token', response.token);
+              window.location.href = `questions/`;
             }
-            else if (xhr.status == 401) {
-                const response = JSON.parse(this.responseText);
-                console.log(response);
-              } 
             else {
-                const loginFailedResponse = JSON.parse(this.responseText);
-                console.log(loginFailedResponse);
+              // Login failed
+              const loginFailedResponse = JSON.parse(this.responseText);
+              console.log(loginFailedResponse);
+              // Gets error login container
+              let loginErrorContainer = e.target.previousElementSibling;
+
+              // Accesses the list tag to display the error
+              let loginErrorTag = loginErrorContainer.children[0];
+
+              // if the list tag doesn't contain an error message,
+              // add one.
+              if(loginErrorTag.innerHTML == ''){
+                  
+                  loginErrorTag.innerHTML = loginFailedResponse.error;
+              }
+              else{
+                  // If list tag has an error text replace it with a new one
+                  loginErrorTag.innerHTML = loginFailedResponse.error;
+              }
+              // Display the error container, to display the error,
+              // message.
+              loginErrorContainer.style.display = 'block';
+              // Makes the error message disappear in 30 seconds
+              // and sets the value of the list tag to an empty text.
+              setTimeout(function(){
+                  loginErrorTag.innerHTML = '';
+                  loginErrorContainer.style.display = 'none';
+              }
+              ,9000)
             }
           };
         
         xhr.send(loginData);
-        // Gets error login container
-        // let loginErrorContainer = e.target.previousElementSibling;
-
-        // Accesses the list tag to display the error
-        // let loginErrorTag = loginErrorContainer.children[0];
-
-        // if the list tag doesn't contain an error message,
-        // add one.
-        // if(loginErrorTag.innerHTML == ''){
-            
-        //     loginErrorTag.innerHTML = "Please provide correct username and password";
-        // }
-        // else{
-        //     // If list tag has an error text replace it with a new one
-        //     loginErrorTag.innerHTML = "Please fill all values to login";
-        // }
-
-        // Display the error container, to display the error,
-        // message.
-        // loginErrorContainer.style.display = 'block';
-
-        // Makes the error message disappear in 30 seconds
-        // and sets the value of the list tag to an empty text.
-        // setTimeout(function(){
-        //     loginErrorTag.innerHTML = '';
-        //     loginErrorContainer.style.display = 'none';
-        // }
-        // ,30000)
 
     }
 }

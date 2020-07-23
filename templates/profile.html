@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+    <title>Andrew profile</title>
+</head>
+<body>
+    <!-- Body container -->
+    <div id="body-container">
+        <!-- navigation bar -->
+        <div id="nav">
+            <a href="../homepage.html" id="left-item">FindHelp</a>
+            <a href="{{ url_for('questions.home_view_questions') }}" id="right-item">Questions</a>
+        </div>
+        <!-- Body -->
+        <div id="body">
+            <!-- left bar -->
+            <div id="left-bar">
+                <!-- Menu items -->
+                <div id="menu-items">
+                    <button id="questions" class="sidebar-button active">Questions</button>
+                    <button id="update" class="sidebar-button">Update profile</button>
+                    <button id="profile" class="sidebar-button">Profile</button>
+                </div>
+            </div>
+            <!-- content -->
+            <div id="content">
+                <!-- Update -->
+                <div id="update-div">
+                    <!-- heading -->
+                    <h3>Update profile</h3>
+                    <!-- Form to update the profile -->
+                    <div id="form-div">
+                        <div id="left-div"></div>
+                        <div id="right-div"></div>
+                        <form action="#" method="post" id="update-form">
+                            <!-- username -->
+                            <label for="username" id="username-label">Fullname:</label>
+                            <input type="text" name="username" id="username">
+                            <!-- Email -->
+                            <label for="email" id="email-label">Email:</label>
+                            <input type="text" name="email" id="email">
+                            <!-- Role -->
+                            <label for="role" id="role-label">Role:</label>
+                            <select id="role">
+                                <option value=""></option>
+                                <option value="false">user</option>
+                                <option value="true">Moderate user</option>
+                            </select>
+                            <!-- profile picture -->
+                            <div id="image-div">
+                                <label for="image" id="image-label">
+                                    <p>Upload image</p> 
+                                </label>
+                                <input type="file" name="image" id="image">
+                            </div>
+                            <!-- Profession -->
+                            <label for="profession" id="profession-label">Profession:</label>
+                            <input type="text" name="profession" id="profession">
+                            <!-- Education -->
+                            <label for="education" id="education-label">Education level:</label>
+                            <input type="text" name="education" id="education">
+                            <!-- Company -->
+                            <label for="company" id="company-label">Company:</label>
+                            <input type="text" name="company" id="company">
+                            <!-- submit button -->
+                            <input type="submit" value="Update" id="update-button">
+                        </form>
+                    </div>
+                </div>
+                <!-- End of update profile -->
+                <!-- Prfile info section -->
+                <div id="profile-div">
+                    <div class="profile-div">
+                        <div id="profile-info-heading">Profile information</div>
+                        <div id="profile-pic-heading" class="profile-info-sub-heading">
+                            Profile picture
+                        </div>
+                        <!-- Profile pic -->
+                        <div id="profile-picture">
+                        </div>
+                        <div id="profile-info-head" class="profile-info-sub-heading">
+                            Background data
+                        </div>
+                        <!-- Profile info -->
+                        <div id="info-container">
+                            <div id="profile-info">
+                                <label for="" class="info-label">Fullname:</label>
+                                <label for="" class="info-value">Andrew Njaya Odhiambo</label>
+                                <label for="" class="info-label">Email:</label>
+                                <label for="" class="info-value">njayaandrew@gmail.com</label>
+                                <label for="" class="info-label">Role:</label>
+                                <label for="" class="info-value">Moderate user</label>
+                                <label for="" class="info-label">Profession:</label>
+                                <label for="" class="info-value">Software developer</label>
+                                <label for="" class="info-label">Education:</label>
+                                <label for="" class="info-value">Bachelors degree</label>
+                                <label for="" class="info-label">Company:</label>
+                                <label for="" class="info-value">FindHelp</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- questions the user asked -->
+                <div id="questions-div">
+                </div>
+
+            </div>
+            <!-- End of content -->
+        </div>
+    </div>
+<script src="{{ url_for('static', filename='js/profile.js' ) }}"></script> 
+</body>
+</html>

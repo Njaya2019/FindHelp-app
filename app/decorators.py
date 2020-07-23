@@ -3,7 +3,7 @@
 #  access to the requested (valid) URL by the client
 #  is Forbidden for some reason
 from functools import wraps
-from flask import jsonify, request
+from flask import jsonify, request, session
 import jwt
 
 def token_required(f):
@@ -12,7 +12,11 @@ def token_required(f):
         token = None
         if 'x-access-token' in request.headers:
             token = request.headers['x-access-token']
-        if not token:
+        elif 'x-access-token' in session:
+            token = session['x-access-token']
+        elif 'x-access-token' in request.args:
+            token = user = request.args.get('x-access-token')
+        else:
             return jsonify({'status':403, 'error':'token is required'}), 403
         try:
             data = jwt.decode(token, 'secret', algorithms='HS256')

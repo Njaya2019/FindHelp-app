@@ -44,6 +44,24 @@ class question():
             print(err)
 
     @staticmethod
+    def view_questions_count_answers(con_cur):
+        """A method to view all questions and count all the answers"""
+        try:
+            # con = con_cur[0]
+            cur = con_cur[1]
+            # getQuestions_sql = "SELECT * FROM questions"
+            # INNER JOIN questions to get all users who posted questions. 
+            getQuestions_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, COUNT(answers.answer) FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
+            cur.execute(getQuestions_sql)
+            # if there are no rows fetchall returns an empty list.
+            all_questions = cur.fetchall()
+            if all_questions:
+                return all_questions
+            return False
+        except Exception as err:
+            print(err)
+
+    @staticmethod
     def viewQuestion(con_cur, questionid):
         """A method to view all questions"""
         try:

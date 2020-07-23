@@ -70,5 +70,5 @@ if __name__ == "__main__":
     db.createTables(con_cur)
     # db.dropTables()
     # server = Server(app.wsgi_app)
-    app.run(host='0.0.0.0')
+    app.run()
     # server.serve()
