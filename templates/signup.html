@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FindHelp SignUp</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/signup.css') }}">
+</head>
+<body>
+    <!-- Container to hold all sign up details -->
+    <div class="signup-container">
+        <!-- Signup navigation bar -->
+        <div id="signup-navbar">
+            <a id="signup-homelink" href="{{ url_for('index') }}">FindHelp</a>
+            <a id="signup-signinlink" href="{{ url_for('signin.login') }}">Login</a>
+        </div>
+        <!-- Signup form -->
+        <div id="signup-body">
+                <!-- Signup title -->
+                <h1>Sign Up</h1>
+                <!-- signup errors -->
+                <div id="signup-errors">
+                    <li></li>
+                </div>
+                <!-- Form -->
+                <form action="../auth/signin.html" method="post" id="signup-form">
+                    <!-- Fullname -->
+                    <div id="fullname-label-div" class="div-label">
+                        <label for="fullname" id="email-label">Fullname:</label>
+                    </div>
+                    <div id="fullname-textbox-div">
+                        <input type="text" name="username" id="fullname">
+                    </div>
+                    <!-- Email -->
+                    <div id="email-label-div" class="div-label">
+                        <label for="email" id="email-label">Email:</label>
+                    </div>
+                    <div id="email-textbox-div">
+                        <input type="text" name="email" id="email">
+                    </div>
+                    <!-- Role -->
+                    <div id="role-label-div" class="div-label">
+                        <label for="role" id="role-label">Role:</label>
+                    </div>
+                    <div id="role-textbox-div">
+                        <select name="role" id="role">
+                            <option value=""></option>
+                            <option value="true">User</option>
+                            <option value="false">Moderate user</option>
+                        </select>
+                    </div>
+                    <!-- Password -->
+                    <div id="password-label-div" class="div-label">
+                        <label for="password" id="password-label">Password:</label>
+                    </div>
+                    <div id="password-textbox-div">
+                        <input type="password" name="password" id="password">
+                    </div>
+                    <!-- Confirm password -->
+                    <div id="confirm-password-label-div" class="div-label">
+                        <label for="confirmpassword" id="confirm-password-label">Confirm:</label>
+                    </div>
+                    <div id="confirm-password-textbox-div">
+                        <input type="password" name="confirmpassword" id="confirmpassword">
+                    </div>
+                    <!-- Submit button -->
+                    <div id="submit-div">
+                        <input type="submit" value="Sign Up" id="submit">
+                    </div>
+                </form>
+        </div>
+        <!-- Login page footer -->
+        <div id="signup-footer">
+             <li>&#9400; Find-Help 2020</li>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/signup.js' ) }}"></script>  
+</body>
+</html>

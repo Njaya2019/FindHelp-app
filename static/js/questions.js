@@ -186,6 +186,7 @@ function get_questions(){
 
             // renders each question
             questions.questions.forEach(function render_question(element) {
+
                 display_questions += `
                 <div class="posted-question">
                     <!-- Upper section -->
@@ -209,7 +210,7 @@ function get_questions(){
                     <!-- Question posted body -->
                     <div class="question-body">
                         <!-- question title -->
-                        <a href="questionanswers.html" class="question-title">${element.title}</a>
+                        <a href="${element.questionid}/${element.title.split(" ").join("-")}" class="question-title">${element.title}</a>
                         <!-- Question description -->
                         <p>${element.description}</p>
                         <p>${element.answers} answer</p>

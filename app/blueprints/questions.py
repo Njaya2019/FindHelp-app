@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app, render_template
+import urllib.parse
 from app.validators.validate import jsonvalues, regularExValidation
 from app.models.questionsmodel import question
 from app.models.dataBase import db
@@ -7,7 +8,7 @@ from app.decorators import token_required
 from app.validators.validate import timefunctions
 
 
-questions_blueprint = Blueprint('questions', __name__)
+questions_blueprint = Blueprint('questions', __name__, template_folder="templates")
 
 
 @questions_blueprint.route('/questions', methods = ['POST'])
@@ -170,7 +171,8 @@ def view_question(questionid):
             # name of the user as key and the answer as value.
             for useranswer in aQuestion["usersandanswers"]:
                 user_and_answer_list = useranswer.rsplit(":")
-                users_and_answers_dictionary.update({user_and_answer_list[0]:user_and_answer_list[1],'upvotes':user_and_answer_list[2],'downvotes':user_and_answer_list[3]})
+                total_votes = int(user_and_answer_list[2])-int(user_and_answer_list[3])
+                users_and_answers_dictionary.update({'whoanswered': user_and_answer_list[0], 'answer':user_and_answer_list[1],'votes': total_votes})
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
                 users_and_answers_list.append(users_and_answers_dictionary_copy)
             new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'answers':users_and_answers_list})
@@ -179,6 +181,7 @@ def view_question(questionid):
         return jsonify({'status':200, 'Question':new_question_dictionary}), 200
         # return jsonify({'status':200, 'Question':{'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'postedat':datePosted_StringTimeZoneAware, 'userid':aQuestion['userid']}}), 200
     return jsonify({'status':404, 'error':'Sorry the question doesn\'t exist'}), 404
+
 
 # A user views all questions and the their counted answers
 @questions_blueprint.route('/questions/answers_count/', methods = ['GET'])
@@ -228,7 +231,15 @@ def delete_question(current_user_id, questionid):
 @questions_blueprint.route('/questions/', methods = ['GET'])
 @token_required
 def home_view_questions(current_user_id):
-    ''' This is a view function to display a page, where
+    ''' This is a view function displays a page, where
         a user can create, view, edit and delete a question.
     '''
     return render_template('questions.html')
+
+@questions_blueprint.route('/questions/<int:questionid>/<path:question_title>', methods = ['GET'])
+@token_required
+def renders_view_question(current_user_id, questionid, question_title):
+    ''' 
+        Renders a page to display a question and all it's answers
+    '''
+    return render_template('questionanswers.html')

@@ -12,8 +12,8 @@
     <div class="login-container">
         <!-- Login navigation bar -->
         <div id="login-navbar">
-            <a id="login-homelink" href="../homepage.html">FindHelp</a>
-            <a id="login-signuplink" href="signup.html">SignUp</a>
+            <a id="login-homelink" href="{{ url_for('index') }}">FindHelp</a>
+            <a id="login-signuplink" href="{{ url_for('signin.signup') }}">SignUp</a>
         </div>
         <!-- Login form -->
         <div id="login-body">

@@ -1,4 +1,4 @@
-from flask import Flask, escape, url_for, request, jsonify
+from flask import Flask, escape, url_for, request, jsonify, render_template
 from livereload import Server
 from configurations import ProductionConfig, DevelopmentConfig
 from app.blueprints.users import signin
@@ -40,9 +40,9 @@ app = create_app(ProductionConfig, 'config.py')
 
     
 
-# @app.route('/')
-# def index():
-#     return 'index'
+@app.route('/')
+def index():
+    return render_template('homepage.html')
 
 # @app.route('/login', methods=['GET', 'POST'])
 # def login():

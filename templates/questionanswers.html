@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/questionanswers.css') }}">
+    <title>How do you create classes in python ?</title>
+</head>
+<body>
+    <!-- Container -->
+    <div id="container">
+        <!-- Navigation -->
+        <div id="nav">
+
+            <!-- left link. link to Home page -->
+            <a id="left-link" href="../homepage.html">FindHelp</a>
+            <!-- Right link. link to user's view page -->
+            <a id="right-link" href="../questionsanswers/questions.html">Questions</a>
+            
+        </div>
+        <!-- end of navigation -->
+        <!-- Body -->
+        <div id="body-container">
+
+            <!-- question and it's description container -->
+            <div id="title-description-container">
+            </div>
+            <div id="answers-heading">
+                <h3>Answers</h3>
+            </div>
+            <!-- Answers container -->
+            <div id="answers-container">
+                <p>No answers yet be the first to provide an answer</p>
+
+            </div>
+            <!-- End of all answers container -->
+            <!--===============================posting an answer header ==============================-->
+            <div id="post-answer-heading">
+                <h3>Post an answer</h3>
+            </div>
+            <!-- errors -->
+            <div id="answer-errors">
+                <li></li>
+            </div>
+            <!--container to post answers-->
+            <div id="answers-form-container">
+                <form action="#" method="post" class="submit-answer-input">
+                    <textarea name="answer" id="answer" cols="30" rows="10" placeholder="Post an answer"></textarea>
+                    <div id="submit-answer">
+                        <input type="submit" value="Post" name="submit-answer-input">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- end of body -->
+        <!-- Left side bar -->
+        <div id="left-side-bar">
+        </div>
+        <!-- end of left side bar -->
+        <!-- rigt side bar -->
+        <div id="right-side-bar">
+        </div>
+        <!-- end of right side bar -->
+        <!-- footer -->
+        <div id="footer">
+        </div>
+        <!-- end of footer -->
+    </div>
+    <!-- end of container -->
+    <script src="{{ url_for('static', filename='js/questionanswers.js' ) }}"></script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FindHelp home page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+</head>
+<body>
+
+    <!-- Home page body -->
+    <div id="home-body">
+        <!-- Navigation -->
+        <div id="nav">
+            <a href="{{ url_for('index') }}" class="navlinks left-link">FindHelp</a>
+            <!-- Right navigation links -->
+            <div id="right-links">
+                    <a href="{{ url_for('signin.login') }}" class="navlinks right-link">Signin</a>
+                    <a href="{{ url_for('signin.signup') }}" class="navlinks right-link">Signup</a>
+            </div>
+        </div>
+        <!-- First body section -->
+        <div id="first-body-section">
+            <h1>Find Solutions</h1>
+            <h2>
+                Millions of people around the world sharing knowledge and skills. 
+            </h2>
+            <p>
+                A platform that's not limited to a particular field, connect with people whom
+                you have same passion and thirst for perfection.
+            </p>
+        </div>
+        <!-- Footer -->
+        <div id="footer">
+            <li class="footer-item">&#9400; FindHelp Co</li>     
+        </div>
+    </div>
+    <script src="js/homepage.js"></script>
+</body>
+</html>

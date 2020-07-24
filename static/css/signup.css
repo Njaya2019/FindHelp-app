@@ -1,0 +1,296 @@
+/* ================ sign up page body tag =================*/
+html{
+    height: 100vh;
+}
+body{
+    margin: 0px;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+    height: 100vh;
+}
+
+/*=================== Login container ====================*/
+.signup-container{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 40px auto 40px;
+    grid-row-gap: 10px;
+    height: 100vh;
+    padding: 0px;
+    /* border: 1px solid red; */
+
+}
+
+/* ====================== Login page container ======================*/
+#signup-navbar{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px;
+    background-color: lightblue;
+    box-shadow: 15px 15px 10px lightslategray;
+    border: 1px solid lightblue;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+#signup-navbar a{
+    text-decoration-line: none;
+    color: black;
+}
+
+#signup-homelink{
+    font-size: 18px;
+    font-weight: bold;
+    margin-left: 0px;
+    margin-right: 0px;
+}
+
+#signup-navbar #signup-signinlink{
+    font-size: 13px;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 2px;
+    color: white;
+    background-color: rgba(0, 0, 255, 0.5);
+    border: 1px solid rgba(0, 0, 255, 0.5);
+    transition: 0.4s ease-in-out;
+}
+
+#signup-navbar #signup-signinlink:hover{
+    background-color: blue;
+}
+
+/* =================== Login details ====================*/
+#signup-body{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+/* Signup text title */
+#signup-body h1{
+    font-size: 27px;
+    color: rgba(0, 0, 255, 0.4);
+    font-weight: bolder;
+}
+
+/* Sign up error div container */
+#signup-body #signup-errors{
+    padding: 10px;
+    margin: 0 0 10px 0;
+    display: none;
+}
+
+/* Error messages section */
+#signup-body #signup-errors li{
+    color: rgba(255, 0, 0, 0.7);
+}
+
+/* Form container. Signup form.*/
+#signup-body #signup-form{
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    display: grid;
+    grid-template-columns: 220px;
+    grid-auto-rows: 20px 40px 20px 40px 20px 40px 20px 40px 20px 40px 40px;
+    grid-row-gap: 10px;
+    grid-template-areas:
+    "fullnameLabel"
+    "fullnameBox"
+    "emailLabel" 
+    "emailBox"
+    "roleLabel"
+    "roleBox"
+    "passwordLabel"
+    "passwordBox"
+    "confirmPasswordLabel"
+    "confirmPasswordBox"
+    "submitButton";
+    padding: 5px;
+}
+
+#signup-body #signup-form #fullname-label-div{
+    grid-area: fullnameLabel;
+}
+
+#signup-body #signup-form #fullname-textbox-div{
+    grid-area: fullnameBox;
+}
+
+#signup-body #signup-form #email-label-div{
+ grid-area: emailLabel;
+}
+   
+#signup-body #signup-form #email-textbox-div{
+ grid-area: emailBox;
+}
+
+#signup-body #signup-form #role-label-div{
+    grid-area: roleLabel;
+}
+      
+#signup-body #signup-form #role-textbox-div{
+    grid-area: roleBox;
+}
+
+#signup-body #signup-form #password-label-div{
+    grid-area: passwordLabel;
+}
+
+#signup-body #signup-form #password-textbox-div{
+    grid-area: passwordBox;
+}
+
+#signup-body #signup-form #confirm-password-label-div{
+    grid-area: confirmPasswordLabel;
+}
+
+#signup-body #signup-form #confirm-password-textbox-div{
+    grid-area: confirmPasswordBox;
+}
+
+#signup-body #signup-form #submit-div{
+    grid-area: submitButton;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+
+}
+#signup-body #signup-form div label{
+    font-size: 13px;
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+
+#signup-body #signup-form div input{
+    width: 216px;
+    padding-top: 10px;
+    padding-bottom: 11px;
+    border-radius: 3px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    font-family: 'Times New Roman', Times, serif;
+}
+
+select{
+    font-weight: bold;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    width: 218px;
+    padding-top: 10px;
+    padding-bottom: 11px;
+    border-radius: 3px;
+    color: rgba(0, 0, 0, 0.7);
+}
+select option:nth-child(2), option:last-child{
+    font-weight: bold;
+}
+
+
+.div-label{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+
+#signup-body #signup-form #submit-div input{
+    background-color: rgba(0, 0, 255, 0.5);
+    border: 1px solid rgba(0, 0, 255, 0.5);
+    border-radius: 3px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.6s ease-in-out;
+    color: white;
+    width: 70px;
+    padding: 8px;
+}
+#signup-body #signup-form #submit-div input:hover{
+    background-color: blue;
+}
+/* =================== Sign up footer ================== */
+#signup-footer{
+    border: 1px solid lightblue;
+    background-color: lightblue;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
+#signup-footer li{
+    list-style-type: none;
+}
+
+
+
+/*==================== Media query for screens above 768px ====================*/
+@media (min-width: 768px){
+    /* Form container. Signup form.*/
+    #signup-body #signup-form{
+        display: grid;
+        grid-template-columns: 60px 260px 60px 260px;
+        grid-auto-rows: minmax(15px, auto);
+        grid-column-gap: 2px;
+        grid-row-gap: 5px;
+        grid-template-areas:
+        "fullnameLabel fullnameBox emailLabel emailBox"
+        "roleLabel roleBox passwordLabel passwordBox"
+        "confirmPasswordLabel confirmPasswordBox . submitButton";
+        padding: 5px;
+    }
+
+    #signup-body #signup-form div input{
+        outline: none;
+        width: 226px;
+        padding-top: 8px;
+        padding-bottom: 8px;
+        padding-left: 2px;
+        padding-right: 25px;
+        border-radius: 3px;
+        font-size: 15px;
+    }
+
+    #signup-body #signup-form div {
+        /* padding: 10px; */
+        padding-left: 0px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+
+    #signup-body #signup-form div select{
+        width: 255px;
+        padding: 8px 10px 8px 2px;
+        border-radius: 3px;
+    }
+    
+    #signup-body #signup-form #submit-div input{
+        width: 80px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        font-size: 15px;
+        border-radius: 3px;
+        margin-right: 5px;
+    }
+
+    #fullname-label-div , #email-label-div, #role-label-div, #password-label-div, #confirm-password-label-div{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+    }
+
+    #signup-body h1{
+        font-size: 32px;
+    }
+
+    /* #signup-body #signup-form div label{
+        border: 1px solid black;
+    } */
+
+}

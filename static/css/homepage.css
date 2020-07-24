@@ -1,0 +1,102 @@
+/* ======Parent Body tag ======*/
+body{
+    margin: 0px;
+    color: black;
+    font-family: 'Times New Roman', Times, serif;
+    height: 100vh;
+}
+/*======================= Navigation section css =========================*/
+#nav{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightblue;
+    padding-right: 1px;
+    padding-left: 1px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    box-shadow: 15px 15px 10px lightslategray;
+}
+
+/* All navigation links */
+#nav .navlinks{
+    text-decoration-line: none;
+    color: black;
+    /* font-style: oblique; */
+}
+
+/* Right links parent element*/
+#right-links{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 125px;
+}
+
+/* Left link*/
+#nav .left-link{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 23px;
+    font-weight: 800;
+}
+
+/* All Right links */
+#right-links .right-link{
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    font-weight: 600;
+    padding: 7px;
+    background-color: rgba(0, 0, 255, 0.3);
+    border: 1px solid rgba(0, 0, 255, 0.3);
+    color: white;
+    transition: 0.3s ease-in-out;
+}
+
+/* Right links on hover */
+#right-links .right-link:hover{
+    background-color: blue;
+}
+
+/* ========================== Home Body ==========================*/
+/* Body */
+#home-body{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 40px auto 40px;
+    grid-row-gap: 30px;
+    height: 100vh;
+}
+
+/* .home-img{
+    background-image:url("../img/Desert.jpg");
+} */
+
+/* Body item */
+#first-body-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Body item heading */
+#home-body #first-body-section h1{
+    font-size: 50px;
+    color: lightblue;
+    font-weight: 900;
+}
+
+/* ===================== Home footer ==================== */
+#footer{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    background-color: lightblue;
+}
+
+#footer .footer-item{
+    list-style: none;
+}
+/* =========================== Media queries ===========================*/

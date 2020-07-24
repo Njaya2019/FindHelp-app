@@ -56,7 +56,7 @@ def signup():
                     displayUser.update({'userId':newUser['userid'],'fullname':newUser['fullname'], 'email':newUser['email'], 'role':newUser['roles']})
                     return jsonify({'status':201, 'user':displayUser}), 201        
     
-    return 'Signup please'
+    return render_template('signup.html')
 
 @signin.route('/signin', methods = ['GET', 'POST'])
 def login():
