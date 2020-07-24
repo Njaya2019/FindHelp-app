@@ -190,7 +190,7 @@ function get_question(questionId){
         if(xhr.status == 200){
             // changes the response text to JavaScript Object
             let question = JSON.parse(xhr.responseText);
-            console.log(question);
+            // console.log(question);
 
             // variable to display question title and description
             let title_description_html = '';
@@ -211,9 +211,9 @@ function get_question(questionId){
 
             // answers variable to display all answers in html
             answers_html = '';
-
+            console.log(questionObject.answers.length);
             // Checks if the answers array is not empty
-            if(questionObject.answers){
+            if(questionObject.answers && questionObject.answers.length){
                 questionObject.answers.forEach(function(answer){
 
                 answers_html += `
@@ -286,7 +286,8 @@ function get_question(questionId){
                 });
             }
             else{
-                answers_container.innerHTML = `<p>No answers yet be the first to provide an answer</p>`;
+                document.querySelector("#answers-container").innerHTML = `<p>No answers yet be the first to provide an answer</p>`;
+                document.querySelector("#container #body-container #answer-errors").style.maxHeight= "0px";
             }
 
         }

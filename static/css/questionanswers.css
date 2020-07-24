@@ -90,14 +90,6 @@ body{
     grid-row-gap: 5px;
 }
 
-/* #container #body-container #title-description-container{
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-} */
-/* #container #body-container #title-description-container div{
-    border: 1px solid black;
-} */
 #container #body-container #title-description-container #title-section{
     background-color:rgba(192,192,192,0.8);
     font-weight: bold;
@@ -558,10 +550,12 @@ body{
 #container #body-container #answer-errors{
     background-color: white;
     padding: 0px;
-    margin: 5px 10px 0px 10px;
+    /* margin: 5px 10px 0px 10px; */
+    margin: 0px;
     max-height: 0;
     overflow: hidden;
     transition: 0.4s ease-in-out;
+    background-origin: 1px solid black;
 }
 /* Answer errors list tag */
 #container #body-container #answer-errors li{
@@ -571,19 +565,20 @@ body{
 }
 #container #body-container #answers-form-container{
     border-radius: 5px;
-    padding: 8px;
+    padding: 8px 8px 0px 8px;
     border: 1px solid rgba(0,0,0,0.2);
 }
 /* Answer form */
 #container #body-container #answers-form-container form{
     display: grid;
     grid-template-columns:1fr;
-    grid-template-rows: 110px 50px;
-    grid-row-gap: 10px;
+    /* grid-template-rows: 110px 50px; */
+    grid-row-gap: 20px;
     grid-template-areas:
     "answer"
     "submit";
     height: auto;
+    margin-bottom: 0px;
 }
 
 
@@ -599,6 +594,7 @@ body{
     font-family: 'Times New Roman', Times, serif;
     font-size: 14px;
     font-weight: normal;
+    /* border: 1px solid black; */
 }
 
 /* Answer submit button div container */
@@ -607,6 +603,8 @@ body{
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
+    /* border: 1px solid black; */
+    margin-bottom: 0px;
 }
 
 /* submit answer button */
