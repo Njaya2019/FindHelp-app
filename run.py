@@ -36,7 +36,7 @@ def create_app(enviroment, configfile=None):
     app.register_error_handler(405, errorhandlers.httpmethod_not_allowed)
     return app
 
-app = create_app(ProductionConfig, 'config.py')
+app = create_app(DevelopmentConfig, 'config.py')
 
     
 

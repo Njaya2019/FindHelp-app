@@ -12,14 +12,16 @@ class Config(object):
 class ProductionConfig(Config):
     DEBUG = False
     SEND_FILE_MAX_AGE_DEFAULT = 0
+    UPLOAD_FOLDER = "static\\img"
     SECRET_KEY = b'_5#y2L"F4Q8z\n\xec]/'
 
 
 class DevelopmentConfig(Config):
     DEBUG = True
     DEVELOPMENT = True
-    UPLOAD_FOLDER = "instance\\image_uploads"
+    UPLOAD_FOLDER = "static\\img"
     SEND_FILE_MAX_AGE_DEFAULT = 0
+    SECRET_KEY = b'_5#y2L"F4Q8z\n\xec]/'
 
 class TestingConfig(Config):
     DEBUG = True

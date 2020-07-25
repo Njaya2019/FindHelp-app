@@ -67,6 +67,10 @@ function clickActions(e){
         e.target.parentNode.parentNode.parentNode.parentNode.children[2].children[0].style.maxHeight = null;
         e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[1].scrollHeight + "px";  
     }
+    else if(e.target.classList.contains('edit-form')){
+        e.preventDefault();
+        console.log('This form is being submitted');
+    }
     // Upload question image container clicked
     else if(e.target.id == 'question-image'){
         // uploads the image and displays its name on the button.
@@ -87,10 +91,10 @@ function clickActions(e){
 }
 
 
-// Gets the form id
+// Gets the question's form id 
 submitQuestion = document.querySelector("#post-question-form");
 
-// A question submit event
+// A submit event to post a question
 submitQuestion.addEventListener('submit', postQuestion);
 
 // A function to run on submit question event
@@ -113,10 +117,9 @@ function postQuestion(e){
     xhr.onload = function(onloadevent){
         // successful posted question
         if (xhr.status == 201){
-            // change the response text to a javascript object
-            // let question_posted = JSON.parse(xhr.responseText);
-            // console.log(question_posted);
             get_questions();
+            // resets form data
+            questionform.reset();
         }
         else{
             // Response error from the server
@@ -177,7 +180,7 @@ function get_questions(){
             // Changes the questions response text to a javascript array object
             const questions = JSON.parse(xhr.responseText);
 
-            console.log(questions);
+            console.log(questions.questions);
 
             // display all questions
 
@@ -217,7 +220,7 @@ function get_questions(){
                     </div>
                     <!-- Edit question div -->
                     <div class="edit-div">
-                        <form action="#" class="edit-form">
+                        <form class="edit-form">
                             <div class="edit-question-errors">
                                 <li>Provide values for both title and description</li>
                                 <li>Space values are not valid values</li>
@@ -226,7 +229,7 @@ function get_questions(){
                             <textarea class="edit-question-description" name="description" placeholder="Edit question description..." cols="30" rows="10"></textarea>
                             <div class="cancel-submit">
                                 <input type="button" class="cancel-button" value="cancel">
-                                <input type="submit" name="submit-edited-question" class="submit-edited-question" value="save">
+                                <input type="submit" name="submit-edited-question" class="submit-edited-question" data-questionid=${element.questionid} value="save">
                             </div>
                         </form>
                     </div>
@@ -259,6 +262,77 @@ function get_questions(){
     xhr.send();
 }
 
+// A function to edit a question
+function editQuestion(question_id){
+    // Gets the question's edit form id 
+    editQuestion = document.querySelector(".edit-form");
+
+    // A submit event to modify a question
+    editQuestion.addEventListener('submit', function(e) {
+        // Prvents action of the form from routing automatically
+        e.preventDefault();
+
+        // Grabs form data to be sent to the server by an ajax request
+        let editquestionform = e.target;
+        let editedquestionData = new FormData(editquestionform);
+
+        // initialise ajax request
+        let xhr = new XMLHttpRequest();
+
+        // open the request
+        xhr.open('PUT', `http://127.0.0.1:5000/questions/${question_id}`, true);
+        // What should happen if the reponse received from the server
+        xhr.onload = function(onloadevent){
+            // successful posted question
+            if (xhr.status == 200){
+                // get_questions();
+                // resets form data
+                // editquestionform.reset();
+                console.log('edited');
+            }
+            else{
+                // Response error from the server
+                // let error = JSON.parse(xhr.responseText);
+                console.log('failed to edit');
+                // // Gets the error div container
+                // let questionErrorContainer = e.target.parentNode.previousElementSibling;
+
+                // // Accesses the list tag to display the error
+                // let questionErrorTag = questionErrorContainer.children[0];
+
+                // // if the list tag doesn't contain an error message,
+                // // add one.
+                // if(questionErrorTag.innerHTML == ''){
+                //     questionErrorTag.innerHTML = error.error;
+                // }
+                // else{
+                //     // If list tag has an error text replace it with a new one
+                //     questionErrorTag.innerHTML = error.error;
+                // }
+
+                // // Display the error container, to display the error,
+                // // message.
+                // questionErrorContainer.style.maxHeight = questionErrorContainer.scrollHeight + 'px';
+
+                // // Deletes all list error tags after 30 seconds
+                // setTimeout(function(){
+
+                //     // Replace the current error text with an empty string
+                //     questionErrorTag.innerHTML = '';
+
+                //     // Makes the error container to disappear
+                //     questionErrorContainer.style.maxHeight = 0 + 'px';
+
+                // }, 30000);      
+            }
+        };
+
+        // Sends the request
+        xhr.send(editedquestionData);
+
+    });
+}
+
 
 // Deletes a question
 function delete_question(question_id){
@@ -273,9 +347,9 @@ function delete_question(question_id){
     xhr.onload = function(onloadevent){
         console.log('The question has been deleted');
         // successfully deleted the question
-        if (xhr.status == 204){
+        if (xhr.status == 200){
             get_questions();
-            console.log('The question has been deleted');
+            
         }
         else{
             // The question doesn't exist error

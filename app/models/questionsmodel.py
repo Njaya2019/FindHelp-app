@@ -1,5 +1,5 @@
 from .dataBase import db
-from os import remove
+import os
 
 class question():
     
@@ -68,11 +68,12 @@ class question():
             # con = con_cur[0]
             cur = con_cur[1]
             # getQuestion_sql = "SELECT * FROM questions WHERE questionid=%s"
-            getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, ARRAY_AGG(userswhoanswered.fullname|| ':'||answers.answer|| ':' ||answers.upvotes|| ':' ||answers.downvotes) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
+            getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, ARRAY_AGG(userswhoanswered.fullname|| ':'||answers.answer|| ':'||answers.answerid|| ':' ||answers.upvotes|| ':' ||answers.downvotes) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
             cur.execute(getQuestion_sql, (questionid,))
             # if there are no rows fetchall returns an empty list.
             a_question = cur.fetchone()
             if a_question:
+                print(a_question)
                 return a_question
             return False
         except Exception as err:
@@ -105,7 +106,7 @@ class question():
             print(err)
     
     @staticmethod
-    def deleteQuestion(con_cur, questionid, userid):
+    def deleteQuestion(con_cur, questionid, userid, upload_folder, current_app):
         """A method to delete a qestion """
         try:
             con = con_cur[0]
@@ -118,7 +119,9 @@ class question():
                     return 'forbidden'
                     # return 'You can not delete other users\' questions'
                 if questionFetched['questionimage'] != 'noimagekey':
-                    remove(questionFetched['questionimage'])
+                    uploads_dir = os.path.join(current_app.root_path, upload_folder)
+                    image_path = os.path.join(uploads_dir, questionFetched['questionimage'])
+                    os.remove(image_path)
                 # The statement below returns the deleted row
                 deleteQuestion_sql = "DELETE FROM questions WHERE questionid=%s RETURNING questionid"
                 cur.execute(deleteQuestion_sql, [questionid,])

@@ -441,7 +441,7 @@ body{
 
 /* Confirm delete container */
 #container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer{
-    width: 300px;
+    width: 200px;
     border-top: 1px solid lightblue;
     border-bottom: 1px solid lightblue;
     border-right: 1px solid lightblue;
@@ -492,8 +492,12 @@ body{
     margin: 3px;
     font-weight: bold;
     cursor: pointer;
+    transition: 0.7s ease-in-out;
 }
-
+/* Confirm delete cancel button on hover */
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer #delete-answer-cancel:hover{
+    background-color:rgba(128,128,128, 0.7);
+}
 /*  Confirm delete delete button  */
 #container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer #delete-answer-delete{
     padding: 8px;
@@ -503,6 +507,11 @@ body{
     margin: 3px;
     color: white;
     cursor: pointer;
+    transition: 0.7s ease-in-out;
+}
+/* Confirm delete on hover */
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer #delete-answer-delete:hover{
+    background-color: rgba(255, 0, 0, 0.5);
 }
 /* End of confirm delete */
 
@@ -595,6 +604,7 @@ body{
     font-size: 14px;
     font-weight: normal;
     /* border: 1px solid black; */
+    min-height: 350px;
 }
 
 /* Answer submit button div container */
@@ -710,6 +720,25 @@ body{
         height: 17px;
         width: 17px;
         font-size: 11px;
+    }
+
+    /* Confirm delete container */
+    #container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer{
+        width: 300px;
+        border-top: 1px solid lightblue;
+        border-bottom: 1px solid lightblue;
+        border-right: 1px solid lightblue;
+        border-left: 1px solid lightblue;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: 40px 60px 40px;
+        border-radius: 2px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -150px;
+        margin-top: -50px;
+
     }
 
 }

@@ -154,11 +154,14 @@ class jsonvalues():
             image = request.files[filekeyname]
             if image and '.' in image.filename and image.filename.rsplit('.', 1)[1] in allowedlowerCaseExtensions:
                 uploads_dir = os.path.join(current_app.root_path, upload_folder)
-                os.makedirs(uploads_dir, exist_ok=True)
+                # gets the image name and secures it
                 imagename = secure_filename(image.filename)
+                # Joins the image name to the directory it will be saved
                 image_path = os.path.join(uploads_dir, imagename)
+                # saves the image to the upload folder
                 image.save(image_path)
-                return image_path
+                # returns image name and extenstion
+                return image.filename
             else:
                 return 'invalid extension'
 

@@ -171,8 +171,16 @@ def view_question(questionid):
             # name of the user as key and the answer as value.
             for useranswer in aQuestion["usersandanswers"]:
                 user_and_answer_list = useranswer.rsplit(":")
-                total_votes = int(user_and_answer_list[2])-int(user_and_answer_list[3])
-                users_and_answers_dictionary.update({'whoanswered': user_and_answer_list[0], 'answer':user_and_answer_list[1],'votes': total_votes})
+                total_votes = int(user_and_answer_list[3])-int(user_and_answer_list[4])
+                print(int(user_and_answer_list[3]), int(user_and_answer_list[4]), total_votes)
+                users_and_answers_dictionary.update(
+                    {
+                        'whoanswered': user_and_answer_list[0],
+                        'answerid': user_and_answer_list[2],
+                        'answer':user_and_answer_list[1],
+                        'votes': total_votes
+                    }
+                )
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
                 users_and_answers_list.append(users_and_answers_dictionary_copy)
             new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'answers':users_and_answers_list})
@@ -219,14 +227,19 @@ def all_questions_count_answers(current_user_id):
 @questions_blueprint.route('/questions/<int:questionid>', methods = ['DELETE'])
 @token_required
 def delete_question(current_user_id, questionid):
+    # Gets the database and connects to it
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
-    questionDeleted = question.deleteQuestion(con_cur, questionid, current_user_id)
+    # Calls the function to delete a question
+    questionDeleted = question.deleteQuestion(con_cur, questionid, current_user_id, current_app.config['UPLOAD_FOLDER'], current_app)
+    # Restricts any other user to delete a question
     if questionDeleted == 'forbidden':
         return jsonify({'status':403, 'error':'You can not delete other users\' questions'})
+    # The question being deleted doesn't exist
     if questionDeleted == 'notfound':
         # 204 The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.
         return jsonify({'status':404, 'error':'Sorry the question you are trying to delete doesn\'t exist'}), 404
-    return jsonify({'status':204, 'message':'The question has been successfully deleted'}), 204
+    # The question has been successfully deleted
+    return jsonify({'status':204, 'message':'The question has been successfully deleted'}), 200
 
 @questions_blueprint.route('/questions/', methods = ['GET'])
 @token_required

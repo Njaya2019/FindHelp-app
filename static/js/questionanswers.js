@@ -1,4 +1,4 @@
-// =========================Listens for click events on every element on the whole page===========\\
+// ====== Listens for click events on every element on the whole page =======\\
 document.body.addEventListener('click', clickActions);
 
 function clickActions(e){
@@ -49,12 +49,26 @@ function clickActions(e){
         e.target.parentNode.parentNode.parentNode.style.display = 'none';
     }
     // Vote up or down arrows clicked
-    else if(e.target.classList.contains('arrow-up') ||  e.target.classList.contains('arrow-down')){
+    else if(e.target.classList.contains('arrow-up') || e.target.classList.contains('arrow-down')){
         if (e.target.classList.contains('arrow-up')){
-            console.log("Vote up was clicked");
+            // console.log("Vote up was clicked");
+            let upvote_answerid = e.target.getAttribute("data-up-answerid");
+            
+            // Changes the answer id string to an integer
+            let answerid = parseInt(upvote_answerid);
+            // console.log(typeof answerid);
+            voteForAnswer('upvote', answerid, questionIdInt);
+
         }
         else{
-            console.log("Vote down was clicked")
+            // console.log("Vote down was clicked")
+            let downvote_answerid = e.target.getAttribute("data-down-answerid");
+
+            // Changes the answer id string to an integer
+            let answerid = parseInt(downvote_answerid);
+            // console.log(typeof answerid);
+            voteForAnswer('downvote', answerid, questionIdInt);
+            
         }
     }
     else{
@@ -64,8 +78,7 @@ function clickActions(e){
 }
 
 
-
-//======================================= Creates an answers line seperator ====================\\
+//====== Creates an answers line seperator =======\\
 // selecting answers' container
 let answers = document.querySelectorAll('#container #body-container #answers-container .user-answer');
 
@@ -79,7 +92,7 @@ if (answers){
     }
 }
 
-//==========================A class that has all submit functions===============================\\
+//====== A class that has all submit functions =======\\
 class SubmitFunctions{
 
     static submitEditedAnswer(e){
@@ -137,7 +150,7 @@ class SubmitFunctions{
 
 }
 
-// ===================================== Performs the submit events =================================\\
+//======= Performs the submit events =======\\
 document.body.addEventListener('submit', submitActions);
 
 
@@ -149,13 +162,13 @@ function submitActions(e){
         e.preventDefault();
         SubmitFunctions.submitEditedAnswer(e);
     }
-    else if(e.target.classList.contains('submit-answer-input')){
-        // Submits an answer
+    // else if(e.target.classList.contains('submit-answer-input')){
+    //     // Submits an answer
 
-        // Prevent automatic route
-        e.preventDefault();
-        SubmitFunctions.submitAnswer(e);
-    }
+    //     // Prevent automatic route
+    //     e.preventDefault();
+    //     SubmitFunctions.submitAnswer(e);
+    // }
     else{
         console.log("Do nothing")
     }
@@ -171,7 +184,7 @@ let urlArray = currentLocation.split('/', 3);
 // question's id as a string
 let questionIdString = urlArray[2];
 
-// Changes the id string to an integer
+// Changes the question id string to an integer
 let questionIdInt = parseInt(urlArray[2]);
 
 
@@ -190,7 +203,7 @@ function get_question(questionId){
         if(xhr.status == 200){
             // changes the response text to JavaScript Object
             let question = JSON.parse(xhr.responseText);
-            // console.log(question);
+            console.log(question);
 
             // variable to display question title and description
             let title_description_html = '';
@@ -204,7 +217,7 @@ function get_question(questionId){
                 <!-- question description -->
                 <div id="description-section">${questionObject.description}</div>
                 <div id="who-posted-image">
-                    <img class="posted-by-image" src="{{ url_for('static', filename='img/man.jpg') }}" alt="posted by"> <a href="#">${questionObject.whoposted}</a>
+                    <img class="posted-by-image" src="http://127.0.0.1:5000/static/img/man.jpg" alt="posted by"> <a href="#">${questionObject.whoposted}</a>
                 </div>
             `
             document.querySelector('#title-description-container').innerHTML = title_description_html;
@@ -215,14 +228,13 @@ function get_question(questionId){
             // Checks if the answers array is not empty
             if(questionObject.answers && questionObject.answers.length){
                 questionObject.answers.forEach(function(answer){
-
                 answers_html += `
                 <div class="user-answer">
                     <!-- answer's number -->
                     <div class="answer-number">
-                        <div class="arrow-up"></div>
+                        <div class="arrow-up" data-up-answerid=${answer.answerid}></div>
                         <div class="votes">${answer.votes}</div>
-                        <div class="arrow-down"></div>
+                        <div class="arrow-down" data-down-answerid=${answer.answerid}></div>
                     </div>
                     <!-- answer header -->
                     <div class="answer-header">
@@ -274,7 +286,7 @@ function get_question(questionId){
                     <!-- answer's footer -->
                     <div class="answer-footer">
                         <div class="name-image">
-                            <img src="{{ url_for('static', filename='img/woman.jpg') }}" alt="" srcset="">
+                            <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="" srcset="">
                             <a href="#">${answer.whoanswered}</a>
                         </div>
                     </div>
@@ -303,3 +315,94 @@ function get_question(questionId){
 
 // Runs the get question function
 get_question(questionIdInt);
+
+// Gets an answer's form id
+submitAnswer = document.querySelector("#submit-answer-form");
+
+
+function postAnswer(question_id){
+    // A submit event to provide an answer to a question
+    submitAnswer.addEventListener('submit', function(e){
+
+        // Prvents action of the form from routing automatically
+        e.preventDefault();
+
+        // Grabs form data to be sent to the server by an ajax request
+        let answerform = e.target;
+        let answerData = new FormData(answerform);
+
+        // creates a ajax request object
+        xhr = new XMLHttpRequest();
+
+        // opens the reques
+        xhr.open('POST', `http://127.0.0.1:5000/answers/${question_id}`);
+
+        // Response from the server
+        xhr.onload = function (onloadevent) {
+            // Answer submited successfully
+            if (xhr.status == 201){
+                // changes the response text to a javascript object 
+                let answer = JSON.parse(xhr.responseText);
+                get_question(question_id);
+            }
+            else{
+                // error response
+                let error = JSON.parse(xhr.responseText);
+                console.log(error );
+                // gets error div element
+                let submitAnswerErrorContainer = e.target.parentNode.previousElementSibling;
+                // Accesses the list tag to display the error
+                let editErrorTag = submitAnswerErrorContainer.children[0];
+                // if the list tag doesn't contain an error message,
+                // add one.
+                if(editErrorTag.innerHTML == ''){
+                    editErrorTag.innerHTML = error.error;
+                }
+                else{
+                    // If list tag has an error text replace it with a new one
+                    editErrorTag.innerHTML = error.error;
+                }
+                // Display the error container, to display the error,
+                // message.
+                submitAnswerErrorContainer.style.maxHeight = submitAnswerErrorContainer.scrollHeight + 'px';
+                // makes the errors disappear in 30 seconds
+                setTimeout(function(){
+                    // Replace the current error text with an empty string
+                    editErrorTag.innerHTML = '';
+                    // Makes the error container to disappear
+                    submitAnswerErrorContainer.style.maxHeight = null;
+                }, 3000);
+            }
+        };
+
+        // sends the answer
+        xhr.send(answerData);
+
+
+    });
+}
+
+// Calls a function to post answer
+postAnswer(questionIdInt);
+
+// A function to vote for an answer
+function voteForAnswer(upordownvote, answerid, question_id){
+    // initialise ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // Opens the request
+    xhr.open('POST', `http://127.0.0.1:5000/${upordownvote}/${answerid}/answer`);
+
+    // Response from the server
+    xhr.onload = function(onloadevent){
+        // successful vote
+        if (xhr.status == 201){
+            get_question(question_id);
+        }
+        else{
+            console.log('voting failed');
+        }
+    };
+
+    xhr.send()
+}
