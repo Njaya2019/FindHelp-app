@@ -488,10 +488,19 @@ textarea:focus, input:focus{
 } */
 
 /* Editing posted question errors */
-#questions-body #questions #posted-questions .posted-question .edit-form .edit-question-errors{
+#questions-body #questions #posted-questions .posted-question .edit-question-errors{
+    background-color: white;
+    padding: 0px;
+    margin: 0px;
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.4s ease-in-out;
+}
+
+#questions-body #questions #posted-questions .posted-question .edit-question-errors li{
     color: rgba(255, 0, 0, 0.7);
     font-size: 14px;
-    display: none;
+    padding-left: 5px;
 }
 
 /* Edit question form */

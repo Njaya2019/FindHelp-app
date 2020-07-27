@@ -57,7 +57,7 @@ function clickActions(e){
             // Changes the answer id string to an integer
             let answerid = parseInt(upvote_answerid);
             // console.log(typeof answerid);
-            voteForAnswer('upvote', answerid, questionIdInt);
+            voteForAnswer(e, 'upvote', answerid, questionIdInt);
 
         }
         else{
@@ -67,7 +67,7 @@ function clickActions(e){
             // Changes the answer id string to an integer
             let answerid = parseInt(downvote_answerid);
             // console.log(typeof answerid);
-            voteForAnswer('downvote', answerid, questionIdInt);
+            voteForAnswer(e, 'downvote', answerid, questionIdInt);
             
         }
     }
@@ -95,30 +95,68 @@ if (answers){
 //====== A class that has all submit functions =======\\
 class SubmitFunctions{
 
-    static submitEditedAnswer(e){
-        // gets error div element
-        let editErrorContainer = e.target.previousElementSibling;
-        // Accesses the list tag to display the error
-        let editErrorTag = editErrorContainer.children[0];
-        // if the list tag doesn't contain an error message,
-        // add one.
-        if(editErrorTag.innerHTML == ''){
-            editErrorTag.innerHTML = "Please provide correct username and password";
-        }
-        else{
-            // If list tag has an error text replace it with a new one
-            editErrorTag.innerHTML = "Please fill all values to login";
-        }
-        // Display the error container, to display the error,
-        // message.
-        editErrorContainer.style.maxHeight = editErrorContainer.scrollHeight + 'px';;
-        // makes the errors disappear in 30 seconds
-        setTimeout(function(){
-            // Replace the current error text with an empty string
-            editErrorTag.innerHTML = '';
-            // Makes the error container to disappear
-            editErrorContainer.style.maxHeight = null;
-        }, 30000);
+    static submitEditedAnswer(e, question_id){
+
+        // gets the answer id
+        let answer_id = e.target.getAttribute('data-edit-answerid');
+
+        // Grabs form data to be sent to the server by an ajax request
+        let editanswerform = e.target;
+        let editedanswerData = new FormData(editanswerform);
+
+        // initialises ajax request object
+        let xhr = new XMLHttpRequest();
+
+        // opens the request
+        xhr.open('PUT', `http://127.0.0.1:5000/answers/${answer_id}`)
+
+        // gets the response from the server
+        xhr.onload = function(onloadevent){
+            
+            // successfully edited the answer response
+            if(xhr.status == 200){
+                get_question(question_id);
+            }
+            else{
+                // response text error from server changed to javascript object
+                const error = JSON.parse(xhr.responseText);
+
+                // gets error div element
+                let editErrorContainer = e.target.previousElementSibling;
+
+                // Accesses the list tag to display the error
+                let editErrorTag = editErrorContainer.children[0];
+
+                // if the list tag doesn't contain an error message,
+                // add one.
+                if(editErrorTag.innerHTML == ''){
+
+                    editErrorTag.innerHTML = error.error;
+                }
+                else{
+
+                    // If list tag has an error text replace it with a new one
+                    editErrorTag.innerHTML = error.error;
+                }
+
+                // Display the error container, to display the error,
+                // message.
+                editErrorContainer.style.maxHeight = editErrorContainer.scrollHeight + 'px';
+
+                // makes the errors disappear in 30 seconds
+                setTimeout(function(){
+
+                    // Replace the current error text with an empty string
+                    editErrorTag.innerHTML = '';
+
+                    // Makes the error container to disappear
+                    editErrorContainer.style.maxHeight = null;
+                }, 3000);
+            }
+        };
+
+        // sends the edited answer
+        xhr.send(editedanswerData);
     }
 
 
@@ -160,17 +198,10 @@ function submitActions(e){
 
         // Prevent automatic route
         e.preventDefault();
-        SubmitFunctions.submitEditedAnswer(e);
+        SubmitFunctions.submitEditedAnswer(e, questionIdInt);
     }
-    // else if(e.target.classList.contains('submit-answer-input')){
-    //     // Submits an answer
-
-    //     // Prevent automatic route
-    //     e.preventDefault();
-    //     SubmitFunctions.submitAnswer(e);
-    // }
     else{
-        console.log("Do nothing")
+        
     }
 
 }
@@ -199,11 +230,12 @@ function get_question(questionId){
 
     // When the request has been processed
     xhr.onload = function (onloadevent){
+
         // the request was successful and the question was retrieved
         if(xhr.status == 200){
+
             // changes the response text to JavaScript Object
             let question = JSON.parse(xhr.responseText);
-            console.log(question);
 
             // variable to display question title and description
             let title_description_html = '';
@@ -224,7 +256,7 @@ function get_question(questionId){
 
             // answers variable to display all answers in html
             answers_html = '';
-            console.log(questionObject.answers.length);
+
             // Checks if the answers array is not empty
             if(questionObject.answers && questionObject.answers.length){
                 questionObject.answers.forEach(function(answer){
@@ -235,6 +267,9 @@ function get_question(questionId){
                         <div class="arrow-up" data-up-answerid=${answer.answerid}></div>
                         <div class="votes">${answer.votes}</div>
                         <div class="arrow-down" data-down-answerid=${answer.answerid}></div>
+                        <div class="vote-error-container">
+                            You can not upvote an answer twice
+                        </div>
                     </div>
                     <!-- answer header -->
                     <div class="answer-header">
@@ -242,7 +277,7 @@ function get_question(questionId){
                             <span class="edit-icon">&#x270E;</span>
                             <span class="delete-icon">&#10060;</span>
                         </div>
-                        <div class="time-posted">30 mins ago</div>
+                        <div class="time-posted">${answer.time}</div>
                     </div>
                     <!-- answer div -->
                     <div class="the-answer">
@@ -255,7 +290,7 @@ function get_question(questionId){
                              <div class="edit-answer-errors">
                                 <li></li>
                             </div>
-                            <form action="#" method="PUT" enctype="multipart/form-data" class="submit-edited-answer-form">
+                            <form enctype="multipart/form-data" data-edit-answerid=${answer.answerid} class="submit-edited-answer-form">
                                 <textarea name="answer" id="" cols="30" rows="15" placeholder="Edit answer..."></textarea>
                                 <div class="cancel-submit">
                                     <input type="button" class="cancel-button" value="cancel">
@@ -304,11 +339,12 @@ function get_question(questionId){
 
         }
         else{
+
             // Returns error if the question wasn't found
-            let error = JSON.parse(xhr.responseText);
-            console.log(error);    
+            let error = JSON.parse(xhr.responseText);  
         }
     };
+
     // Sends the request
     xhr.send();
 }
@@ -321,6 +357,7 @@ submitAnswer = document.querySelector("#submit-answer-form");
 
 
 function postAnswer(question_id){
+
     // A submit event to provide an answer to a question
     submitAnswer.addEventListener('submit', function(e){
 
@@ -339,8 +376,10 @@ function postAnswer(question_id){
 
         // Response from the server
         xhr.onload = function (onloadevent) {
+
             // Answer submited successfully
             if (xhr.status == 201){
+
                 // changes the response text to a javascript object 
                 let answer = JSON.parse(xhr.responseText);
                 get_question(question_id);
@@ -348,27 +387,34 @@ function postAnswer(question_id){
             else{
                 // error response
                 let error = JSON.parse(xhr.responseText);
-                console.log(error );
+
                 // gets error div element
                 let submitAnswerErrorContainer = e.target.parentNode.previousElementSibling;
+
                 // Accesses the list tag to display the error
                 let editErrorTag = submitAnswerErrorContainer.children[0];
+
                 // if the list tag doesn't contain an error message,
                 // add one.
                 if(editErrorTag.innerHTML == ''){
                     editErrorTag.innerHTML = error.error;
                 }
                 else{
+
                     // If list tag has an error text replace it with a new one
                     editErrorTag.innerHTML = error.error;
                 }
+
                 // Display the error container, to display the error,
                 // message.
                 submitAnswerErrorContainer.style.maxHeight = submitAnswerErrorContainer.scrollHeight + 'px';
+
                 // makes the errors disappear in 30 seconds
                 setTimeout(function(){
+
                     // Replace the current error text with an empty string
                     editErrorTag.innerHTML = '';
+
                     // Makes the error container to disappear
                     submitAnswerErrorContainer.style.maxHeight = null;
                 }, 3000);
@@ -386,7 +432,7 @@ function postAnswer(question_id){
 postAnswer(questionIdInt);
 
 // A function to vote for an answer
-function voteForAnswer(upordownvote, answerid, question_id){
+function voteForAnswer(e, upordownvote, answerid, question_id){
     // initialise ajax request object
     let xhr = new XMLHttpRequest();
 
@@ -400,9 +446,32 @@ function voteForAnswer(upordownvote, answerid, question_id){
             get_question(question_id);
         }
         else{
-            console.log('voting failed');
+            // Changes error response text to a javascript object
+            let error = JSON.parse(this.responseText);
+
+            // gets the error container
+            let errorPopUpDiv = e.target.parentNode.children[3];
+            
+            // displays the error container
+            errorPopUpDiv.style.display = 'flex';
+
+            // places the error message to the container
+            errorPopUpDiv.innerHTML = error.error;
+
+            // makes the error disappear in 3 seconds
+            setTimeout(function(){
+
+                // clears the error message in the error container
+                errorPopUpDiv.innerHTML = '';
+
+                // hides the error container
+                errorPopUpDiv.style.display = 'none';
+
+            }, 3000);
         }
     };
 
     xhr.send()
 }
+
+// 

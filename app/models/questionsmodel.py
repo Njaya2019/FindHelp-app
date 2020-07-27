@@ -68,12 +68,11 @@ class question():
             # con = con_cur[0]
             cur = con_cur[1]
             # getQuestion_sql = "SELECT * FROM questions WHERE questionid=%s"
-            getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, ARRAY_AGG(userswhoanswered.fullname|| ':'||answers.answer|| ':'||answers.answerid|| ':' ||answers.upvotes|| ':' ||answers.downvotes) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
+            getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
             cur.execute(getQuestion_sql, (questionid,))
             # if there are no rows fetchall returns an empty list.
             a_question = cur.fetchone()
             if a_question:
-                print(a_question)
                 return a_question
             return False
         except Exception as err:
@@ -94,7 +93,7 @@ class question():
                     return 'You can not edit this question but only the owner'
                 if questionToEdit['questionimage'] != 'noimagekey':
                     remove(questionToEdit['questionimage'])
-                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s, timeposted=CURRENT_TIMESTAMP WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
+                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
                 editedQuestionData = (title, description, imageurl, questionid,)
                 cur.execute(editQuestion_sql, editedQuestionData)
                 con.commit()

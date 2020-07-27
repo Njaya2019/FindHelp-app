@@ -3,32 +3,36 @@
 document.body.addEventListener('submit', submitLoginData);
 
 // A class that has login functions
-
-
 class LoginFunctions{
 
     // A function to submit signin data
     static submitSigninData(e){
+
         // Gets form's login data
         let loginform = e.target;
         let loginData = new FormData(loginform);
-        console.log(loginData);
+
         // Initialise XMLHttpRequest
         let xhr = new XMLHttpRequest()
+
+        // Opens the request
         xhr.open("POST", "http://127.0.0.1:5000/signin", true);
-        // Open the request
+        
         xhr.onload = function(onloadevent) {
+
             if (xhr.status == 200) {
+            
               // Login was successful
               const response = JSON.parse(this.responseText);
-              // console.log(this.responseURL);
+
               localStorage.setItem('token', response.token);
               window.location.href = `questions/`;
             }
             else {
+
               // Login failed
               const loginFailedResponse = JSON.parse(this.responseText);
-              console.log(loginFailedResponse);
+
               // Gets error login container
               let loginErrorContainer = e.target.previousElementSibling;
 
@@ -42,12 +46,15 @@ class LoginFunctions{
                   loginErrorTag.innerHTML = loginFailedResponse.error;
               }
               else{
+
                   // If list tag has an error text replace it with a new one
                   loginErrorTag.innerHTML = loginFailedResponse.error;
               }
+
               // Display the error container, to display the error,
               // message.
               loginErrorContainer.style.display = 'block';
+
               // Makes the error message disappear in 30 seconds
               // and sets the value of the list tag to an empty text.
               setTimeout(function(){

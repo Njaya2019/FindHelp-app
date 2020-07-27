@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify, current_app, render_template
-import urllib.parse
+from datetime import datetime
+import iso8601
 from app.validators.validate import jsonvalues, regularExValidation
 from app.models.questionsmodel import question
 from app.models.dataBase import db
@@ -158,7 +159,7 @@ def view_question(questionid):
     aQuestion = question.viewQuestion(con_cur, questionid)
     new_question_dictionary = {}
     if aQuestion:
-        print(type(aQuestion["usersandanswers"][0]))
+        # print(type(aQuestion["usersandanswers"][0]))
         timepassed = timefunctions.calculateTimePassed(aQuestion['timeposted'])
         NoneType = type(None)
         if type(aQuestion["usersandanswers"][0]) != NoneType:
@@ -170,15 +171,17 @@ def view_question(questionid):
             # Loop through the answers and create a dictionary of the answers, 
             # name of the user as key and the answer as value.
             for useranswer in aQuestion["usersandanswers"]:
-                user_and_answer_list = useranswer.rsplit(":")
+                user_and_answer_list = useranswer.rsplit("----")
                 total_votes = int(user_and_answer_list[3])-int(user_and_answer_list[4])
-                print(int(user_and_answer_list[3]), int(user_and_answer_list[4]), total_votes)
+                date_time_obj = iso8601.parse_date(user_and_answer_list[5])
+                time_passed_answered = timefunctions.calculateTimePassed(date_time_obj)
                 users_and_answers_dictionary.update(
                     {
                         'whoanswered': user_and_answer_list[0],
                         'answerid': user_and_answer_list[2],
                         'answer':user_and_answer_list[1],
-                        'votes': total_votes
+                        'votes': total_votes,
+                        'time': time_passed_answered
                     }
                 )
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()

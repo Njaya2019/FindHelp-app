@@ -16,7 +16,7 @@ function clickActions(e){
     else if(e.target.classList.contains('delete-question')){
         // Deleting question action option clicked.
         // Displays confirming delete window.
-        confirmDeleteWindow = e.target.parentNode.parentNode.parentNode.parentNode.children[3];
+        confirmDeleteWindow = e.target.parentNode.parentNode.parentNode.parentNode.children[4];
         confirmDeleteWindow.style.display = 'block';
         e.target.parentNode.style.display = 'none';
     }          
@@ -46,11 +46,11 @@ function clickActions(e){
         e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = 0 + "px";
 
         // Gets the form that would facilitate the editing of the question.
-        let editQuestionFormElement = e.target.parentNode.parentNode.parentNode.parentNode.children[2].children[0];
+        let editQuestionFormElement = e.target.parentNode.parentNode.parentNode.parentNode.children[3].children[0];
 
         // Supplies the original posted text to the input and textarea elements of form for editing the question.
-        editQuestionFormElement.children[1].value = editQuestionTitle;
-        editQuestionFormElement.children[2].value = editQuestionDescription;
+        editQuestionFormElement.children[0].value = editQuestionTitle;
+        editQuestionFormElement.children[1].value = editQuestionDescription;
         
         // if the form is already open, closes it and places back the posted question.
         if(editQuestionFormElement.style.maxHeight == editQuestionFormElement.scrollHeight + "px"){
@@ -64,12 +64,8 @@ function clickActions(e){
     }
     else if(e.target.classList.contains('cancel-button')){
         // Closes the editing question form.
-        e.target.parentNode.parentNode.parentNode.parentNode.children[2].children[0].style.maxHeight = null;
+        e.target.parentNode.parentNode.parentNode.parentNode.children[3].children[0].style.maxHeight = null;
         e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[1].scrollHeight + "px";  
-    }
-    else if(e.target.classList.contains('edit-form')){
-        e.preventDefault();
-        console.log('This form is being submitted');
     }
     // Upload question image container clicked
     else if(e.target.id == 'question-image'){
@@ -85,7 +81,7 @@ function clickActions(e){
         });
     }
     else{
-        console.log('Not implemented yet')
+
     }
 
 }
@@ -115,16 +111,19 @@ function postQuestion(e){
 
     // What should happen if the reponse received from the server
     xhr.onload = function(onloadevent){
+
         // successful posted question
         if (xhr.status == 201){
+
             get_questions();
+
             // resets form data
             questionform.reset();
         }
         else{
             // Response error from the server
             let error = JSON.parse(xhr.responseText);
-            console.log(error);
+
             // Gets the error div container
             let questionErrorContainer = e.target.parentNode.previousElementSibling;
 
@@ -134,9 +133,11 @@ function postQuestion(e){
             // if the list tag doesn't contain an error message,
             // add one.
             if(questionErrorTag.innerHTML == ''){
+
                 questionErrorTag.innerHTML = error.error;
             }
             else{
+
                 // If list tag has an error text replace it with a new one
                 questionErrorTag.innerHTML = error.error;
             }
@@ -157,11 +158,11 @@ function postQuestion(e){
             }, 30000);      
         }
     };
+
     // Sends the request
     xhr.send(questionData);
 
 }
-
 
 // A function to get all questions
 function get_questions(){
@@ -179,8 +180,6 @@ function get_questions(){
 
             // Changes the questions response text to a javascript array object
             const questions = JSON.parse(xhr.responseText);
-
-            console.log(questions.questions);
 
             // display all questions
 
@@ -219,17 +218,16 @@ function get_questions(){
                         <p>${element.answers} answer</p>
                     </div>
                     <!-- Edit question div -->
+                    <div class="edit-question-errors">
+                        <li></li>
+                    </div>
                     <div class="edit-div">
-                        <form class="edit-form">
-                            <div class="edit-question-errors">
-                                <li>Provide values for both title and description</li>
-                                <li>Space values are not valid values</li>
-                            </div>
+                        <form enctype="multipart/form-data" data-questionid=${element.questionid} class="edit-form">
                             <input type="text" name="title" class="edit-question-title" placeholder="Edit question title...">
                             <textarea class="edit-question-description" name="description" placeholder="Edit question description..." cols="30" rows="10"></textarea>
                             <div class="cancel-submit">
                                 <input type="button" class="cancel-button" value="cancel">
-                                <input type="submit" name="submit-edited-question" class="submit-edited-question" data-questionid=${element.questionid} value="save">
+                                <input type="submit" name="submit-edited-question" class="submit-edited-question" value="save">
                             </div>
                         </form>
                     </div>
@@ -262,75 +260,81 @@ function get_questions(){
     xhr.send();
 }
 
-// A function to edit a question
-function editQuestion(question_id){
-    // Gets the question's edit form id 
-    editQuestion = document.querySelector(".edit-form");
+document.body.addEventListener('submit', editQuestion);
 
-    // A submit event to modify a question
-    editQuestion.addEventListener('submit', function(e) {
-        // Prvents action of the form from routing automatically
+// A function to edit a question
+function editQuestion(e){
+    if(e.target.classList.contains('edit-form')){
+
         e.preventDefault();
+
+        // gets the question id
+        let question_id = e.target.getAttribute("data-questionid");
+        
+        // Changes the question id string to an integer
+        let int_question_id = parseInt(question_id);
 
         // Grabs form data to be sent to the server by an ajax request
         let editquestionform = e.target;
         let editedquestionData = new FormData(editquestionform);
 
-        // initialise ajax request
+        // initialises ajax request object
         let xhr = new XMLHttpRequest();
 
-        // open the request
-        xhr.open('PUT', `http://127.0.0.1:5000/questions/${question_id}`, true);
+        // opens the request
+        xhr.open('PUT', `http://127.0.0.1:5000/questions/${int_question_id}`);
+
         // What should happen if the reponse received from the server
         xhr.onload = function(onloadevent){
+
             // successful posted question
             if (xhr.status == 200){
-                // get_questions();
-                // resets form data
-                // editquestionform.reset();
-                console.log('edited');
+
+                // display all questions
+                get_questions();
+
             }
             else{
+
                 // Response error from the server
-                // let error = JSON.parse(xhr.responseText);
-                console.log('failed to edit');
+                let error = JSON.parse(xhr.responseText);
+
                 // // Gets the error div container
-                // let questionErrorContainer = e.target.parentNode.previousElementSibling;
+                let errorDiv = e.target.parentNode.previousElementSibling;
 
                 // // Accesses the list tag to display the error
-                // let questionErrorTag = questionErrorContainer.children[0];
+                let listErrorTag = errorDiv.children[0];
 
                 // // if the list tag doesn't contain an error message,
                 // // add one.
-                // if(questionErrorTag.innerHTML == ''){
-                //     questionErrorTag.innerHTML = error.error;
-                // }
-                // else{
-                //     // If list tag has an error text replace it with a new one
-                //     questionErrorTag.innerHTML = error.error;
-                // }
+                if(listErrorTag.innerHTML == ''){
+                    listErrorTag.innerHTML = error.error;
+                }
+                else{
+                    // If list tag has an error text replace it with a new one
+                    listErrorTag.innerHTML = error.error;
+                }
 
                 // // Display the error container, to display the error,
                 // // message.
-                // questionErrorContainer.style.maxHeight = questionErrorContainer.scrollHeight + 'px';
+                errorDiv.style.maxHeight = errorDiv.scrollHeight + 'px';
 
-                // // Deletes all list error tags after 30 seconds
-                // setTimeout(function(){
+                // Deletes all list error tags after 30 seconds
+                setTimeout(function(){
 
-                //     // Replace the current error text with an empty string
-                //     questionErrorTag.innerHTML = '';
+                    // Replace the current error text with an empty string
+                    listErrorTag.innerHTML = '';
 
-                //     // Makes the error container to disappear
-                //     questionErrorContainer.style.maxHeight = 0 + 'px';
+                    // Makes the error container to disappear
+                    errorDiv.style.maxHeight = 0 + 'px';
 
-                // }, 30000);      
+                }, 3000);      
             }
         };
 
-        // Sends the request
+        // Sends the request with the edited question
         xhr.send(editedquestionData);
-
-    });
+    }
 }
 
 
@@ -345,16 +349,18 @@ function delete_question(question_id){
 
     // the request was successfully sent to the server
     xhr.onload = function(onloadevent){
-        console.log('The question has been deleted');
+        
         // successfully deleted the question
         if (xhr.status == 200){
+            
             get_questions();
             
         }
         else{
+
             // The question doesn't exist error
             const error = JSON.parse(xhr.responseText);
-            console.log(error.error);
+
         }
     };
 
@@ -362,7 +368,6 @@ function delete_question(question_id){
     xhr.send();
 
 }
-
 
 // Renders all questions when the page loads
 get_questions();
