@@ -41,12 +41,23 @@ function clickActions(e){
         deleteModal.style.display = "block";
     }
     // closes delete modal, background element
-    else if(e.target.id == 'delete-modal'){
+    else if(e.target.classList.contains('delete-modal')){
         e.target.style.display = 'none';
     }
     // closes delete modal, cancel button
-    else if(e.target.id == 'delete-answer-cancel'){
+    else if(e.target.classList.contains('delete-answer-cancel')){
         e.target.parentNode.parentNode.parentNode.style.display = 'none';
+    }
+    // deletes a question
+    else if(e.target.classList.contains('delete-answer-delete-answerid')){
+        let answerid = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute("data-del-answerid");
+        // let editForm = e.target.parentNode.parentNode.parentNode.previousElementSibling.children[1];
+        // let answerid = editForm.getAttribute("data-edit-answerid");
+        // console.log(answerid);
+        // Changes the answer id string to an integer
+        let answer_id = parseInt(answerid);
+        console.log(answer_id);
+        delete_answer(e, answer_id, questionIdInt);
     }
     // Vote up or down arrows clicked
     else if(e.target.classList.contains('arrow-up') || e.target.classList.contains('arrow-down')){
@@ -115,6 +126,7 @@ class SubmitFunctions{
             
             // successfully edited the answer response
             if(xhr.status == 200){
+                console.log(answer_id);
                 get_question(question_id);
             }
             else{
@@ -259,9 +271,10 @@ function get_question(questionId){
 
             // Checks if the answers array is not empty
             if(questionObject.answers && questionObject.answers.length){
+                console.log(questionObject.answers);
                 questionObject.answers.forEach(function(answer){
                 answers_html += `
-                <div class="user-answer">
+                <div class="user-answer" data-del-answerid=${answer.answerid}>
                     <!-- answer's number -->
                     <div class="answer-number">
                         <div class="arrow-up" data-up-answerid=${answer.answerid}></div>
@@ -287,7 +300,7 @@ function get_question(questionId){
                         <!-- Form to edit an answer -->
                         <div class="edit-answer">
                             <!-- Editing answers errors -->
-                             <div class="edit-answer-errors">
+                            <div class="edit-answer-errors">
                                 <li></li>
                             </div>
                             <form enctype="multipart/form-data" data-edit-answerid=${answer.answerid} class="submit-edited-answer-form">
@@ -302,16 +315,16 @@ function get_question(questionId){
                         <!-- Confirm delete -->
                         <div class="confirm-delete-answer-background" id="delete-modal">
                             <!-- Confirm delete answer dialog box -->
-                            <div id="confirm-delete-answer">
-                                <div id="confirm-delete-answer-title">
+                            <div class="confirm-delete-answer">
+                                <div class="confirm-delete-answer-title">
                                     <h4>Delete answer</h4>
                                 </div>
-                                <div id="confirm-delete-answer-body">
+                                <div class="confirm-delete-answer-body">
                                     <h5>Are you sure you want to delete the answer ?</h5>
                                 </div>
-                                <div id="confirm-delete-answer-footer">
-                                    <input type="button" id="delete-answer-cancel" value="cancel">
-                                    <input type="button" id="delete-answer-delete" value="delete">
+                                <div class="confirm-delete-answer-footer">
+                                    <input type="button" class="delete-answer-cancel" value="cancel">
+                                    <input type="button" class="delete-answer-delete delete-answer-delete-answerid" value="delete">
                                 </div>
                             </div>
                         </div>
@@ -322,7 +335,7 @@ function get_question(questionId){
                     <div class="answer-footer">
                         <div class="name-image">
                             <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="" srcset="">
-                            <a href="#">${answer.whoanswered}</a>
+                            <a href='http://127.0.0.1:5000/answers/${answer.answerid}'>${answer.whoanswered}</a>
                         </div>
                     </div>
                     <!-- End of votes -->
@@ -383,6 +396,9 @@ function postAnswer(question_id){
                 // changes the response text to a javascript object 
                 let answer = JSON.parse(xhr.responseText);
                 get_question(question_id);
+
+                // resets the form values
+                answerform.reset();
             }
             else{
                 // error response
@@ -474,4 +490,106 @@ function voteForAnswer(e, upordownvote, answerid, question_id){
     xhr.send()
 }
 
-// 
+// A function that deletes an answer
+function delete_answer(e, answer_id, questionId){
+
+    // initialises ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // opens the request
+    xhr.open('DELETE', `http://127.0.0.1:5000/answers/${answer_id}`);
+
+    // response from the server
+    xhr.onload = function(onloadevent){
+
+        // answer successfully deleted
+        if(xhr.status == 200){
+            let delete_message = JSON.parse(xhr.responseText);
+            get_question(questionId);
+            // console.log(delete_message.message);
+            let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
+
+            // displays the flash container
+            falsh_container.style.display = 'flex';
+
+            // Adds the message to the container
+            falsh_container.innerHTML = delete_message.message;
+            
+            // makes the flash container to disappear in 4 seconds
+            setTimeout(function() {
+
+                // makes the container to disappear
+                falsh_container.style.display = 'none';
+
+                // makes sure it's content is empty after it disappears
+                falsh_container.innerHTML = '';
+
+            }, 4000);
+
+        }
+        else if(xhr.status === 403){
+            // changes the response text to a javascript object
+            let error = JSON.parse(xhr.responseText);
+            get_question(questionId);
+        
+            let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
+
+            // displays the flash container
+            falsh_container.style.display = 'flex';
+
+            // changes the flash container background color to red
+            falsh_container.style.backgroundColor = "red";
+
+            // changes it's color opacity opacity
+
+
+            // Adds the errorto the container
+            falsh_container.innerHTML = error.error;
+            
+            // makes the flash container to disappear in 4 seconds
+            setTimeout(function() {
+
+                // makes the container to disappear
+                falsh_container.style.display = 'none';
+
+                // makes sure it's content is empty after it disappears
+                falsh_container.innerHTML = '';
+
+            }, 4000);
+
+        }
+        else{
+            // error response
+            let error= JSON.parse(xhr.responseText);
+            console.log(error.error);
+        }
+    };
+
+    // sends the delete request
+    xhr.send();
+}
+
+let delete_buttons = document.getElementsByClassName('delete-answer-delete');
+console.log(delete_buttons);
+
+// Array.from(delete_buttons).forEach(function(button){
+//     button.addEventListener('click', function(e){
+//         console.log('clicked');
+//     // console.log('data-wow value is: ' + element.dataset.wow);
+//     let answerid = button.getAttribute("data-delete-answerid");
+//     let answer_id = parseInt(answerid);
+//     delete_answer(e, answer_id, questionIdInt);
+//   });
+// });
+
+
+// Array.prototype.forEach.call(delete_buttons, function(button) {
+//         button.addEventListener('click', function(e) {
+//         // let answerid = button.getAttribute("data-delete-answerid");
+//         let answerid = element.dataset.delete-answerid;
+//         let answer_id = parseInt(answerid);
+//         console.log('clicked');
+//         delete_answer(e, answer_id, questionIdInt);
+
+//     });
+//   });

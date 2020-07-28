@@ -84,12 +84,19 @@ def editAnswer(current_user_id, answerid):
 @answers_blueprint.route('/answers/<int:answerid>', methods = ['DELETE'])
 @token_required
 def delete_answer(current_user_id, answerid):
+    print(current_user_id)
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
-    answerDeleted = answer.deleteAnswer(con_cur, answerid, current_user_id)
+    answerDeleted = answer.deleteAnswer(
+        con_cur,
+        answerid,
+        current_user_id,
+        current_app.config['UPLOAD_FOLDER'],
+        current_app
+    )
     if answerDeleted == 'forbidden':
-        return jsonify({'status':403, 'error':'You can not delete other users\' answers'})
+        return jsonify({'status':403, 'error':'You can not delete other users\' answers'}), 403
     if answerDeleted == 'notfound':
         # 204 The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.
         return jsonify({'status':404, 'error':'Sorry the answer you are trying to delete doesn\'t exist'}), 404
-    return jsonify({'status':204, 'message':'The answer has been successfully deleted'}), 204
+    return jsonify({'status':200, 'message':'The answer has been successfully deleted'}), 200
     

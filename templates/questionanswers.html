@@ -14,7 +14,7 @@
         <div id="nav">
 
             <!-- left link. link to Home page -->
-            <a id="left-link" href="../homepage.html">FindHelp</a>
+            <a id="left-link" href="{{ url_for('questions.home_view_questions') }}">FindHelp</a>
             <!-- Right link. link to user's view page -->
             <a id="right-link" href="{{ url_for('questions.home_view_questions') }}">Questions</a>
             
@@ -22,7 +22,10 @@
         <!-- end of navigation -->
         <!-- Body -->
         <div id="body-container">
-
+            <!-- flash messages -->
+            <div id="flash-messages">
+                The answer has been successfully deleted
+            </div>
             <!-- question and it's description container -->
             <div id="title-description-container">
             </div>

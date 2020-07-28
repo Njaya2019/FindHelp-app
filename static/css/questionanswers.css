@@ -88,8 +88,31 @@ body{
     grid-template-columns: 1fr;
     grid-template-rows: auto;
     grid-row-gap: 5px;
+    position: relative;
 }
 
+/* flash messages */
+#container #body-container #flash-messages{
+    position: absolute;
+    top: 140px;
+    left: 150px;
+    width: 250px;
+    z-index: 4;
+    background-color: rgba(0, 0, 255, 0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding-left: 10px;
+    border-radius: 2px;
+    color: white;
+    display: none;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+/* question title */
 #container #body-container #title-description-container #title-section{
     background-color:rgba(192,192,192,0.8);
     font-weight: bold;
@@ -97,6 +120,7 @@ body{
     border-radius: 3px;
 }
 
+/* question description */
 #container #body-container #title-description-container #description-section{
     background-color:rgba(192,192,192,0.8);
     padding: 10px;
@@ -464,7 +488,7 @@ body{
 }
 
 /* Confirm delete container */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer{
     width: 200px;
     border-top: 1px solid lightblue;
     border-bottom: 1px solid lightblue;
@@ -483,7 +507,7 @@ body{
 }
 
 /* Confirm delete title container */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-title{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer .confirm-delete-answer-title{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -493,7 +517,7 @@ body{
 }
 
 /* Confirm delete body container */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-body{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer .confirm-delete-answer-body{
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -502,7 +526,7 @@ body{
 }
 
 /* Confirm delete footer container */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer .confirm-delete-answer-footer{
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
@@ -510,7 +534,7 @@ body{
 }
 
 /* Confirm delete cancel button */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer #delete-answer-cancel{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer .confirm-delete-answer-footer .delete-answer-cancel{
     padding: 5px;
     border: 1px solid lightgray;
     margin: 3px;
@@ -519,11 +543,11 @@ body{
     transition: 0.7s ease-in-out;
 }
 /* Confirm delete cancel button on hover */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer #delete-answer-cancel:hover{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer .confirm-delete-answer-footer .delete-answer-cancel:hover{
     background-color:rgba(128,128,128, 0.7);
 }
 /*  Confirm delete delete button  */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer #delete-answer-delete{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer .confirm-delete-answer-footer .delete-answer-delete{
     padding: 8px;
     border: 1px solid lightgray;
     font-weight: bold;
@@ -534,7 +558,7 @@ body{
     transition: 0.7s ease-in-out;
 }
 /* Confirm delete on hover */
-#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer #confirm-delete-answer-footer #delete-answer-delete:hover{
+#container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer .confirm-delete-answer-footer .delete-answer-delete:hover{
     background-color: rgba(255, 0, 0, 0.5);
 }
 /* End of confirm delete */
@@ -747,7 +771,7 @@ body{
     }
 
     /* Confirm delete container */
-    #container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background #confirm-delete-answer{
+    #container #body-container #answers-container .user-answer .the-answer .confirm-delete-answer-background .confirm-delete-answer{
         width: 300px;
         border-top: 1px solid lightblue;
         border-bottom: 1px solid lightblue;
@@ -783,4 +807,42 @@ body{
         padding: 0px;
     }
 
+    /* flash messages */
+    #container #body-container #flash-messages{
+        /* width: 250px; */
+        top: 220px;
+        left: 280px;
+    }
 }
+
+@media (max-width: 444px){
+
+    /* flash messages */
+    #container #body-container #flash-messages{
+        top: 180px;
+        left: 80px;
+    }
+
+}
+
+@media (max-width: 370px){
+
+    /* flash messages */
+    #container #body-container #flash-messages{
+        top: 180px;
+        left: 40px;
+    }
+
+}
+
+@media (max-width: 330px){
+
+    /* flash messages */
+    #container #body-container #flash-messages{
+        top: 180px;
+        left: 80px;
+        width: 80px;
+    }
+
+}
+

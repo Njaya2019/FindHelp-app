@@ -10,33 +10,60 @@ class SignupFunctions{
     // A function to submit signup data
     static submitSignupData(e){
 
-        // Gets error container
-        let signupErrorContainer = e.target.previousElementSibling;
+        // Grabs signup form data to be sent to the server by an ajax request
+        let signupform = e.target;
+        let signupData = new FormData(signupform);
 
-        // Accesses the list tag to display the error
-        let signupErrorTag = signupErrorContainer.children[0];
+        // initialises ajax object
+        let xhr = new XMLHttpRequest();
 
-        // if the list tag doesn't contain an error message,
-        // add one.
-        if(signupErrorTag.innerHTML == ''){
-            signupErrorTag.innerHTML = "Please provide valid values for all fields";
-        }
-        else{
-            // If list tag has an error text replace it with a new one
-            signupErrorTag.innerHTML = "Please fill all fields to register";
-        }
+        // opens the request
+        xhr.open('POST', `http://127.0.0.1:5000/signup`);
 
-        // Display the error container, to display the error,
-        // message.
-        signupErrorContainer.style.display = 'block';
+        // response from the server
+        xhr.onload = function(onloadevent) {
+            // user registered successfully
+            if(xhr.status == 201){
+                // redirects to login page
+                window.location.href = `signin`;
+            }
+            else{
 
-        // Makes the error message disappear in 30 seconds
-        // and sets the value of the list tag to an empty text.
-        setTimeout(function(){
-            signupErrorTag.innerHTML = '';
-            signupErrorContainer.style.display = 'none';
-        }
-        ,30000)
+                // response error from the server
+                let error = JSON.parse(xhr.responseText);
+
+                // Gets error container
+                let signupErrorContainer = e.target.previousElementSibling;
+
+                // Accesses the list tag to display the error
+                let signupErrorTag = signupErrorContainer.children[0];
+
+                // if the list tag doesn't contain an error message,
+                // add one.
+                if(signupErrorTag.innerHTML == ''){
+                    signupErrorTag.innerHTML = error.error;
+                }
+                else{
+                    // If list tag has an error text replace it with a new one
+                    signupErrorTag.innerHTML = error.error;
+                }
+
+                // Display the error container, to display the error,
+                // message.
+                signupErrorContainer.style.display = 'block';
+
+                // Makes the error message disappear in 4 seconds
+                // and sets the value of the list tag to an empty text.
+                setTimeout(function(){
+                    signupErrorTag.innerHTML = '';
+                    signupErrorContainer.style.display = 'none';
+                }
+                ,4000)
+            }
+        };
+
+        // sends the signup data
+        xhr.send(signupData);
 
     }
 }

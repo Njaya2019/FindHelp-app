@@ -59,7 +59,7 @@ class answer():
             print(err)
 
     @staticmethod
-    def deleteAnswer(con_cur, answerid, userid):
+    def deleteAnswer(con_cur, answerid, userid, upload_folder, current_app):
         """A method to delete a qestion """
         try:
             con = con_cur[0]
@@ -68,13 +68,17 @@ class answer():
             cur.execute(findAnswer_sql, [answerid,])
             answerFetched = cur.fetchone()
             if answerFetched:
+                # restricts other users from deleting the anser
+                print(answerFetched['userid'], userid, answerid)
                 if answerFetched['userid'] != userid:
                     return 'forbidden'
-                    # return 'You can not delete other users\' questions'
-                if answerFetched['questionimage'] != 'noimagekey':
-                    remove(answerFetched['questionimage'])
+                # Deletes an answer's image, if it exists
+                if answerFetched['answerimage'] != 'noimagekey':
+                    uploads_dir = os.path.join(current_app.root_path, upload_folder)
+                    image_path = os.path.join(uploads_dir, answerFetched['answerimage'])
+                    os.remove(image_path)
                 # The statement below returns the deleted row
-                deleteAnswer_sql = "DELETE FROM anwers WHERE answerid=%s RETURNING answerid"
+                deleteAnswer_sql = "DELETE FROM answers WHERE answerid=%s RETURNING answerid"
                 cur.execute(deleteAnswer_sql, [answerid,])
                 con.commit()
                 deleted_answer = cur.fetchone()
@@ -82,8 +86,8 @@ class answer():
                     return 'deleted'
                     # return 'The question has been successfully deleted'
             else:
-                return 'notfound'
-                # return 'Sorry the question you are trying to delete doesn't exist'       
+                # the answer dosen't exist
+                return 'notfound'       
         except Exception as err:
             print(err)
     
