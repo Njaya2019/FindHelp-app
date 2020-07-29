@@ -94,8 +94,8 @@ body{
 /* flash messages */
 #container #body-container #flash-messages{
     position: absolute;
-    top: 140px;
-    left: 150px;
+    top: 170px;
+    left: 0px;
     width: 250px;
     z-index: 4;
     background-color: rgba(0, 0, 255, 0.6);
@@ -247,7 +247,7 @@ body{
 /* pop up error message */
 #container #body-container #answers-container .user-answer .answer-number .vote-error-container{
     z-index: 4;
-    background-color: rgba(255, 0, 0, 1);
+    background-color: rgba(255, 0, 0, 0.7);
     position: absolute;
     top: 60px;
     left: 60px;
@@ -791,7 +791,7 @@ body{
 
     #container #body-container #answers-container .user-answer .answer-number .vote-error-container{
         z-index: 4;
-        background-color: rgba(255, 0, 0, 1);
+        background-color: rgba(255, 0, 0, 0.7);
         position: absolute;
         top: 60px;
         left: 60px;
@@ -804,45 +804,12 @@ body{
         border-radius: 2px;
         color: white;
         display: none;
-        padding: 0px;
+        padding-left: 10px;
     }
 
     /* flash messages */
     #container #body-container #flash-messages{
-        /* width: 250px; */
         top: 220px;
-        left: 280px;
+        left: 0px;
     }
 }
-
-@media (max-width: 444px){
-
-    /* flash messages */
-    #container #body-container #flash-messages{
-        top: 180px;
-        left: 80px;
-    }
-
-}
-
-@media (max-width: 370px){
-
-    /* flash messages */
-    #container #body-container #flash-messages{
-        top: 180px;
-        left: 40px;
-    }
-
-}
-
-@media (max-width: 330px){
-
-    /* flash messages */
-    #container #body-container #flash-messages{
-        top: 180px;
-        left: 80px;
-        width: 80px;
-    }
-
-}
-

@@ -37,7 +37,7 @@ function clickActions(e){
     }
     // displays delete modal
     else if(e.target.classList.contains('delete-icon')){
-        let deleteModal = document.getElementById('delete-modal');
+        let deleteModal = e.target.parentNode.parentNode.parentNode.children[2].children[2];
         deleteModal.style.display = "block";
     }
     // closes delete modal, background element
@@ -47,17 +47,6 @@ function clickActions(e){
     // closes delete modal, cancel button
     else if(e.target.classList.contains('delete-answer-cancel')){
         e.target.parentNode.parentNode.parentNode.style.display = 'none';
-    }
-    // deletes a question
-    else if(e.target.classList.contains('delete-answer-delete-answerid')){
-        let answerid = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.getAttribute("data-del-answerid");
-        // let editForm = e.target.parentNode.parentNode.parentNode.previousElementSibling.children[1];
-        // let answerid = editForm.getAttribute("data-edit-answerid");
-        // console.log(answerid);
-        // Changes the answer id string to an integer
-        let answer_id = parseInt(answerid);
-        console.log(answer_id);
-        delete_answer(e, answer_id, questionIdInt);
     }
     // Vote up or down arrows clicked
     else if(e.target.classList.contains('arrow-up') || e.target.classList.contains('arrow-down')){
@@ -255,7 +244,7 @@ function get_question(questionId){
             // gets the question object
             let questionObject = question.Question;
             title_description_html +=`
-                <div id="timeposted-section">posted: ${questionObject.timeposted}, views: 1 time</div>
+                <div id="timeposted-section">posted: ${questionObject.timeposted}, views: 2 times</div>
                 <!-- question title -->
                 <div id="title-section">${questionObject.title}</div>
                 <!-- question description -->
@@ -271,7 +260,7 @@ function get_question(questionId){
 
             // Checks if the answers array is not empty
             if(questionObject.answers && questionObject.answers.length){
-                console.log(questionObject.answers);
+                
                 questionObject.answers.forEach(function(answer){
                 answers_html += `
                 <div class="user-answer" data-del-answerid=${answer.answerid}>
@@ -313,7 +302,7 @@ function get_question(questionId){
                         </div>
                         <!-- End of editing form -->
                         <!-- Confirm delete -->
-                        <div class="confirm-delete-answer-background" id="delete-modal">
+                        <div class="confirm-delete-answer-background" class="delete-modal">
                             <!-- Confirm delete answer dialog box -->
                             <div class="confirm-delete-answer">
                                 <div class="confirm-delete-answer-title">
@@ -324,7 +313,7 @@ function get_question(questionId){
                                 </div>
                                 <div class="confirm-delete-answer-footer">
                                     <input type="button" class="delete-answer-cancel" value="cancel">
-                                    <input type="button" class="delete-answer-delete delete-answer-delete-answerid" value="delete">
+                                    <input type="button" onclick="delete_answer(event, ${answer.answerid}, ${questionIdInt})" class="delete-answer-delete" value="delete">
                                 </div>
                             </div>
                         </div>
@@ -491,7 +480,7 @@ function voteForAnswer(e, upordownvote, answerid, question_id){
 }
 
 // A function that deletes an answer
-function delete_answer(e, answer_id, questionId){
+function delete_answer(event, answer_id, questionId){
 
     // initialises ajax request object
     let xhr = new XMLHttpRequest();
@@ -507,13 +496,21 @@ function delete_answer(e, answer_id, questionId){
             let delete_message = JSON.parse(xhr.responseText);
             get_question(questionId);
             // console.log(delete_message.message);
-            let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
+            let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
 
             // displays the flash container
             falsh_container.style.display = 'flex';
 
             // Adds the message to the container
             falsh_container.innerHTML = delete_message.message;
+
+            // Scroll to the top of page to see the message
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
+            
             
             // makes the flash container to disappear in 4 seconds
             setTimeout(function() {
@@ -532,7 +529,7 @@ function delete_answer(e, answer_id, questionId){
             let error = JSON.parse(xhr.responseText);
             get_question(questionId);
         
-            let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
+            let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
 
             // displays the flash container
             falsh_container.style.display = 'flex';
@@ -541,10 +538,17 @@ function delete_answer(e, answer_id, questionId){
             falsh_container.style.backgroundColor = "red";
 
             // changes it's color opacity opacity
-
+            falsh_container.style.opacity = "0.7";
 
             // Adds the errorto the container
             falsh_container.innerHTML = error.error;
+
+            // Scroll to the top of page to see the error
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
             
             // makes the flash container to disappear in 4 seconds
             setTimeout(function() {
@@ -568,28 +572,3 @@ function delete_answer(e, answer_id, questionId){
     // sends the delete request
     xhr.send();
 }
-
-let delete_buttons = document.getElementsByClassName('delete-answer-delete');
-console.log(delete_buttons);
-
-// Array.from(delete_buttons).forEach(function(button){
-//     button.addEventListener('click', function(e){
-//         console.log('clicked');
-//     // console.log('data-wow value is: ' + element.dataset.wow);
-//     let answerid = button.getAttribute("data-delete-answerid");
-//     let answer_id = parseInt(answerid);
-//     delete_answer(e, answer_id, questionIdInt);
-//   });
-// });
-
-
-// Array.prototype.forEach.call(delete_buttons, function(button) {
-//         button.addEventListener('click', function(e) {
-//         // let answerid = button.getAttribute("data-delete-answerid");
-//         let answerid = element.dataset.delete-answerid;
-//         let answer_id = parseInt(answerid);
-//         console.log('clicked');
-//         delete_answer(e, answer_id, questionIdInt);
-
-//     });
-//   });
