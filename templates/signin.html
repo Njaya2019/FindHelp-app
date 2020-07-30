@@ -45,10 +45,10 @@
                     </div>
                     <!-- Reset password and signup links-->
                     <div id="reset-password-div">
-                        <a href="resetpassword.html" id="resetpassword">Forgot password ?</a>
+                        <a href="{{ url_for('signin.reset_password') }}" id="resetpassword">Forgot password ?</a>
                     </div>
                     <div id="signup-div">
-                        <a href="signup.html" id="signedup">Already a member ?</a>
+                        <a href="{{ url_for('signin.signup') }}" id="signedup">Already a member ?</a>
                     </div>
                 </form>
         </div>

@@ -15,7 +15,7 @@
             <h3><a href="{{ url_for('questions.home_view_questions') }}">FindHelp</a></h3>
             <!-- name and photo -->
             <div id="left-nav">
-                <div>
+                <div id="bell">
                     <!-- &#128276; -->
                     <div id="bell-div">
                         <img src="{{ url_for('static', filename='img/bell.png') }}" alt="Nofication bell">
@@ -24,7 +24,10 @@
                 </div>
                 <div id="profile-link">
                     <img src="{{ url_for('static', filename='img/man.jpg') }}" alt="profile-photo">
-                    <a href="{{ url_for('signin.profile') }}" ><h4>Andrew Njaya</h4></a>
+                    <a href="{{ url_for('signin.profile') }}" ><h4 id="user-fullname">Andrew Njaya</h4></a>
+                    <div id="logout-button">
+                        logout
+                    </div>
                 </div>
             </div>
         </div>

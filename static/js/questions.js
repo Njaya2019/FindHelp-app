@@ -67,8 +67,8 @@ function clickActions(e){
         e.target.parentNode.parentNode.parentNode.parentNode.children[3].children[0].style.maxHeight = null;
         e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[1].scrollHeight + "px";  
     }
-    // Upload question image container clicked
     else if(e.target.id == 'question-image'){
+        // Upload question image container clicked
         // uploads the image and displays its name on the button.
         let labelTag = e.target.nextElementSibling;
         e.target.addEventListener('change', function(event){
@@ -79,6 +79,9 @@ function clickActions(e){
                 labelTag.innerHTML = imageName;
             }
         });
+    }
+    else if(e.target.id == 'logout-button'){
+        sign_out_user();
     }
     else{
 
@@ -195,7 +198,7 @@ function get_questions(){
                     <div class="upper-section">
                         <!-- user's name -->
                         <div class="name">
-                            <a href="{{ url_for('signin.profile') }}" class="user-name">${element.whoposted}</a>
+                            <a href="${base_url}/profile" class="user-name">${element.whoposted}</a>
                             <p>${element.timeposted}</p>
                         </div>
                         <!-- Action options -->
@@ -212,7 +215,7 @@ function get_questions(){
                     <!-- Question posted body -->
                     <div class="question-body">
                         <!-- question title -->
-                        <a href="${element.questionid}/${element.title.split(" ").join("-")}" class="question-title">${element.title}</a>
+                        <a href="${base_url}/questions/${element.questionid}/${element.title.split(" ").join("-")}" class="question-title">${element.title}</a>
                         <!-- Question description -->
                         <p>${element.description}</p>
                         <p>${element.answers} answer</p>
@@ -337,7 +340,6 @@ function editQuestion(e){
     }
 }
 
-
 // Deletes a question
 function delete_question(question_id){
     
@@ -368,6 +370,62 @@ function delete_question(question_id){
     xhr.send();
 
 }
+
+// Gets user's name
+function get_user_fullname(){
+
+    // initialise ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // opens the request
+    xhr.open('POST', 'http://127.0.0.1:5000/questions/');
+
+    // response from the server
+    xhr.onload = function(onload){
+
+        // sets the user name
+        if(xhr.status == 200){
+
+            user_name = JSON.parse(this.responseText);
+
+            fullname_header = document.getElementById('user-fullname');
+
+            fullname_header.innerHTML = user_name.fullname
+        }
+    }
+
+    // sends the request
+    xhr.send();
+}
+
+// Gets the base url
+let base_url = window.location.origin;
+
+
+// Logs out a user
+function sign_out_user(){
+    
+    // initialise ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // opens the request
+    xhr.open('GET', 'http://127.0.0.1:5000/logout');
+
+    // response from the server
+    xhr.onload = function(onload){
+
+        // sets the user name
+        if(xhr.status == 200){
+            window.location.href = `${base_url}`
+        }
+    }
+
+    // sends the request
+    xhr.send();
+}
+
+// Runs the function to set the user name
+get_user_fullname();
 
 // Renders all questions when the page loads
 get_questions();

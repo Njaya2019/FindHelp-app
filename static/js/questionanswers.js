@@ -243,6 +243,7 @@ function get_question(questionId){
 
             // gets the question object
             let questionObject = question.Question;
+            document.querySelector('title').innerHTML = questionObject.title;
             title_description_html +=`
                 <div id="timeposted-section">posted: ${questionObject.timeposted}, views: 2 times</div>
                 <!-- question title -->

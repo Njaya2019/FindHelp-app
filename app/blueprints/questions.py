@@ -4,6 +4,7 @@ import iso8601
 from app.validators.validate import jsonvalues, regularExValidation
 from app.models.questionsmodel import question
 from app.models.dataBase import db
+from app.models.usersmodel import users
 import json
 from app.decorators import token_required
 from app.validators.validate import timefunctions
@@ -150,10 +151,10 @@ def view_questions():
         return jsonify({'status':200, 'Questions':new_questions_list}), 200
     return jsonify({'status':404, 'error':'Sorry there are no questions yet'}), 404
 
-
 # An endpoint to view a question.
 @questions_blueprint.route('/questions/<int:questionid>', methods = ['GET'])
-def view_question(questionid):
+@token_required
+def view_question(current_user_id, questionid):
     """ A view fuction to display a question """
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     aQuestion = question.viewQuestion(con_cur, questionid)
@@ -193,8 +194,7 @@ def view_question(questionid):
         # return jsonify({'status':200, 'Question':{'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'postedat':datePosted_StringTimeZoneAware, 'userid':aQuestion['userid']}}), 200
     return jsonify({'status':404, 'error':'Sorry the question doesn\'t exist'}), 404
 
-
-# A user views all questions and the their counted answers
+# A user views all questions and count of the their answers
 @questions_blueprint.route('/questions/answers_count/', methods = ['GET'])
 @token_required
 def all_questions_count_answers(current_user_id):
@@ -225,7 +225,6 @@ def all_questions_count_answers(current_user_id):
         return jsonify({'status': 200, 'questions': all_questions_list}), 200
     return jsonify({'status':404, 'error':'Sorry there are no questions yet'}), 404
 
-
 # An endpoint to delete a question.
 @questions_blueprint.route('/questions/<int:questionid>', methods = ['DELETE'])
 @token_required
@@ -244,12 +243,20 @@ def delete_question(current_user_id, questionid):
     # The question has been successfully deleted
     return jsonify({'status':204, 'message':'The question has been successfully deleted'}), 200
 
-@questions_blueprint.route('/questions/', methods = ['GET'])
+@questions_blueprint.route('/questions/', methods = ['GET', 'POST'])
 @token_required
 def home_view_questions(current_user_id):
     ''' This is a view function displays a page, where
         a user can create, view, edit and delete a question.
     '''
+    if request.method == 'POST':
+
+        con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+
+        user_fullname = users.get_user_fullname(con_cur, current_user_id)
+
+        return jsonify({'fullname': user_fullname['fullname']})
+
     return render_template('questions.html')
 
 @questions_blueprint.route('/questions/<int:questionid>/<path:question_title>', methods = ['GET'])

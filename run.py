@@ -12,10 +12,15 @@ from dotenv import load_dotenv
 
 # Create .env file path.
 dotenv_path = join(dirname(__file__), '.env')
+
 # Load file from the path.
 load_dotenv(dotenv_path)
 
 def create_app(enviroment, configfile=None):
+    '''
+        Instantiates the flaks app, registers blueprints
+        and adds configuration settings to the app
+    '''
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(enviroment)
     app.config.from_pyfile(configfile, silent=True)
@@ -42,28 +47,29 @@ app = create_app(DevelopmentConfig, 'config.py')
 
 @app.route('/')
 def index():
+    '''
+        The home page of the web app
+    '''
     return render_template('homepage.html')
 
 # @app.route('/login', methods=['GET', 'POST'])
-# def login():
-    # if request.method == 'POST':
-        # username = request.form['username']
-        # password = request.form['password']
-        # pass
-    # auth = request.authorization
-    # return 'Please login'
+# def log_in():
+#     if request.method == 'POST':
+#         username = request.form['username']
+#         password = request.form['password']
+#         pass
+#     auth = request.authorization
+#     return 'Please login'
 
-
-
-@app.route('/user/<username>')
-def profile(username):
-    return '{}\'s profile'.format(escape(username))
+# @app.route('/user/<username>')
+# def prof_ile(username):
+#     return '{}\'s profile'.format(escape(username))
 
 # with app.test_request_context():
 #     print(url_for('index'))
-#     print(url_for('login'))
-#     print(url_for('login', next = '/'))
-#     print(url_for('profile', username = 'Andrew Njaya'))
+#     print(url_for('log_in'))
+#     print(url_for('log_in', next = '/'))
+#     print(url_for('prof_ile', username = 'Andrew Njaya'))
 
 if __name__ == "__main__":
     con_cur = db.connectToDatabase(app.config['DATABASE_URI'])

@@ -3,7 +3,7 @@
 #  access to the requested (valid) URL by the client
 #  is Forbidden for some reason
 from functools import wraps
-from flask import jsonify, request, session
+from flask import jsonify, request, session, redirect, url_for
 import jwt
 
 def token_required(f):
@@ -21,13 +21,10 @@ def token_required(f):
         try:
             data = jwt.decode(token, 'secret', algorithms='HS256')
         except jwt.ExpiredSignatureError as je:
-            print(je)
-            return jsonify({'status':401, 'error':'The token has expired'}), 401
+            return redirect(url_for('index'))
         except jwt.DecodeError as de:
-            print(de)
             return jsonify({'status':401, 'error':'The token is invalid'}), 403
         except Exception as e:
-            print(e)
             return jsonify({'status':401, 'error':'The token is invalid'}), 401
         current_user_id = data['userId']
         return f(current_user_id, *args, **kwargs)

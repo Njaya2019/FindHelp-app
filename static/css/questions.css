@@ -62,27 +62,31 @@ body{
     justify-content: space-between;
     align-items: center;
     height: 35px;
-    width: 200px;
+    width: 300px;
     margin-right: 5px;
+    /* border: 1px solid black; */
 }
 
 /* Right navigation link */
 #questions-body #questions-nav h3{
     color: rgba(0,0,0,0.8);
 }
+
 #questions-body #questions-nav h3 a{
     text-decoration-line: none;
     color: rgba(0,0,0,0.8);
 }
+
 /* profile link */
 #questions-body #questions-nav #left-nav #profile-link{
-    display: grid;
-    grid-template-columns: auto auto;
-    grid-template-rows: 35px;
-    grid-column-gap: 3px;
+    display: flex;
+    flex-direction: row;
     align-items: center;
+    height: 35px;
+    margin-right: 0px;
     /* border:1px solid black; */
 }
+
 /* Navigation profile image*/
 #questions-body #questions-nav #left-nav img{
     height: 25px;
@@ -92,15 +96,43 @@ body{
     padding: 2px;
     background-color: white;
     cursor: pointer;
+    margin-right: 3px;
 }
+
 /* Profile link name */
 #questions-body #questions-nav #left-nav a{
     text-decoration-line: none;
-    color: rgba(0,0,0,0.8);
+    color: rgba(0, 0, 255, 1);
     font-weight: bolder;
     font-size: 13px;
 }
 
+/* logout button */
+#questions-body #questions-nav #left-nav #profile-link #logout-button{
+    background-color: rgba(0, 0, 255, 0.3);
+    border: 1px solid rgba(0, 0, 255, 0.3);
+    color: white;
+    height: 25px;
+    width: 50px;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 2px;
+    padding-right: 2px;
+    margin-left: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: 0.7s ease-in-out;
+}
+
+/* logout button on hover */
+#questions-body #questions-nav #left-nav #profile-link #logout-button:hover{
+    background-color: rgba(0, 0, 255, 0.8);
+}
 /* Profile link name on hover*/
 #questions-body #questions-nav #left-nav a:hover{
     color: black;
@@ -113,13 +145,15 @@ body{
     width: auto;
     position: relative;
 }
-/* #questions-body #questions-nav #left-nav div img{
-    width: 20px;
-} */
+
+/* bell div */
+#questions-body #questions-nav #left-nav #bell{
+    width: 25px;
+    padding: 0px;
+}
 /* Notification bell */
 #questions-body #questions-nav #left-nav div #bell-div{
     cursor: pointer;
-    border:1px solid rgba(0, 0, 255, 0.5);
 }
 /* Notification bell badge */
 #questions-body #questions-nav #left-nav div #badge{

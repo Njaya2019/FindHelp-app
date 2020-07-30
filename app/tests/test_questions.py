@@ -67,9 +67,10 @@ class TestAskQuetions():
         assert data["question"]["user"] == 1
 
     @staticmethod
-    def test_get_questions(client):
+    def test_get_questions(client, token):
         """ Tests if the app gets all questions """
-        response = client.get("/questions")
+        TestAskQuetions.headers['x-access-token'] = token
+        response = client.get("/questions", headers = TestAskQuetions.headers)
         data = json.loads(response.data)
         assert response.status_code==200
         assert data["Questions"][0]["questionid"] == 1
@@ -77,9 +78,10 @@ class TestAskQuetions():
         assert data["Questions"][0]["description"] == TestAskQuetions.description
     
     @staticmethod
-    def test_get_a_question(client):
+    def test_get_a_question(client, token):
         """ Tests if the app gets a question """
-        response = client.get("/questions/2")
+        TestAskQuetions.headers['x-access-token'] = token
+        response = client.get("/questions/2", headers = TestAskQuetions.headers)
         data = json.loads(response.data)
         assert response.status_code==200
         assert data["Question"]["questionid"] == 2
@@ -87,9 +89,10 @@ class TestAskQuetions():
         assert data["Question"]["description"] == TestAskQuetions.description
     
     @staticmethod
-    def test_get_question_doesntExist(client):
+    def test_get_question_doesntExist(client, token):
         """ Tests if the app gets a question """
-        response = client.get("/questions/100")
+        TestAskQuetions.headers['x-access-token'] = token
+        response = client.get("/questions/100",  headers = TestAskQuetions.headers)
         data = json.loads(response.data)
         assert response.status_code==404
         assert data["error"] == "Sorry the question doesn't exist"

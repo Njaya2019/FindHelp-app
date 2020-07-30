@@ -11,6 +11,7 @@ import datetime
 
 signin = Blueprint('signin', __name__, template_folder="templates")
 
+# sign up endpoint
 @signin.route('/signup', methods = ['GET', 'POST'])
 def signup():
     """An endpoint to rigister new memmbers"""
@@ -58,6 +59,7 @@ def signup():
     
     return render_template('signup.html')
 
+# login endpoint
 @signin.route('/signin', methods = ['GET', 'POST'])
 def login():
     ''' A view function for users to login to their accounts'''
@@ -98,8 +100,73 @@ def login():
                     return jsonify({'status':200, 'token':decodedToken}), 200
     return render_template('signin.html')
 
-
+# User's profile endpoint
 @signin.route('/profile')
 @token_required
 def profile(current_user_id):
+    ''' The profile page that has all questions the
+    user posted, form to edit personal information
+    and a view of that information.
+    '''
     return render_template('profile.html')
+
+# Signs out endpoint
+@signin.route('/logout')
+@token_required
+def signout(current_user_id):
+    '''
+        Logs out the user by removing the
+        token from session object
+    '''
+
+    # removes x-access-token from the session dictionary
+    session.pop('x-access-token', None)
+
+    # returns a response object to the targeted url
+    # return redirect(url_for('index'))
+    return jsonify({'message': 'You have been logged out'})
+
+# Reset password endpoint
+@signin.route('/resetpassword', methods=['GET', 'POST'])
+def reset_password():
+    '''
+        An endpoint that helps users to reset password
+    '''
+
+    if request.method == 'POST':
+
+        user_email = request.form.to_dict()
+
+        dataAvailable = jsonvalues.emptyValues(**user_email)
+
+        keysAvailable = jsonvalues.jsonKeys(**userData)
+        requiredKeys = ("email",)
+        validKeys = jsonvalues.validKeys(*requiredKeys, **userData)   
+        if not dataAvailable:
+            return jsonify(
+                {
+                    'status': 400,
+                    'error': 'The email you provided doesn\'t exist'
+                }
+            ), 400
+        elif not validKeys:
+            return jsonify(
+                {
+                    'status':400, 
+                    'error':'Please provide a valid email key'
+                }
+            ), 400
+        elif not keysAvailable:
+            return jsonify(
+                {
+                    'status': 400, 
+                    'error': 'Email key is missing'
+                }
+            ), 400
+        else:
+            pass 
+    if 'x-access-token' in session:
+        # removes x-access-token from the session dictionary
+        session.pop('x-access-token', None)
+
+    return render_template('resetpassword.html')
