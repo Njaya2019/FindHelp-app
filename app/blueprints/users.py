@@ -1,4 +1,8 @@
-from flask import Blueprint, jsonify, request, current_app, render_template, session
+from flask import Blueprint, jsonify, request, current_app, render_template, session, redirect, url_for, copy_current_request_context
+from flaskthreads import AppContextThread
+from flask_mail import Mail
+from flask_mail import Message
+import threading
 from app.validators.validate import jsonvalues, regularExValidation
 from app.models.usersmodel import users
 from app.models.dataBase import db
@@ -91,7 +95,7 @@ def login():
                     # Please implement the 401 error, it means that the credentials you entered were invalid 
                     return jsonify({'status':401, 'error':loginUser}), 401
                 else:
-                    token = jwt.encode({'userId':loginUser['userid'], 'exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=30)}, 'secret', algorithm='HS256')
+                    token = jwt.encode({'userId':loginUser['userid'], 'exp':datetime.datetime.utcnow() + datetime.timedelta(minutes=120)}, 'secret', algorithm='HS256')
                     # decoding the encoded token(which is in bytes). Decoding it will change the bytes to UTF-8 character text. 
                     # serializable by the jsonify function. Otherwise jsonify won't serialize bytes data type.
                     # serialize - is the process of translating data structures or object state into a format that can be stored (for example, in a file or memory buffer)
@@ -110,7 +114,7 @@ def profile(current_user_id):
     '''
     return render_template('profile.html')
 
-# Signs out endpoint
+# Sign out endpoint
 @signin.route('/logout')
 @token_required
 def signout(current_user_id):
@@ -126,9 +130,9 @@ def signout(current_user_id):
     # return redirect(url_for('index'))
     return jsonify({'message': 'You have been logged out'})
 
-# Reset password endpoint
+# Request to reset password endpoint
 @signin.route('/resetpassword', methods=['GET', 'POST'])
-def reset_password():
+def request_reset():
     '''
         An endpoint that helps users to reset password
     '''
@@ -139,14 +143,14 @@ def reset_password():
 
         dataAvailable = jsonvalues.emptyValues(**user_email)
 
-        keysAvailable = jsonvalues.jsonKeys(**userData)
+        keysAvailable = jsonvalues.jsonKeys(**user_email)
         requiredKeys = ("email",)
-        validKeys = jsonvalues.validKeys(*requiredKeys, **userData)   
+        validKeys = jsonvalues.validKeys(*requiredKeys, **user_email)   
         if not dataAvailable:
             return jsonify(
                 {
                     'status': 400,
-                    'error': 'The email you provided doesn\'t exist'
+                    'error': 'Please provide an email to reset your password'
                 }
             ), 400
         elif not validKeys:
@@ -164,9 +168,139 @@ def reset_password():
                 }
             ), 400
         else:
-            pass 
+
+            con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+            
+            # Grabs the user for that email
+            the_user = users.check_email(con_cur, user_email['email'])
+            if type(the_user) == str:
+                return jsonify(
+                    {
+                        'status': 400, 
+                        'error': the_user
+                    }
+                ), 400
+            else:
+
+                @copy_current_request_context
+                def send_reset_email(secret_key, user, current_app):
+                    ''' Sends a mail to reset password'''
+
+                    # initialise extension
+                    mail = Mail(current_app)
+
+                    token = users.get_reset_password_token(user['userid'], secret_key)
+
+                    # Email message
+                    email_message = Message(
+                        'Password reset request',
+                        sender='noreply@demo.com',
+                        recipients=[user['email']]
+                    )
+
+                    # Email body
+                    email_message.body = 'To reset password, visit the following link: {}. If you did not make this request please ignore this and no changes will be made'.format(url_for('signin.reset_password', token=token, _external=True))
+                
+                    mail.send(email_message)
+                
+                # A thread to send an email
+                send_email_thread = threading.Thread(target=send_reset_email, args=[current_app.config['SECRET_KEY'], the_user, current_app])
+
+                # Starts the thread
+                send_email_thread.start()
+
+                # Provides a response to the user while the email is being sent
+                return jsonify(
+                    {
+                        'status': 200, 
+                        'message': 'An email was sent with instructions to reset your password'
+                    }
+                ), 200
     if 'x-access-token' in session:
         # removes x-access-token from the session dictionary
         session.pop('x-access-token', None)
 
     return render_template('resetpassword.html')
+
+# Reset password endpoint
+@signin.route('/resetpassword/<token>', methods=['GET', 'POST'])
+def reset_password(token):
+    '''
+        An endpoint that helps users to reset password
+    '''
+
+    if request.method == 'POST':
+
+        password_data = request.form.to_dict()
+
+        dataAvailable = jsonvalues.emptyValues(**password_data)
+
+        keysAvailable = jsonvalues.jsonKeys(**password_data)
+
+        requiredKeys = ("password", "confirmpassword")
+
+        validKeys = jsonvalues.validKeys(*requiredKeys, **password_data)   
+        if not dataAvailable:
+            return jsonify(
+                {
+                    'status': 400,
+                    'error': 'Please fill in the blanks to change password'
+                }
+            ), 400
+        elif not validKeys:
+            return jsonify(
+                {
+                    'status':400, 
+                    'error':'Please provide a password and confirm password  keys'
+                }
+            ), 400
+        elif not keysAvailable:
+            return jsonify(
+                {
+                    'status': 400, 
+                    'error': 'Confirm password or password key is missing'
+                }
+            ), 400
+        elif password_data['password'] != password_data['confirmpassword']:
+            return jsonify(
+                {
+                    'status': 400, 
+                    'error': 'Confirm password and password do not match'
+                }
+            ), 400
+        else:
+            con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+            # Verifies the token
+            user = users.verify_reset_password_token(
+                con_cur,
+                current_app.config['SECRET_KEY'],
+                token
+            )
+
+            if user is None:
+                # redirect to request reset password
+                return jsonify(
+                    {
+                        "status": 400,
+                        "error": "The token is invalid or has expired"
+                    }
+                ), 400
+            
+            # Updates password
+            user_updated_password = users.update_password(
+                con_cur,
+                user['userid'],
+                password_data['password']
+            )
+            if user_updated_password:
+                return jsonify(
+                    {
+                        "status": 200,
+                        "message": "The password has been updated, login with your new password"
+                    }
+                ), 200
+    if 'x-access-token' in session:
+        # removes x-access-token from the session dictionary
+        session.pop('x-access-token', None)
+
+    return render_template('newpassword.html')

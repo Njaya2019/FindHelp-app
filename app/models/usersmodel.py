@@ -1,4 +1,9 @@
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask_mail import Message
+from flask_mail import Mail
+from flask import url_for
+from threading import Thread
+from time import sleep
 from .dataBase import db
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -59,12 +64,11 @@ class users():
             cur.execute(email_sql, (email,))
             user = cur.fetchone()
             if user:
-                return None
+                return user
             else:
                 return 'The user with email {} dosen\'t exists. Check the email and try again'.format(email)
         except Exception as err:
             print(err)
-
 
     @staticmethod
     def get_user_fullname(con_cur, userid):
@@ -102,6 +106,7 @@ class users():
     
     @staticmethod
     def verify_reset_password_token(con_cur, secret_key, token):
+
         '''
             Verifies the token to reset the password,
             it uses a try and catch because the token could be invalid
@@ -120,6 +125,27 @@ class users():
         user = users.get_user_fullname(con_cur, userid)
 
         return user
+
+    @staticmethod
+    def update_password(con_cur, userid, password):
+        """
+            Updates a user's password
+        """
+
+        try:
+            con = con_cur[0]
+            cur = con_cur[1]
+            hashed_password=generate_password_hash(password, method='sha256')
+            change_password_sql = "UPDATE users SET passwords=%s WHERE userid=%s RETURNING userid, fullname"
+            userData = (hashed_password, userid,)
+            cur.execute(change_password_sql, userData)
+            con.commit()
+            userdata = cur.fetchone()
+            return userdata
+        except Exception as error:
+            print(error)
+
+
 
         
 

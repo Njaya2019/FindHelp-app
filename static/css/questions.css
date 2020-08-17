@@ -62,7 +62,7 @@ body{
     justify-content: space-between;
     align-items: center;
     height: 35px;
-    width: 300px;
+    width: 200px;
     margin-right: 5px;
     /* border: 1px solid black; */
 }
@@ -366,7 +366,9 @@ textarea:focus, input:focus{
 
 /* Posted question div */
 #questions-body #questions #posted-questions .posted-question{
-   border: 1px solid rgba(0,0,0,0.3);;
+   border: 1px solid rgba(0,0,0,0.3);
+   display: grid;
+   grid-template-columns: 1fr;
    border-radius: 5px;
 }
 
@@ -744,6 +746,17 @@ textarea:focus, input:focus{
         flex-direction: row;
         align-items: center;
         margin-left: -5px;
+    }
+
+    #questions-body #questions-nav #left-nav{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        height: 35px;
+        width: 300px;
+        margin-right: 5px;
+        /* border: 1px solid black; */
     }
 
 }

@@ -1,5 +1,4 @@
 from flask import Flask, escape, url_for, request, jsonify, render_template
-from livereload import Server
 from configurations import ProductionConfig, DevelopmentConfig
 from app.blueprints.users import signin
 from app.blueprints.questions import questions_blueprint
@@ -9,12 +8,16 @@ from app.models.dataBase import db
 from app.errors import errorhandlers
 from os.path import join, dirname
 from dotenv import load_dotenv
+from livereload import Server
+from flask_mail import Mail
 
 # Create .env file path.
 dotenv_path = join(dirname(__file__), '.env')
 
 # Load file from the path.
 load_dotenv(dotenv_path)
+
+mail = ''
 
 def create_app(enviroment, configfile=None):
     '''
@@ -32,6 +35,9 @@ def create_app(enviroment, configfile=None):
     app.register_blueprint(votes_blueprint)
     # app.config.from_envvar('SETTINGS')
     # app.config['DEBUG'] = True
+
+    # initialise extension
+    # mail = Mail(app)
     
     #register application exceptions
     app.register_error_handler(404, errorhandlers.page_not_found)
@@ -42,8 +48,6 @@ def create_app(enviroment, configfile=None):
     return app
 
 app = create_app(DevelopmentConfig, 'config.py')
-
-    
 
 @app.route('/')
 def index():

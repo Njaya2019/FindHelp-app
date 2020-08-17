@@ -158,7 +158,7 @@ function postQuestion(e){
                 // Makes the error container to disappear
                 questionErrorContainer.style.maxHeight = 0 + 'px';
 
-            }, 30000);      
+            }, 3000);      
         }
     };
 

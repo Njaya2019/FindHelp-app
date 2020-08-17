@@ -22,6 +22,11 @@ class DevelopmentConfig(Config):
     UPLOAD_FOLDER = "static\\img"
     SEND_FILE_MAX_AGE_DEFAULT = 0
     SECRET_KEY = b'_5#y2L"F4Q8z\n\xec]/'
+    MAIL_SERVER = 'smtp.googlemail.com'
+    MAIL_PORT = 587
+    MAIL_USE_TLS = True
+    MAIL_USERNAME = 'njayaandrew@gmail.com'
+    MAIL_PASSWORD = 'andrewnjaya99'
 
 class TestingConfig(Config):
     DEBUG = True
