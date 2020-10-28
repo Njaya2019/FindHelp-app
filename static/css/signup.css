@@ -17,6 +17,7 @@ body{
     grid-row-gap: 10px;
     height: 100vh;
     padding: 0px;
+    background-color: rgba(133, 133, 173, 0.3);
     /* border: 1px solid red; */
 
 }
@@ -28,21 +29,23 @@ body{
     justify-content: space-between;
     align-items: center;
     padding: 0px;
-    background-color: lightblue;
-    box-shadow: 15px 15px 10px lightslategray;
-    border: 1px solid lightblue;
+    background-color: rgba(60, 179, 113, 0.6);
+    /* box-shadow: 15px 15px 10px lightslategray; */
+    /* border: 1px solid rgba(60, 179, 113, 0.6); */
     margin-left: 0px;
     margin-right: 0px;
 }
 
 #signup-navbar a{
     text-decoration-line: none;
-    color: black;
+    /* color: black; */
 }
 
 #signup-homelink{
-    font-size: 18px;
-    font-weight: bold;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 27px;
+    color: rgba(134, 89, 45, 1);
+    font-weight: 1000;
     margin-left: 0px;
     margin-right: 0px;
 }
@@ -69,11 +72,19 @@ body{
     justify-content: center;
     align-items: center;
 }
+#signup-body #inner-signup-container{
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    border-radius: 5px;
+    background-color: white;
+}
 /* Signup text title */
 #signup-body h1{
     font-size: 27px;
     color: rgba(0, 0, 255, 0.4);
     font-weight: bolder;
+    /* border: 1px solid black; */
+    text-align: center;
 }
 
 /* Sign up error div container */
@@ -86,14 +97,20 @@ body{
 /* Error messages section */
 #signup-body #signup-errors li{
     color: rgba(255, 0, 0, 0.7);
+    /* background-color: rgba(0, 0, 255, 0.4); */
+    text-align: center;
+    display: grid;
+    grid-template-columns: 150px;
+    font-size: 13px;
+    /* border: 1px solid black; */
 }
 
 /* Form container. Signup form.*/
 #signup-body #signup-form{
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    /* border: 1px solid rgba(0, 0, 0, 0.3); */
     border-radius: 5px;
     display: grid;
-    grid-template-columns: 220px;
+    grid-template-columns: minmax(100px 220px);
     grid-auto-rows: 20px 40px 20px 40px 20px 40px 20px 40px 20px 40px 40px;
     grid-row-gap: 10px;
     grid-template-areas:
@@ -133,6 +150,9 @@ body{
       
 #signup-body #signup-form #role-textbox-div{
     grid-area: roleBox;
+    /* border: 1px solid black; */
+    display: grid;
+    grid-template-columns: 1fr;
 }
 
 #signup-body #signup-form #password-label-div{
@@ -167,7 +187,7 @@ body{
 
 
 #signup-body #signup-form div input{
-    width: 216px;
+    /* width: 216px; */
     padding-top: 10px;
     padding-bottom: 11px;
     border-radius: 3px;
@@ -180,7 +200,8 @@ select{
     font-weight: bold;
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.3);
-    width: 218px;
+    /* width: 218px; */
+    /* width: 150px; */
     padding-top: 10px;
     padding-bottom: 11px;
     border-radius: 3px;
@@ -215,7 +236,7 @@ select option:nth-child(2), option:last-child{
 /* =================== Sign up footer ================== */
 #signup-footer{
     border: 1px solid lightblue;
-    background-color: lightblue;
+    background-color: rgba(60, 179, 113, 0.6);
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -231,8 +252,16 @@ select option:nth-child(2), option:last-child{
 
 /*==================== Media query for screens above 768px ====================*/
 @media (min-width: 768px){
+    /* signup container */
+    #signup-body #inner-signup-container{
+        border: 1px solid rgba(0, 0, 0, 0.3);
+        padding: 15px;
+        border-radius: 5px;
+        background-color: white;
+    }
     /* Form container. Signup form.*/
     #signup-body #signup-form{
+        border: 1px solid rgba(0, 0, 0, 0.3);
         display: grid;
         grid-template-columns: 60px 260px 60px 260px;
         grid-auto-rows: minmax(15px, auto);
@@ -292,5 +321,16 @@ select option:nth-child(2), option:last-child{
     /* #signup-body #signup-form div label{
         border: 1px solid black;
     } */
+
+    /* Error messages section */
+    #signup-body #signup-errors li{
+        color: rgba(255, 0, 0, 0.7);
+        /* background-color: rgba(0, 0, 255, 0.4); */
+        text-align: center;
+        display: grid;
+        grid-template-columns: minmax(100px, 1fr);
+        font-size: 14px;
+        /* border: 1px solid black; */
+    }
 
 }
