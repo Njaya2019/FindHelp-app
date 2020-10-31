@@ -48,6 +48,23 @@ function clickActions(e){
         // Gets the form that would facilitate the editing of the question.
         let editQuestionFormElement = e.target.parentNode.parentNode.parentNode.parentNode.children[3].children[0];
 
+        // gets the edit tags parent element
+        let tagEditParentElement = editQuestionFormElement.children[2];
+
+        // Gets the already posted tags to be displayed on the edit input text box.
+        let tagParentElement = editQuestionFormElement.parentNode.previousElementSibling.previousElementSibling.children[2];
+        let children = tagParentElement.children
+        // Checks if the edit tag array has elements,
+        // If so then it empty's the tag
+        if(editTagsArray.length > 0){
+            editTagsArray.splice(0,editTagsArray.length);
+        }
+        // Then adds the posted tags to the edit input text box automatically
+        for(i=0; i<children.length; i++){
+            editTagsArray.push(children[i].textContent);
+        }
+        addEditTags(editTagsArray, tagEditParentElement);
+
         // Supplies the original posted text to the input and textarea elements of form for editing the question.
         editQuestionFormElement.children[0].value = editQuestionTitle;
         editQuestionFormElement.children[1].value = editQuestionDescription;
@@ -65,7 +82,12 @@ function clickActions(e){
     else if(e.target.classList.contains('cancel-button')){
         // Closes the editing question form.
         e.target.parentNode.parentNode.parentNode.parentNode.children[3].children[0].style.maxHeight = null;
-        e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[1].scrollHeight + "px";  
+        e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[1].scrollHeight + "px";
+        // editTagsArray = [];
+        editTagsArray.splice(0,editTagsArray.length);
+        // console.log(editTagsArray);
+        let tagParent = e.target.parentNode.previousElementSibling;
+        resetEditTags(tagParent);
     }
     else if(e.target.id == 'question-image'){
         // Upload question image container clicked
@@ -80,8 +102,86 @@ function clickActions(e){
             }
         });
     }
+    else if(e.target.classList.contains('edit-question-image-btn')){
+        // Upload edited question image container clicked
+        // uploads the edited image and displays its name on the button.
+        let labelTag = e.target.nextElementSibling;
+        e.target.addEventListener('change', function(event){
+            // splits the string with a back slash and returns the last element
+            // of the array which is the image's name.
+            // This returns the last element of the array whicj is the name of the image.
+            let imageName = event.target.value.split("\\").pop();
+            if (imageName){
+                // console.log(imageName);
+                labelTag.innerHTML = imageName;
+                // console.log(labelTag);
+            }
+            let editQuestionImageButton = e.target;
+            // On change too display the edited question image to the user
+            if (editQuestionImageButton.files && editQuestionImageButton.files[0]) {
+
+                // An api to read contents of a image file content
+                let editedQuestionImageReader = new FileReader();
+
+                editedQuestionImageReader.onload = function(event) {
+
+                // Gets image element to display the image
+                    let displayImage = editQuestionImageButton.parentNode.parentNode.previousElementSibling.children[0];
+                    // console.log(ditQuestionImageButtons.result);
+                    // Changes image element source attribute
+                    displayImage.src = event.target.result;
+                    // console.log(event.target.result);
+
+                    // Makes the parent container of the image big to fit the image
+                    // console.log(displayImage.parentNode);
+                    displayImage.parentNode.style.maxHeight =  displayImage.parentNode.scrollHeight + 'px';
+                    // console.log(displayImage.parentNode);
+                    editQuestionImageButton.parentNode.parentNode.previousElementSibling.parentNode.style.maxHeight =  displayImage.parentNode.parentNode.parentNode.parentNode.parentNode.scrollHeight + 'px';
+                }
+                    
+                editedQuestionImageReader.readAsDataURL(e.target.files[0]); 
+            }
+        });
+    }
     else if(e.target.id == 'logout-button'){
         sign_out_user();
+    }
+    else if(e.target.classList.contains('close-tag')){
+        const tagData = e.target.getAttribute('data-tag');
+        // Checks if the input text box is for editing the tag
+        // removes the tag
+        if(e.target.parentNode.parentNode.parentNode.classList.contains('edit-form')){
+            const editIndex = editTagsArray.indexOf(tagData);
+            // ... spread operator and slicing the array from start index to end index.
+            editTagsArray = [...editTagsArray.slice(0, editIndex), ...editTagsArray.slice(editIndex  + 1)]
+            addEditTags(editTagsArray, e.target.parentNode.parentNode);
+        }
+        // Remove the tag on creating the question
+        else{
+            const index = tagsArray.indexOf(tagData);
+            // ... spread operator
+            tagsArray = [...tagsArray.slice(0, index), ...tagsArray.slice(index + 1)]
+            addTags();
+        }
+    }
+    else if(e.target.id == 'bell-bell'){
+        let notificationDropDown = e.target.parentNode.parentNode.children[2];
+        shownotificationWindow(notificationDropDown);
+        
+    }
+    else if(e.target.id == 'bell-div'){
+        let notificationDropDown = e.target.parentNode.children[2];
+        shownotificationWindow(notificationDropDown);
+        
+    }
+    else if(e.target.id == 'bell'){
+        let notificationDropDown = e.target.children[2];
+        shownotificationWindow(notificationDropDown);
+        
+    }
+    else if(e.target.id == 'badge'){
+        let notificationDropDown = e.target.nextElementSibling;
+        shownotificationWindow(notificationDropDown);
     }
     else{
 
@@ -218,6 +318,15 @@ function get_questions(){
                         <a href="${base_url}/questions/${element.questionid}/${element.title.split(" ").join("-")}" class="question-title">${element.title}</a>
                         <!-- Question description -->
                         <p>${element.description}</p>
+                        <!-- Tags -->
+                        <div class="tags">
+                            <div>
+                                python
+                            </div>
+                            <div>
+                                Classes
+                            </div>
+                        </div>
                         <p>${element.answers} answer</p>
                     </div>
                     <!-- Edit question div -->
@@ -228,7 +337,24 @@ function get_questions(){
                         <form enctype="multipart/form-data" data-questionid=${element.questionid} class="edit-form">
                             <input type="text" name="title" class="edit-question-title" placeholder="Edit question title...">
                             <textarea class="edit-question-description" name="description" placeholder="Edit question description..." cols="30" rows="10"></textarea>
+                            <!-- Edit tags -->
+                            <div class="question-tags">
+                                <input type="text" name="tags" class="tags-input" placeholder="Add a tag...">
+                            </div>
+                            <!-- Edited image container -->
+                            <div class="edited-image">
+                                <img class="the-edited-image" src="" alt="the edited image">
+                            </div>
                             <div class="cancel-submit">
+                                <div class="edit-question-image-container">
+                                    <input type="file" name="edited-question-image" id=${"edit-question-image-btn"+element.questionid} class="edit-question-image-btn">
+                                    <label for=${"edit-question-image-btn"+element.questionid}>
+                                        <div class="edit-question-upload-image">
+                                            <img src=${uploadImage} alt="edited question image" srcset="">
+                                        </div>  
+                                        Choose...
+                                    </label>
+                                </div>
                                 <input type="button" class="cancel-button" value="cancel">
                                 <input type="submit" name="submit-edited-question" class="submit-edited-question" value="save">
                             </div>
@@ -401,6 +527,9 @@ function get_user_fullname(){
 // Gets the base url
 let base_url = window.location.origin;
 
+let uploadImage = base_url + '/static/img/upload.png';
+// console.log(uploadImage);
+
 
 // Logs out a user
 function sign_out_user(){
@@ -429,3 +558,199 @@ get_user_fullname();
 
 // Renders all questions when the page loads
 get_questions();
+
+// A method to display the notification dropdown
+function shownotificationWindow(notificationWindow){
+    if (notificationWindow.style.display == "grid"){
+        notificationWindow.style.display = "none";
+    }
+    else{
+        notificationWindow.style.display = 'grid';
+    }
+}
+
+
+
+// ===================== Adding question's tags ======================
+// A function to create a tag
+function createQuestionTags(tagName){
+    const div = document.createElement('div');
+    div.setAttribute('class', 'tag');
+    const labelSpan = document.createElement('span');
+    labelSpan.setAttribute('class', 'label');
+    labelSpan.innerHTML = tagName;
+    const closeButton = document.createElement('span');
+    closeButton.setAttribute('class', 'close-tag');
+    closeButton.setAttribute('data-tag', tagName);
+    closeButton.innerHTML = '&#9747;';
+    div.appendChild(labelSpan);
+    div.appendChild(closeButton);
+
+    return div
+}
+// some data store for the tags
+let tagsArray = [];
+
+// Input text box container for the tags
+questionTagContainer = document.querySelector('#question-tags');
+
+// Input text box for the tags
+tagsInput = document.querySelector('#tags-input');
+
+// This is because the elements already exists on the interface, it will add
+// identical tags, so they are all removed first.
+function reset(){
+    document.querySelectorAll('.tag').forEach(function(tag){
+        tag.parentElement.removeChild(tag);
+    });
+}
+
+// function to add the tags
+function addTags(){
+    
+    reset();
+    tagsArray.slice().reverse().forEach(function(tagvalue){
+        const tagDiv = createQuestionTags(tagvalue);
+        questionTagContainer.prepend(tagDiv);
+    });
+}
+
+// A keyup event for adding a tag
+tagsInput.addEventListener('keyup', function(e){
+    if(e.key === 'Enter'){
+        if (tagsInput.value === ''){
+            console.log('Please provide a tag');
+            let questionErrorContainer = tagsInput.parentNode.parentNode.parentNode.previousElementSibling;
+
+            // Accesses the list tag to display the error
+            let questionErrorTag = questionErrorContainer.children[0];
+        
+            // if the list tag doesn't contain an error message,
+            // add one.
+            if(questionErrorTag.innerHTML == ''){
+                questionErrorTag.innerHTML = "Please provide a tag";
+            }
+            else{
+                // If list tag has an error text replace it with a new one
+                questionErrorTag.innerHTML = "Please provide a tag";
+            }
+        
+            // Display the error container, to display the error,
+            // message.
+            questionErrorContainer.style.maxHeight = questionErrorContainer.scrollHeight + 'px';
+        
+            // Deletes all list error tags after 30 seconds
+            setTimeout(function(){
+        
+                // Replace the current error text with an empty string
+                questionErrorTag.innerHTML = '';
+        
+                // Makes the error container to disappear
+                questionErrorContainer.style.maxHeight = 0 + 'px';
+        
+            }, 3000);
+        
+        }
+        else{
+            tagsArray.push(tagsInput.value);
+            addTags();
+            tagsInput.value = '';
+        }
+    }
+});
+
+// Prevent enter key from submiting a form but add a tag
+// in the input textbox
+document.body.addEventListener("keypress", function(e){
+    if(event.keyCode == 13) {
+        event.preventDefault();
+        return false;
+      }
+});
+
+
+
+// ================== Adding tags on editing a question =====================
+// Reset all tags with class 'tag' (removes all tags to be added a fresh)
+function resetEditTags(parent){
+    let children = parent.querySelectorAll('.tag');
+    children.forEach(function(tag){
+        parent.removeChild(tag);
+    });
+}
+
+// A function to add tags in editing a question
+function addEditTags(editTagsArray, container){
+    resetEditTags(container);
+    editTagsArray.slice().reverse().forEach(function(editTagvalue){
+        const tagDiv = createQuestionTags(editTagvalue);
+        container.prepend(tagDiv);
+    });
+}
+// Listening to all key up events of the document
+function keyUpActions(e){
+    // Enter key up event
+    if(e.key === 'Enter'){
+        // some data store for the tags
+        
+        // Checks for the edit question input elements for tag 
+        if(e.target.classList.contains('tags-input')){
+            // grabs the input's element parent container
+            let editTagParentContainer = e.target.parentNode;
+            // grabs a tag value from the input
+            let editTagvalue = e.target.value;
+            // adds the value to the array
+            editTagsArray.push(editTagvalue);
+            if (e.target.offsetWidth < 50){
+                console.log("You reached maximum number of tags")
+            }
+            // adds edit tags
+            addEditTags(editTagsArray, editTagParentContainer);
+            // clears the input value for the next tag
+            e.target.value = '';
+            let editQuestionFormElement = editTagParentContainer.parentNode;
+            editQuestionFormElement.style.maxHeight = editQuestionFormElement.scrollHeight + "px";
+        }
+    }
+}
+
+// The listening of keyup events
+document.body.addEventListener('keyup', keyUpActions);
+let editTagsArray = [];
+
+
+
+// ================== Display question image to be uploaded ==================
+// Display question image to be uploaded
+function readURL(input) {
+    if (input.files && input.files[0]) {
+
+      // An API to read contents of a image file content
+      let questionImageReader = new FileReader();
+      
+      questionImageReader.onload = function(e) {
+          // Gets image element to display the image
+          let displayImage = document.getElementById("display-image");
+          // Changes image element source attribute
+          displayImage.src = e.target.result
+          // Makes the parent container of the image big to fit the image
+          displayImage.parentNode.style.maxHeight =  displayImage.parentNode.scrollHeight + 'px';
+      }
+      // Reads the image file uploaded 
+      questionImageReader.readAsDataURL(input.files[0]); 
+    }
+}
+
+// Gets the upload input image file element
+let imageUploadInput = document.getElementById("question-image");
+
+// triggers a change event on the upload button
+// Listens to a change event
+imageUploadInput.onchange = function(e){
+    // reads the file and displays the image
+    readURL(this);
+}
+
+
+
+// ================= Display edited question image to be uploaded ================

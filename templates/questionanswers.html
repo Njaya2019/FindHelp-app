@@ -14,9 +14,9 @@
         <div id="nav">
 
             <!-- left link. link to Home page -->
-            <a id="left-link" href="{{ url_for('questions.home_view_questions') }}">FindHelp</a>
+            <a id="left-link" href="{{ url_for('questions.home_view_questions') }}">Help</a>
             <!-- Right link. link to user's view page -->
-            <a id="right-link" href="{{ url_for('questions.home_view_questions') }}">Questions</a>
+            <a id="right-link" href="{{ url_for('questions.home_view_questions') }}">questions</a>
             
         </div>
         <!-- end of navigation -->
@@ -38,9 +38,9 @@
             </div>
             <!-- End of all answers container -->
             <!--===============================posting an answer header ==============================-->
-            <!-- <div id="post-answer-heading">
+            <div id="post-answer-heading">
                 <h3>Post an answer</h3>
-            </div> -->
+            </div>
             <!-- errors -->
             <div id="answer-errors">
                 <li></li>
@@ -49,7 +49,20 @@
             <div id="answers-form-container">
                 <form  method="POST" id="submit-answer-form">
                     <textarea name="answer" id="answer" cols="30" rows="10" placeholder="Post an answer"></textarea>
+                    <!-- Display answer image container -->
+                    <div class="answer-image">
+                        <img id="the-answer-image" class="the-answer-image" src="" alt="the answer image">
+                    </div>
                     <div id="submit-answer">
+                        <div class="answer-image-container">
+                            <input type="file" name="image" id="answer-image-btn" class="answer-image-btn">
+                            <label for="answer-image-btn">
+                                <div class="answer-upload-image">
+                                    <img src="{{ url_for('static', filename='img/upload.png') }}"  alt="image" srcset="">
+                                </div>  
+                                Choose...
+                            </label>
+                        </div>
                         <input type="submit" value="Post" name="submit-answer-input">
                     </div>
                 </form>

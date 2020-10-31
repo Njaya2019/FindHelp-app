@@ -12,15 +12,52 @@
     <div id="questions-body">
         <!-- Navigation -->
         <div id="questions-nav">
-            <h3><a href="{{ url_for('questions.home_view_questions') }}">FindHelp</a></h3>
+            <h3><a href="{{ url_for('questions.home_view_questions') }}">Help</a></h3>
             <!-- name and photo -->
             <div id="left-nav">
                 <div id="bell">
                     <!-- &#128276; -->
                     <div id="bell-div">
-                        <img src="{{ url_for('static', filename='img/bell.png') }}" alt="Nofication bell">
+                        <img id="bell-bell" src="{{ url_for('static', filename='img/bell.png') }}" alt="Nofication bell">
                     </div>
                     <div id="badge">3</div>
+                    <!-- Notifications -->
+                    <div id="notifications">
+                        <div class="notification-container" data-answer-noti="1">
+                            <div class="question-notification">
+                                <a class="anchor-notification" href="#">How do you create classes in python ?
+                                    How do you create classes in python ?
+                                    How do you create classes in python ?
+                                    How do you create classes in python ?
+                                </a> 
+                            </div>
+                            <div class="notification">answers 10 mins ago</div>
+                        </div>
+                        <div class="notification-container" data-comment="1">
+                            <div class="question-notification">
+                                <a class="anchor-notification" href="#">How do you create classes in python ?</a> 
+                            </div>
+                            <div class="notification">comments 30 mins ago</div>
+                        </div>
+                        <div class="notification-container" data-vote-noti="1">
+                            <div class="question-notification">
+                                <a class="anchor-notification" href="#">How do you create classes in python ?</a> 
+                            </div>
+                            <div class="notification">votes 1 hour ago</div>
+                        </div>
+                        <div class="notification-container" data-vote-noti="2">
+                            <div class="question-notification">
+                                <a class="anchor-notification" href="#">How do you create classes in python ?</a> 
+                            </div>
+                            <div class="notification">votes 1 hour ago</div>
+                        </div>
+                        <div class="notification-container" data-vote-noti="3">
+                            <div class="question-notification">
+                                <a class="anchor-notification" href="#">How do you create classes in python ?</a> 
+                            </div>
+                            <div class="notification">votes 1 hour ago</div>
+                        </div>
+                    </div>
                 </div>
                 <div id="profile-link">
                     <img src="{{ url_for('static', filename='img/man.jpg') }}" alt="profile-photo">
@@ -43,7 +80,7 @@
         <!-- Quentions body -->
         <div id="questions">
             <!--posting a question header -->
-            <div id="post-question-heading">
+            <div class="post-question-heading">
                 <h3>Post a question</h3>
             </div>
             <!-- errors -->
@@ -61,6 +98,22 @@
                     <div id="question-description-textarea">
                         <textarea name="description" placeholder="Question description..." id="question-description" cols="0" rows="8"></textarea>
                     </div>
+                    <!-- Question tags -->
+                    <div id="question-tags">
+                        <!-- <div class="tag">
+                            <span class="label">JavaScript</span>
+                            <span class="close-tag">&#9747;</span>
+                        </div> -->
+                        <!-- <div class="tag">
+                            <span class="label">Css</span>
+                            <span class="close-tag">&#9747;</span >
+                        </div> -->
+                        <input type="text" name="tags" id="tags-input" placeholder="Add a tag...">
+                    </div>
+                    <!-- Display question image to be upload -->
+                    <div id="questionimage-to-upload">
+                        <img id="display-image" src="" alt="question image to upload">
+                    </div>
                     <!-- Submit question button -->
                     <div id="submit-question-button">
                         <div>
@@ -77,7 +130,7 @@
                 </form>
             </div>
             <!--posting an answer header -->
-            <div id="post-question-heading">
+            <div class="post-question-heading">
                 <h3>Posted questions</h3>
             </div>
             <!-- ============================ Posted questions ======================-->

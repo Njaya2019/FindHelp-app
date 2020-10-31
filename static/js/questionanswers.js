@@ -3,12 +3,19 @@ document.body.addEventListener('click', clickActions);
 
 function clickActions(e){
 
-    // edit element clicked
+    
     if(e.target.classList.contains('edit-icon')){
+        // edit element clicked
         // Gets the answer tag
         let answerParagraph = e.target.parentNode.parentNode.nextElementSibling.children[0];
+        // Hides the image container
+            // answerParagraph.nextElementSibling.style.overflow = "hidden";
+            // answerParagraph.nextElementSibling.style.maxHeight = 0 + 'px'
+            answerParagraph.nextElementSibling.style.display = "none";
+        // answerParagraph.nextElementSibling.children[0].style.maxHeight = 0 + 'px'
         // Gets edit div's container
-        let editAnswerContainer = e.target.parentNode.parentNode.nextElementSibling.children[1];
+        let editAnswerContainer = e.target.parentNode.parentNode.nextElementSibling.children[2];
+        
         // Grabs the answer text value
         answerOriginalValue = answerParagraph.innerHTML;
         // Gets the textarea element and set the answer value
@@ -16,40 +23,94 @@ function clickActions(e){
         textareaElement = editAnswerContainer.children[1].children[0];
         textareaElement.value = answerOriginalValue;
         textareaElement.style.maxHeight = textareaElement.scrollHeight + 'px';
+        
+        editAnswerContainer.children[1].style.maxHeight =  editAnswerContainer.children[1].scrollHeight + 'px';
+        // editAnswerContainer.children[1].maxHeight = editAnswerContainer.children[1].scrollHeight + 'px';
         // Makes the answer paragraph tag disappear. setting
         // it's height 0
         answerParagraph.style.maxHeight = 0 + 'px';
         // Brings up the editor container and the editor
+        // editAnswerContainer.children[0].style.maxHeight =  editAnswerContainer.children[0].scrollHeight + 'px';
+        editAnswerContainer.children[1].style.maxHeight =  editAnswerContainer.children[1].scrollHeight + 'px';
         editAnswerContainer.style.maxHeight =  editAnswerContainer.scrollHeight + 'px';
     }
-    // closes edit container
     else if(e.target.classList.contains('cancel-button')){
+        // closes edit container
         // gets the editor container
         editAnswerContainer = e.target.parentNode.parentNode.parentNode;
         // Closes the error container
-        editAnswerContainer.children[0].style.maxHeight = 0 + 'px'
+        editAnswerContainer.children[0].style.maxHeight = 0 + 'px';
+        // editAnswerContainer.children[1].style.maxHeight = 0 + 'px';
+        // gets the image container
+        if(editAnswerContainer.previousElementSibling.children[0].getAttribute("src") != ""){
+            editAnswerContainer.previousElementSibling.style.display = "block";
+            window.scrollBy(0, -900);
+        }
+        else{
+            // editAnswerContainer.previousElementSibling.maxHeight = 0 + "px";
+            editAnswerContainer.previousElementSibling.style.display = "none";
+        }
+        // editAnswerContainer.previousElementSibling.style.maxHeight = editAnswerContainer.previousElementSibling.scrollHeight + 'px';
         // Gets the answer paragraph container
-        answerParagraph = editAnswerContainer.previousElementSibling;
+        let answerParagraph = editAnswerContainer.previousElementSibling.previousElementSibling;
+        
         // Closes the editor container
-        editAnswerContainer.style.maxHeight = null;
+        editAnswerContainer.style.maxHeight = 0 + 'px';
         // Brings up the answer paragraph
         answerParagraph.style.maxHeight = answerParagraph.scrollHeight + 'px';
+        // Scrolls the window vertically up a bit
+        // window.scrollBy(0, -200);
     }
-    // displays delete modal
-    else if(e.target.classList.contains('delete-icon')){
-        let deleteModal = e.target.parentNode.parentNode.parentNode.children[2].children[2];
-        deleteModal.style.display = "block";
+    else if(e.target.classList.contains('edit-comment')){
+        // Brings up the comment editing form
+        let userContainer = e.target.parentNode;
+        let commentContainer = e.target.parentNode.previousElementSibling;
+        let comment = e.target.parentNode.previousElementSibling.innerHTML;
+        let editcommentForm = e.target.parentNode.parentNode.children[2];
+        editcommentForm.children[1].children[0].value = comment;
+        userContainer.style.display = 'none';
+        commentContainer.style.display = 'none';
+        editcommentForm.style.display = 'grid';
     }
-    // closes delete modal, background element
-    else if(e.target.classList.contains('delete-modal')){
+    else if(e.target.classList.contains('edit-comment-cancel')){
+        // Closes editing comment container
+        let form = e.target.parentNode.parentNode;
+        let userContainer = form.previousElementSibling;
+        let commentContainer = userContainer.previousElementSibling;
+        userContainer.style.display = 'flex';
+        commentContainer.style.display = 'block';
+        form.style.display = 'none';
+    }
+    else if(e.target.classList.contains('delete-comment')){
+        // Brings up confirm delete comment modal
+        let deleteCommentModalContainer = e.target.parentNode.parentNode.children[3];
+        deleteCommentModalContainer.style.display = 'block';
+    }
+    else if(e.target.classList.contains('confirm-delete-comment-background')){
+        // Makes the confirm delete modal to disappear
         e.target.style.display = 'none';
     }
-    // closes delete modal, cancel button
+    else if(e.target.classList.contains('delete-comment-cancel')){
+        // Closes the confirm delete comment modal when the cancel button is
+        // clicked
+        e.target.parentNode.parentNode.parentNode.style.display = 'none';
+
+    }
+    else if(e.target.classList.contains('delete-icon')){
+        // displays delete modal
+        let deleteModal = e.target.parentNode.parentNode.parentNode.children[2].children[3];
+        deleteModal.style.display = "block";
+    }
+    else if(e.target.classList.contains('delete-modal')){
+        // closes delete modal, background element
+        e.target.style.display = 'none';
+    }
     else if(e.target.classList.contains('delete-answer-cancel')){
+        // closes delete modal, cancel button
         e.target.parentNode.parentNode.parentNode.style.display = 'none';
     }
-    // Vote up or down arrows clicked
     else if(e.target.classList.contains('arrow-up') || e.target.classList.contains('arrow-down')){
+        // Vote up or down arrows clicked
         if (e.target.classList.contains('arrow-up')){
             // console.log("Vote up was clicked");
             let upvote_answerid = e.target.getAttribute("data-up-answerid");
@@ -71,11 +132,40 @@ function clickActions(e){
             
         }
     }
+    else if(e.target.classList.contains('answer-image-btn')){
+        // Upload answer image buttonclicked
+        // uploads the answer picture and displays its name on the button.
+        let labelTag = e.target.nextElementSibling;
+        e.target.addEventListener('change', function(event){
+            // splits the string with a back slash and returns the last element
+            // of the array which is the image's name.
+            // This returns the last element of the array whicj is the name of the image.
+            let imageName = event.target.value.split("\\").pop();
+            if (imageName){
+                labelTag.innerHTML = imageName;
+            }
+        });
+    }
+    else if(e.target.classList.contains('edit-answer-image-btn')){
+        // Upload answer image buttonclicked
+        // uploads the answer picture and displays its name on the button.
+        let labelTag = e.target.nextElementSibling;
+        e.target.addEventListener('change', function(event){
+            // splits the string with a back slash and returns the last element
+            // of the array which is the image's name.
+            // This returns the last element of the array whicj is the name of the image.
+            let imageName = event.target.value.split("\\").pop();
+            if (imageName){
+                labelTag.innerHTML = imageName;
+            }
+        });
+    }
     else{
         
     }
 
 }
+
 
 
 //====== Creates an answers line seperator =======\\
@@ -91,6 +181,8 @@ if (answers){
     answers[i].insertAdjacentElement("afterend", createDivAnswerSeparator);
     }
 }
+
+
 
 //====== A class that has all submit functions =======\\
 class SubmitFunctions{
@@ -189,10 +281,11 @@ class SubmitFunctions{
 
 }
 
+
+
+
 //======= Performs the submit events =======\\
 document.body.addEventListener('submit', submitActions);
-
-
 function submitActions(e){
     if(e.target.classList.contains('submit-edited-answer-form')){
         // Submits an edited answer
@@ -207,20 +300,27 @@ function submitActions(e){
 
 }
 
+
+
+
 // gets the URL search string, that is the path
 let currentLocation = window.location.pathname;
+
 
 // splits the url to an array and gets question's id as a string
 let urlArray = currentLocation.split('/', 3);
 
+
 // question's id as a string
 let questionIdString = urlArray[2];
+
 
 // Changes the question id string to an integer
 let questionIdInt = parseInt(urlArray[2]);
 
 
-// A function that gets the question and all it's answers
+
+// ===========A function that gets the question and all it's answers============
 function get_question(questionId){
 
     // initialises the ajax request object
@@ -242,6 +342,7 @@ function get_question(questionId){
             let title_description_html = '';
 
             // gets the question object
+            // http://127.0.0.1:5000/static/img/classes.jpg
             let questionObject = question.Question;
             document.querySelector('title').innerHTML = questionObject.title;
             title_description_html +=`
@@ -250,6 +351,14 @@ function get_question(questionId){
                 <div id="title-section">${questionObject.title}</div>
                 <!-- question description -->
                 <div id="description-section">${questionObject.description}</div>
+                <div id="posted-question-image-container">
+                    <img src="" alt="" class="posted-question-image" id="posted-question-image">
+                </div>
+                <div id="posted-image-modal">
+                    <div>
+                        <img src="" alt="" id="image-modal">
+                    </div>
+                </div>
                 <div id="who-posted-image">
                     <img class="posted-by-image" src="http://127.0.0.1:5000/static/img/man.jpg" alt="posted by"> <a href="#">${questionObject.whoposted}</a>
                 </div>
@@ -271,7 +380,10 @@ function get_question(questionId){
                         <div class="votes">${answer.votes}</div>
                         <div class="arrow-down" data-down-answerid=${answer.answerid}></div>
                         <div class="vote-error-container">
-                            You can not upvote an answer twice
+                        <!-- You can not upvote an answer twice -->
+                        </div>
+                        <div class="mark-answer-correct">
+                            <span class="correct">&#10004</span> 
                         </div>
                     </div>
                     <!-- answer header -->
@@ -287,6 +399,9 @@ function get_question(questionId){
                         <!-- answer on paragraph -->
                         <p>${answer.answer}</p>
                         <!-- end of paragraph answer -->
+                        <div class="uploaded-answer-image">
+                            <img class="the-uploaded-answer-image" src="" alt="answer image">
+                        </div>
                         <!-- Form to edit an answer -->
                         <div class="edit-answer">
                             <!-- Editing answers errors -->
@@ -295,7 +410,21 @@ function get_question(questionId){
                             </div>
                             <form enctype="multipart/form-data" data-edit-answerid=${answer.answerid} class="submit-edited-answer-form">
                                 <textarea name="answer" id="" cols="30" rows="15" placeholder="Edit answer..."></textarea>
+                                <!-- Display answer image container -->
+                                <div class="edit-answer-image">
+                                    <img id="the-edited-answer-image" class="the-edited-answer-image" src="" alt="the edited answer image">
+                                </div>
+                                <!-- cancel, submit and edit image button -->
                                 <div class="cancel-submit">
+                                    <div class="edit-answer-image-container">
+                                        <input type="file" name="image" id="edit-answer-image-btn" class="edit-answer-image-btn">
+                                        <label for="edit-answer-image-btn">
+                                            <div class="edit-answer-upload-image">
+                                                <img src="http://127.0.0.1:5000/static/img/upload.png"  alt="image" srcset="">
+                                            </div>  
+                                            Choose...
+                                        </label>
+                                    </div>
                                     <input type="button" class="cancel-button" value="cancel">
                                     <input type="submit" name="submit-edited-answer" class="submit-edited-answer" value="save">
                                 </div>
@@ -328,6 +457,97 @@ function get_question(questionId){
                             <a href='http://127.0.0.1:5000/answers/${answer.answerid}'>${answer.whoanswered}</a>
                         </div>
                     </div>
+                    <!-- Comments section-->
+                    <div class="comments">
+                        <!-- comment -->
+                        <div class="coment-section">
+                            <div class="comment">
+                                <div class="the-comment" id="the-comment-1">How do i go about creating an instance of the class</div>
+                                <div class="user-comment">
+                                    <a href="#">Andrew Njaya</a>
+                                    <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="Andrew">
+                                    <p class="edit-comment">Edit</p>
+                                    <p class="delete-comment">Delete</p>   
+                                </div>
+                                <form class="edit-comment-form">
+                                    <div class="comment-errors">
+                                        <li></li>
+                                    </div>
+                                    <div class="edit-comment-div">
+                                        <input type="text" class="edit-comment-input">
+                                    </div>
+                                    <div class="edit-comment-submit-div">
+                                        <input type="submit" class="edit-comment-submit" value="Save">
+                                        <input type="button" class="edit-comment-cancel" value="Cancel">
+                                    </div>
+                                </form>
+                                <div class="confirm-delete-comment-background" id="delete-comment-modal">
+                                    <!-- Confirm delete comment dialog box -->
+                                    <div class="confirm-delete-comment">
+                                        <div class="confirm-delete-comment-title">
+                                            <h4>Delete comment</h4>
+                                        </div>
+                                        <div class="confirm-delete-comment-body">
+                                            <h5>Are you sure you want to delete the comment ?</h5>
+                                        </div>
+                                        <div class="confirm-delete-comment-footer">
+                                            <input type="button" class="delete-comment-cancel" value="cancel">
+                                            <input type="button" class="delete-comment-delete" value="delete">
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            <div class="comment">
+                                <div class="the-comment">How do i go about creating an instance of the class</div>
+                                <div class="user-comment">
+                                    <a href="#">Andrew Njaya</a>
+                                    <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="Andrew">
+                                    <p class="edit-comment">Edit</p>
+                                    <p class="delete-comment">Delete</p>               
+                                </div>
+                                <form class="edit-comment-form">
+                                    <div class="comment-errors">
+                                        <li></li>
+                                    </div>
+                                    <div class="edit-comment-div">
+                                        <input type="text" class="edit-comment-input">
+                                    </div>
+                                    <div class="edit-comment-submit-div">
+                                        <input type="submit" class="edit-comment-submit" value="Save">
+                                        <input type="button" class="edit-comment-cancel" value="Cancel">
+                                    </div>
+                                </form>
+                                <div class="confirm-delete-comment-background" id="delete-comment-modal">
+                                    <!-- Confirm delete comment dialog box -->
+                                    <div class="confirm-delete-comment">
+                                        <div class="confirm-delete-comment-title">
+                                            <h4>Delete comment</h4>
+                                        </div>
+                                        <div class="confirm-delete-comment-body">
+                                            <h5>Are you sure you want to delete the comment ?</h5>
+                                        </div>
+                                        <div class="confirm-delete-comment-footer">
+                                            <input type="button" class="delete-comment-cancel" value="cancel">
+                                            <input type="button" class="delete-comment-delete" value="delete">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="add-comment-errors" >
+                            <li>Please provide a comment</li>
+                        </div>
+                        <div class="add-comment">
+                            <div class="add-comment-title">Add comment:</div>
+                            <form class="add-comment-form">
+                                <input type="text" name="comment" class="coment-text-box">
+                                <input type="submit" name="submit-comment" class="submit-comment-button" value="Save">
+
+                            </form>
+                        </div>
+
+                    </div>
                     <!-- End of votes -->
                 </div>
                 `
@@ -352,13 +572,16 @@ function get_question(questionId){
     xhr.send();
 }
 
+
+
+
 // Runs the get question function
 get_question(questionIdInt);
 
+
+
 // Gets an answer's form id
 submitAnswer = document.querySelector("#submit-answer-form");
-
-
 function postAnswer(question_id){
 
     // A submit event to provide an answer to a question
@@ -434,8 +657,12 @@ function postAnswer(question_id){
     });
 }
 
+
+
 // Calls a function to post answer
 postAnswer(questionIdInt);
+
+
 
 // A function to vote for an answer
 function voteForAnswer(e, upordownvote, answerid, question_id){
@@ -480,6 +707,8 @@ function voteForAnswer(e, upordownvote, answerid, question_id){
     xhr.send()
 }
 
+
+
 // A function that deletes an answer
 function delete_answer(event, answer_id, questionId){
 
@@ -500,7 +729,7 @@ function delete_answer(event, answer_id, questionId){
             let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
 
             // displays the flash container
-            falsh_container.style.display = 'flex';
+            falsh_container.style.display = 'block';
 
             // Adds the message to the container
             falsh_container.innerHTML = delete_message.message;
@@ -573,3 +802,64 @@ function delete_answer(event, answer_id, questionId){
     // sends the delete request
     xhr.send();
 }
+
+
+
+// ================== Displays an answer picture to be uploaded ===================
+// Display answer image to be uploaded
+function readURL(input) {
+    if (input.files && input.files[0]) {
+      // An api to read contents of a image file content
+      let questionImageReader = new FileReader();
+      
+      questionImageReader.onload = function(e) {
+          // Gets image element to display the image in it
+          let displayImage = document.getElementById("the-answer-image");
+          // Changes image element source attribute
+          displayImage.src = e.target.result
+          // Makes the parent container of the image big to fit the image
+          displayImage.parentNode.style.maxHeight =  displayImage.parentNode.scrollHeight + 'px';
+      }
+      
+      questionImageReader.readAsDataURL(input.files[0]); 
+    }
+}
+
+// Gets the upload input image file element
+let imageUploadInput = document.getElementById("answer-image-btn");
+
+// triggers a change event on the upload button
+// Listens to a change event
+imageUploadInput.onchange = function(e){
+    // reads the file and displays the image
+    readURL(this);
+}
+
+
+
+// =================== Marks an answer correct ======================
+let allTicks = document.querySelectorAll('.correct');
+
+if(allTicks.length < 2){
+    console.log(allTicks.length);
+    allTicks[0].addEventListener('click', function(e){
+        if(allTicks[0].classList.contains("activetick")){
+            allTicks[0].className = allTicks[0].className.replace("activetick", "");
+        }
+        else{
+            allTicks[0].className += " activetick";
+        }
+    });
+}
+else{
+    console.log(allTicks.length);
+    for(i=0; i<allTicks.length; i++){
+        allTicks[i].addEventListener('click', function(e){
+            currentActiveTick = document.querySelectorAll('.activetick');
+            currentActiveTick[0].className = currentActiveTick[0].className.replace("activetick", "");
+            this.className += " activetick";
+        });
+    }
+}
+
+
