@@ -71,12 +71,14 @@ def editQuestion(current_user_id, questionid):
         editQuestionData = request.form.to_dict()
         print(editQuestionData)
         print(request.files)
+        my_list = json.loads(editQuestionData['tags'])
+        print(type(my_list))
         image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
-        dataAvailable = jsonvalues.emptyValues(**editQuestionData )
+        dataAvailable = jsonvalues.emptyValues(**editQuestionData)
         keysAvailable = jsonvalues.jsonKeys(**editQuestionData)
         requiredKeys = ('title', 'description')
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **editQuestionData)
-        if not dataAvailable:
+        if not editQuestionData['title'] or not editQuestionData['description']:
             return jsonify({'status':400, 'error':'Please provide values for title and description'}), 400
         elif not keysAvailable:
             return jsonify({'status':400, 'error':'please provide a valid question title or description'}), 400
@@ -94,7 +96,6 @@ def editQuestion(current_user_id, questionid):
             elif not isString:
                 return jsonify({'status':400, 'error':'Please provide atleast two words for question title and description'}), 400
             else:
-                
                 editedQuestion = question.editQuestion(con_cur, editQuestionData['title'], editQuestionData['description'], image_url, questionid, current_user_id)
                 if type(editedQuestion) == str:
                     return jsonify({'status':404, 'error':editedQuestion}), 404
@@ -235,7 +236,7 @@ def delete_question(current_user_id, questionid):
     questionDeleted = question.deleteQuestion(con_cur, questionid, current_user_id, current_app.config['UPLOAD_FOLDER'], current_app)
     # Restricts any other user to delete a question
     if questionDeleted == 'forbidden':
-        return jsonify({'status':403, 'error':'You can not delete other users\' questions'})
+        return jsonify({'status':403, 'error':'You can not delete other users\' questions'}), 403
     # The question being deleted doesn't exist
     if questionDeleted == 'notfound':
         # 204 The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.

@@ -61,7 +61,9 @@ function clickActions(e){
         }
         // Then adds the posted tags to the edit input text box automatically
         for(i=0; i<children.length; i++){
-            editTagsArray.push(children[i].textContent);
+            // the trim method of the string to remove white spaces on both
+            // sides of the text content
+            editTagsArray.push(children[i].textContent.trim());
         }
         addEditTags(editTagsArray, tagEditParentElement);
 
@@ -205,6 +207,15 @@ function postQuestion(e){
     // Grabs form data to be sent to the server by an ajax request
     let questionform = e.target;
     let questionData = new FormData(questionform);
+    // Adds the tag array value to the form data
+    questionData.set('tags', JSON.stringify(tagsArray));
+    // Emptys the the tags array, the first parameter specifies
+    // the index to start to remove and the second parameter indicates how many
+    //  elements to remove, in this case we are removing all elements so we take
+    // the array length.
+    tagsArray.splice(0,tagsArray.length);
+    // After posting the question, remove all the tags from the input tag
+    resetEditTags(questionform.children[2]);
 
     // initialise ajax request
     let xhr = new XMLHttpRequest();
@@ -222,6 +233,20 @@ function postQuestion(e){
 
             // resets form data
             questionform.reset();
+
+            // Displays successful message
+            let questionMessageDiv = questionform.previousElementSibling;
+            questionMessageDiv.innerHTML = "The question was successfully posted";
+            questionMessageDiv.style.display = 'block';
+
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                questionMessageDiv.innerHTML = "";
+                questionMessageDiv.style.display = 'none';
+
+            }, 4000); 
         }
         else{
             // Response error from the server
@@ -372,7 +397,7 @@ function get_questions(){
                             </div>
                             <div class="confirm-question-delete-footer">
                                 <input type="button" class="delete-question-cancel" value="cancel">
-                                <input type="button" onclick="delete_question(${element.questionid})" class="delete-question-delete" value="delete">
+                                <input type="button" onclick="delete_question(event, ${element.questionid})" class="delete-question-delete" value="delete">
                             </div>
                         </div>
                     </div>
@@ -406,6 +431,15 @@ function editQuestion(e){
         // Grabs form data to be sent to the server by an ajax request
         let editquestionform = e.target;
         let editedquestionData = new FormData(editquestionform);
+        // Adds the tag array value to the form data
+        editedquestionData.set('tags', JSON.stringify(editTagsArray));
+        // Emptys the the tags array, the first parameter specifies
+        // the index to start to remove and the second parameter indicates how many
+        //  elements to remove, in this case we are removing all elements so we take
+        // the array length.
+        editTagsArray.splice(0,editTagsArray.length);
+        // After posting the question, remove all the tags from the input tag
+        resetEditTags(editquestionform.children[2]);
 
         // initialises ajax request object
         let xhr = new XMLHttpRequest();
@@ -421,6 +455,27 @@ function editQuestion(e){
 
                 // display all questions
                 get_questions();
+
+                // Displays successful edition  message
+                let questioneditedMessageDiv = document.getElementById('question-added-flash-message');
+                questioneditedMessageDiv.innerHTML = "The question was edited successfully";
+                questioneditedMessageDiv.style.display = 'block';
+
+                // Scroll to the top of page to see the error
+                window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth' 
+                });
+
+                // Makes the flash message to disappear in 4 seconds
+                setTimeout(function(){
+
+                    // Makes the message container to disappear
+                    questioneditedMessageDiv.innerHTML = "";
+                    questioneditedMessageDiv.style.display = 'none';
+
+                }, 4000); 
 
             }
             else{
@@ -467,7 +522,11 @@ function editQuestion(e){
 }
 
 // Deletes a question
-function delete_question(question_id){
+function delete_question(event, question_id){
+    // closes the delete modal
+    event.target.parentNode.parentNode.parentNode.style.display = "none";
+    // Gets the flash message container
+    let deleteMessageContainer = document.getElementById('question-added-flash-message');
     
     // instantiates the xhr
     xhr = new XMLHttpRequest();
@@ -482,12 +541,48 @@ function delete_question(question_id){
         if (xhr.status == 200){
             
             get_questions();
+
+            // Displays the deletion successful massage
+            deleteMessageContainer.innerHTML = "The question has been successfully deleted";
+            deleteMessageContainer.style.backgroundColor = "rgba(255, 51, 0, 1)";
+            deleteMessageContainer.style.display = "block";
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                deleteMessageContainer.innerHTML = "";
+                deleteMessageContainer.style.backgroundColor = "rgba(102, 153, 255, 1)";
+                deleteMessageContainer.style.display = 'none';
+
+            }, 4000); 
             
         }
         else{
 
-            // The question doesn't exist error
+            // The question doesn't exist error or unauthorized to delete it.
             const error = JSON.parse(xhr.responseText);
+            // Displays the deletion denied error message
+            deleteMessageContainer.innerHTML = error.error;
+            deleteMessageContainer.style.backgroundColor = "rgba(255, 51, 0, 1)";
+            deleteMessageContainer.style.display = "block";
+            
+            // Scroll to the top of page to see the error
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
+
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                deleteMessageContainer.innerHTML = "";
+                deleteMessageContainer.style.backgroundColor = "rgba(102, 153, 255, 1)";
+                deleteMessageContainer.style.display = 'none';
+
+            }, 4000); 
+
 
         }
     };

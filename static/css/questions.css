@@ -316,6 +316,20 @@ textarea:focus, input:focus{
 #questions-body #questions #post-question{
     padding: 0px 15px 0px 15px;
     /* border: 1px solid black; */
+    position: relative;
+}
+/* successfully posted a question flash message*/
+#questions-body #questions #post-question #question-added-flash-message{
+    border: 1px solid rgba(102, 153, 255, 1);
+    padding: 5px;
+    border-radius: 5px;
+    background-color: rgba(102, 153, 255, 1);
+    color: white;
+    text-align: center;
+    position: absolute;
+    left: 15px;
+    top: -30px;
+    display: none;
 }
 /* Div component for posting a question */
 #questions-body #questions #post-question-form{
