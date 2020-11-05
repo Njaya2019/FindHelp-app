@@ -209,6 +209,35 @@ class SubmitFunctions{
             if(xhr.status == 200){
                 console.log(answer_id);
                 get_question(question_id);
+
+                let falsh_container = document.getElementById("flash-messages");
+
+                // displays the flash container
+                falsh_container.style.display = 'block';
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                // Adds the message to the container
+                falsh_container.innerHTML = "The answer was successfully edited";
+    
+                // Scroll to the top of page to see the message
+                window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth' 
+                });
+                
+                
+                // makes the flash container to disappear in 4 seconds
+                setTimeout(function() {
+    
+                    // makes the container to disappear
+                    falsh_container.style.display = 'none';
+                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                    // makes sure it's content is empty after it disappears
+                    falsh_container.innerHTML = '';
+    
+                }, 4000);
             }
             else{
                 // response text error from server changed to javascript object
@@ -305,6 +334,7 @@ function submitActions(e){
 
 // gets the URL search string, that is the path
 let currentLocation = window.location.pathname;
+let base_url = window.location.origin;
 
 
 // splits the url to an array and gets question's id as a string
@@ -337,7 +367,7 @@ function get_question(questionId){
 
             // changes the response text to JavaScript Object
             let question = JSON.parse(xhr.responseText);
-
+            console.log(question);
             // variable to display question title and description
             let title_description_html = '';
 
@@ -352,7 +382,7 @@ function get_question(questionId){
                 <!-- question description -->
                 <div id="description-section">${questionObject.description}</div>
                 <div id="posted-question-image-container">
-                    <img src="" alt="" class="posted-question-image" id="posted-question-image">
+                    <img src="${questionObject.image==="noimagekey"?"":base_url+"/static/img/"+questionObject.image}" alt="" class="posted-question-image" id="posted-question-image">
                 </div>
                 <div id="posted-image-modal">
                     <div>
@@ -360,7 +390,7 @@ function get_question(questionId){
                     </div>
                 </div>
                 <div id="who-posted-image">
-                    <img class="posted-by-image" src="http://127.0.0.1:5000/static/img/man.jpg" alt="posted by"> <a href="#">${questionObject.whoposted}</a>
+                    <img class="posted-by-image" src="${base_url}/static/img/man.jpg" alt="posted by"> <a href="#">${questionObject.whoposted}</a>
                 </div>
             `
             document.querySelector('#title-description-container').innerHTML = title_description_html;
@@ -400,7 +430,7 @@ function get_question(questionId){
                         <p>${answer.answer}</p>
                         <!-- end of paragraph answer -->
                         <div class="uploaded-answer-image">
-                            <img class="the-uploaded-answer-image" src="" alt="answer image">
+                            <img class="the-uploaded-answer-image" src="${answer.answerimage==="noimagekey"?"":base_url+"/static/img/"+answer.answerimage}" alt="${answer.answerimage==="noimagekey"?"":"answer image"}">
                         </div>
                         <!-- Form to edit an answer -->
                         <div class="edit-answer">
@@ -420,7 +450,7 @@ function get_question(questionId){
                                         <input type="file" name="image" id="edit-answer-image-btn" class="edit-answer-image-btn">
                                         <label for="edit-answer-image-btn">
                                             <div class="edit-answer-upload-image">
-                                                <img src="http://127.0.0.1:5000/static/img/upload.png"  alt="image" srcset="">
+                                                <img src="${base_url}/static/img/upload.png"  alt="image" srcset="">
                                             </div>  
                                             Choose...
                                         </label>
@@ -453,8 +483,8 @@ function get_question(questionId){
                     <!-- answer's footer -->
                     <div class="answer-footer">
                         <div class="name-image">
-                            <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="" srcset="">
-                            <a href='http://127.0.0.1:5000/answers/${answer.answerid}'>${answer.whoanswered}</a>
+                            <img src="${base_url}/static/img/woman.jpg" alt="" srcset="">
+                            <a href='${base_url}/answers/${answer.answerid}'>${answer.whoanswered}</a>
                         </div>
                     </div>
                     <!-- Comments section-->
@@ -465,7 +495,7 @@ function get_question(questionId){
                                 <div class="the-comment" id="the-comment-1">How do i go about creating an instance of the class</div>
                                 <div class="user-comment">
                                     <a href="#">Andrew Njaya</a>
-                                    <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="Andrew">
+                                    <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
                                     <p class="edit-comment">Edit</p>
                                     <p class="delete-comment">Delete</p>   
                                 </div>
@@ -502,7 +532,7 @@ function get_question(questionId){
                                 <div class="the-comment">How do i go about creating an instance of the class</div>
                                 <div class="user-comment">
                                     <a href="#">Andrew Njaya</a>
-                                    <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="Andrew">
+                                    <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
                                     <p class="edit-comment">Edit</p>
                                     <p class="delete-comment">Delete</p>               
                                 </div>
@@ -573,8 +603,6 @@ function get_question(questionId){
 }
 
 
-
-
 // Runs the get question function
 get_question(questionIdInt);
 
@@ -612,6 +640,33 @@ function postAnswer(question_id){
 
                 // resets the form values
                 answerform.reset();
+                
+                let falsh_container = document.getElementById("flash-messages");
+
+                // displays the flash container
+                falsh_container.style.display = 'block';
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                // Adds the message to the container
+                falsh_container.innerHTML = "The answer was successfully added";
+    
+                // Scroll to the top of page to see the message
+                window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth' 
+                });
+                           // makes the flash container to disappear in 4 seconds
+                setTimeout(function() {
+
+                    // makes the container to disappear
+                    falsh_container.style.display = 'none';
+                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+                    // makes sure it's content is empty after it disappears
+                    falsh_container.innerHTML = '';
+
+                }, 4000);
             }
             else{
                 // error response
@@ -724,6 +779,7 @@ function delete_answer(event, answer_id, questionId){
         // answer successfully deleted
         if(xhr.status == 200){
             let delete_message = JSON.parse(xhr.responseText);
+            console.log(delete_message);
             get_question(questionId);
             // console.log(delete_message.message);
             let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
@@ -733,6 +789,7 @@ function delete_answer(event, answer_id, questionId){
 
             // Adds the message to the container
             falsh_container.innerHTML = delete_message.message;
+            falsh_container.style.backgroundColor = "red";
 
             // Scroll to the top of page to see the message
             window.scroll({
@@ -747,6 +804,7 @@ function delete_answer(event, answer_id, questionId){
 
                 // makes the container to disappear
                 falsh_container.style.display = 'none';
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
 
                 // makes sure it's content is empty after it disappears
                 falsh_container.innerHTML = '';
@@ -838,28 +896,28 @@ imageUploadInput.onchange = function(e){
 
 
 // =================== Marks an answer correct ======================
-let allTicks = document.querySelectorAll('.correct');
+// let allTicks = document.querySelectorAll('.correct');
 
-if(allTicks.length < 2){
-    console.log(allTicks.length);
-    allTicks[0].addEventListener('click', function(e){
-        if(allTicks[0].classList.contains("activetick")){
-            allTicks[0].className = allTicks[0].className.replace("activetick", "");
-        }
-        else{
-            allTicks[0].className += " activetick";
-        }
-    });
-}
-else{
-    console.log(allTicks.length);
-    for(i=0; i<allTicks.length; i++){
-        allTicks[i].addEventListener('click', function(e){
-            currentActiveTick = document.querySelectorAll('.activetick');
-            currentActiveTick[0].className = currentActiveTick[0].className.replace("activetick", "");
-            this.className += " activetick";
-        });
-    }
-}
+// if(allTicks.length < 2){
+//     console.log(allTicks.length);
+//     allTicks[0].addEventListener('click', function(e){
+//         if(allTicks[0].classList.contains("activetick")){
+//             allTicks[0].className = allTicks[0].className.replace("activetick", "");
+//         }
+//         else{
+//             allTicks[0].className += " activetick";
+//         }
+//     });
+// }
+// else{
+//     console.log(allTicks.length);
+//     for(i=0; i<allTicks.length; i++){
+//         allTicks[i].addEventListener('click', function(e){
+//             currentActiveTick = document.querySelectorAll('.activetick');
+//             currentActiveTick[0].className = currentActiveTick[0].className.replace("activetick", "");
+//             this.className += " activetick";
+//         });
+//     }
+// }
 
 

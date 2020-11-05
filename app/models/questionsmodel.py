@@ -4,7 +4,7 @@ import os
 class question():
     
     @staticmethod
-    def postQuestion(con_cur, title, description, imageurl, userid):
+    def postQuestion(con_cur, title, description, imageurl, userid, tags):
         """A method to post a question"""
         try:
             con = con_cur[0]
@@ -14,8 +14,8 @@ class question():
             # if there are no rows fetchall returns an empty list.
             userAvailable = cur.fetchone()
             if userAvailable:
-                postQuestion_sql = "INSERT INTO questions(questiontitle,questiondescription,questionimage,timeposted,userid) VALUES(%s,%s,%s,CURRENT_TIMESTAMP,%s) RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
-                questionData = (title, description, imageurl, userid,)
+                postQuestion_sql = "INSERT INTO questions(questiontitle,questiondescription,questionimage,timeposted,userid,tags) VALUES(%s,%s,%s,CURRENT_TIMESTAMP,%s,%s) RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
+                questionData = (title, description, imageurl, userid, tags,)
                 cur.execute(postQuestion_sql, questionData)
                 con.commit()
                 postedQuestion = cur.fetchone()
@@ -51,7 +51,7 @@ class question():
             cur = con_cur[1]
             # getQuestions_sql = "SELECT * FROM questions"
             # INNER JOIN questions to get all users who posted questions. 
-            getQuestions_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, COUNT(answers.answer) FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription ORDER BY timeposted DESC"
+            getQuestions_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, questions.tags, COUNT(answers.answer) FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription ORDER BY timeposted DESC"
             cur.execute(getQuestions_sql)
             # if there are no rows fetchall returns an empty list.
             all_questions = cur.fetchall()
@@ -68,7 +68,7 @@ class question():
             # con = con_cur[0]
             cur = con_cur[1]
             # getQuestion_sql = "SELECT * FROM questions WHERE questionid=%s"
-            getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
+            getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, questions.questionimage, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered|| '----' ||answers.answerimage) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, answers.answerimage, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
             cur.execute(getQuestion_sql, (questionid,))
             # if there are no rows fetchall returns an empty list.
             a_question = cur.fetchone()
@@ -79,7 +79,7 @@ class question():
             print(err)
     
     @staticmethod
-    def editQuestion(con_cur, title, description, imageurl, questionid, userid):
+    def editQuestion(con_cur, title, description, imageurl, questionid, userid, tags):
         """A method to edit a question"""
         try:
             con = con_cur[0]
@@ -93,8 +93,8 @@ class question():
                     return 'You can not edit this question but only the owner'
                 if questionToEdit['questionimage'] != 'noimagekey':
                     remove(questionToEdit['questionimage'])
-                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
-                editedQuestionData = (title, description, imageurl, questionid,)
+                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s, tags=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
+                editedQuestionData = (title, description, imageurl, tags, questionid)
                 cur.execute(editQuestion_sql, editedQuestionData)
                 con.commit()
                 editedQuestion = cur.fetchone()

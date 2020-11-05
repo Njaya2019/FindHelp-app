@@ -14,11 +14,11 @@ def answer_question(current_user_id, questionid):
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     if request.method == 'POST':
         answerData = request.form.to_dict()
-        dataAvailable = jsonvalues.emptyValues(**answerData)
+        # dataAvailable = jsonvalues.emptyValues(**answerData)
         keysAvailable = jsonvalues.jsonKeys(**answerData)
         requiredKeys = ('answer',)
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **answerData)
-        if not dataAvailable:
+        if not answerData['answer']:
             return jsonify({'status':400, 'error':'Please provide an answer first'}), 400
         elif not keysAvailable:
             return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400
@@ -51,11 +51,11 @@ def editAnswer(current_user_id, answerid):
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     if request.method == 'PUT':
         answerEditedData = request.form.to_dict()
-        dataAvailable = jsonvalues.emptyValues(**answerEditedData)
+        # dataAvailable = jsonvalues.emptyValues(**answerEditedData)
         keysAvailable = jsonvalues.jsonKeys(**answerEditedData)
         requiredKeys = ('answer',)
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **answerEditedData)
-        if not dataAvailable:
+        if not answerEditedData['answer']:
             return jsonify({'status':400, 'error':'Please provide values for your answer'}), 400
         elif not keysAvailable:
             return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400

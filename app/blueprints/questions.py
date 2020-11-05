@@ -22,6 +22,7 @@ def askQuestion(current_user_id):
         questionData = request.form.to_dict()
         print(questionData)
         print(request.files)
+        tags_string = regularExValidation.format_tags_values(questionData['tags'])
         dataAvailable = jsonvalues.emptyValues(**questionData)
         keysAvailable = jsonvalues.jsonKeys(**questionData)
         requiredKeys = ('title', 'description')
@@ -52,7 +53,7 @@ def askQuestion(current_user_id):
                             "error": "Please provide an image with the following extensions, 'png', 'jpg', 'jpeg' or 'gif'"
                         }
                     ), 400             
-                newQuestion = question.postQuestion(con_cur, questionData['title'], questionData['description'], image_url, current_user_id)
+                newQuestion = question.postQuestion(con_cur, questionData['title'], questionData['description'], image_url, current_user_id, tags_string)
                 if type(newQuestion) == str:
                     return jsonify({'status':404, 'error':newQuestion}), 404
                 dt_msa = newQuestion['timeposted']
@@ -71,9 +72,8 @@ def editQuestion(current_user_id, questionid):
         editQuestionData = request.form.to_dict()
         print(editQuestionData)
         print(request.files)
-        my_list = json.loads(editQuestionData['tags'])
-        print(type(my_list))
-        image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
+        tags_string = regularExValidation.format_tags_values(editQuestionData['tags'])
+        image_url = jsonvalues.upload_Image(request, 'edited-question-image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
         dataAvailable = jsonvalues.emptyValues(**editQuestionData)
         keysAvailable = jsonvalues.jsonKeys(**editQuestionData)
         requiredKeys = ('title', 'description')
@@ -96,7 +96,7 @@ def editQuestion(current_user_id, questionid):
             elif not isString:
                 return jsonify({'status':400, 'error':'Please provide atleast two words for question title and description'}), 400
             else:
-                editedQuestion = question.editQuestion(con_cur, editQuestionData['title'], editQuestionData['description'], image_url, questionid, current_user_id)
+                editedQuestion = question.editQuestion(con_cur, editQuestionData['title'], editQuestionData['description'], image_url, questionid, current_user_id, tags_string)
                 if type(editedQuestion) == str:
                     return jsonify({'status':404, 'error':editedQuestion}), 404
                 timePassed = timefunctions.calculateTimePassed(editedQuestion['timeposted'])
@@ -183,14 +183,15 @@ def view_question(current_user_id, questionid):
                         'answerid': user_and_answer_list[2],
                         'answer':user_and_answer_list[1],
                         'votes': total_votes,
-                        'time': time_passed_answered
+                        'time': time_passed_answered,
+                        'answerimage':user_and_answer_list[6]
                     }
                 )
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
                 users_and_answers_list.append(users_and_answers_dictionary_copy)
-            new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'answers':users_and_answers_list})
+            new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'image':aQuestion['questionimage'], 'answers':users_and_answers_list})
         else:
-            new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'answers':[]})
+            new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'image':aQuestion['questionimage'], 'answers':[]})
         return jsonify({'status':200, 'Question':new_question_dictionary}), 200
         # return jsonify({'status':200, 'Question':{'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'postedat':datePosted_StringTimeZoneAware, 'userid':aQuestion['userid']}}), 200
     return jsonify({'status':404, 'error':'Sorry the question doesn\'t exist'}), 404
@@ -217,7 +218,7 @@ def all_questions_count_answers(current_user_id):
                 {
                     'userid':posted_question['userid'], 'whoposted':posted_question['fullname'],
                     'questionid':posted_question['questionid'], 'title':posted_question['questiontitle'],
-                    'description':posted_question['questiondescription'], 'timeposted':timepassed,
+                    'description':posted_question['questiondescription'], 'timeposted':timepassed, 'tags':posted_question['tags'],
                     'answers': posted_question['count']
                 }
             )

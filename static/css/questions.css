@@ -206,6 +206,7 @@ body{
     border: 1px solid rgba(0,0,0,0.3);
     padding: 2px 2px 2px 2px;
     border-radius: 5px;
+    z-index: 1;
     display: none;
 }
 
@@ -726,7 +727,7 @@ textarea:focus, input:focus{
 #questions-body #questions #posted-questions .posted-question .question-body .tags{
     display: grid;
     grid-template-columns: repeat(auto-fill, 80px);
-    grid-template-rows: 40px;
+    grid-template-rows: auto;
     grid-column-gap: 10px;
     grid-row-gap: 10px;
     /* border: 1px solid black; */
@@ -742,6 +743,7 @@ textarea:focus, input:focus{
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding: 7px 10px 7px 10px;
 }
 /* ======================================================== Edit question =============================================================== */
 /* Edit question div parent element */

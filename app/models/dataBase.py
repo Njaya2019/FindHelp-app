@@ -32,7 +32,7 @@ class db():
             """,
             """CREATE TABLE IF NOT EXISTS questions(questionid SERIAL PRIMARY KEY,questiontitle VARCHAR(300) NOT NULL,
                questiondescription TEXT NOT NULL,questionimage TEXT,timeposted TIMESTAMPTZ,
-               userid INT REFERENCES users(userid) ON DELETE CASCADE)
+               userid INT REFERENCES users(userid) ON DELETE CASCADE, tags TEXT [])
             """,
             """CREATE TABLE IF NOT EXISTS answers(answerid SERIAL PRIMARY KEY,userid INT REFERENCES users(userid) ON DELETE CASCADE,
                questionid INT REFERENCES questions(questionid) ON DELETE CASCADE,

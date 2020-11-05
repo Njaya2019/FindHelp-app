@@ -3,6 +3,7 @@ from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
 import pytz
+import json
 
 
 '''r infront of a string makes it a raw string and tells python not to hundle a backslash in any special way'''
@@ -78,6 +79,23 @@ class regularExValidation():
         if matchPassword:
             return True
         return False
+    
+    @staticmethod
+    def format_tags_values(tags_json):
+        """
+        tags_json-> is a json string of tags values.
+        returns a string of tags that can be parsed in Array
+         data type of postgreSQL.
+        """
+        # Converts the tags json to string to a python list
+        tags_list = json.loads(tags_json)
+        # Adds double quotes to each list element by escaping the double quotes
+        tags_list = ["\""+str(i)+"\"" for i in tags_list]
+        # Changes the list to a string
+        tags_string = ','.join(tags_list)
+        # makes the string a single quote string
+        tags_string  = str("{"+tags_string +"}")
+        return tags_string
 
 
 class jsonvalues():

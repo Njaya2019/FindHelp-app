@@ -308,7 +308,7 @@ function get_questions(){
 
             // Changes the questions response text to a javascript array object
             const questions = JSON.parse(xhr.responseText);
-
+            console.log(questions);
             // display all questions
 
             // display variable
@@ -345,12 +345,15 @@ function get_questions(){
                         <p>${element.description}</p>
                         <!-- Tags -->
                         <div class="tags">
-                            <div>
-                                python
-                            </div>
-                            <div>
-                                Classes
-                            </div>
+                            ${ element.tags?
+                                element.tags.map(tag =>`
+                                <div>
+                                  ${tag}
+                                </div>              
+                                `
+                                ).join('')
+                                :''
+                            }
                         </div>
                         <p>${element.answers} answer</p>
                     </div>
@@ -541,11 +544,16 @@ function delete_question(event, question_id){
         if (xhr.status == 200){
             
             get_questions();
-
             // Displays the deletion successful massage
             deleteMessageContainer.innerHTML = "The question has been successfully deleted";
             deleteMessageContainer.style.backgroundColor = "rgba(255, 51, 0, 1)";
             deleteMessageContainer.style.display = "block";
+            // Scroll to the top of page to see the error
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
             // Makes the flash message to disappear in 4 seconds
             setTimeout(function(){
 
