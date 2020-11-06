@@ -41,6 +41,9 @@ class db():
             """CREATE TABLE IF NOT EXISTS votes(userid INT REFERENCES users(userid) ON DELETE CASCADE,answerid INT REFERENCES answers(answerid) ON DELETE CASCADE,
                upvote INT DEFAULT 0  NOT NULL, downvote INT DEFAULT 0 NOT NULL, PRIMARY KEY(userid, answerid))
             """,
+            """CREATE TABLE IF NOT EXISTS comments(commentid SERIAL PRIMARY KEY, comment VARCHAR(300) NOT NULL, answerid INT REFERENCES answers(answerid) ON DELETE CASCADE,
+               userid INT REFERENCES users(userid) ON DELETE CASCADE,timecommented TIMESTAMPTZ)
+            """,
 
            )
         try:

@@ -349,7 +349,6 @@ let questionIdString = urlArray[2];
 let questionIdInt = parseInt(urlArray[2]);
 
 
-
 // ===========A function that gets the question and all it's answers============
 function get_question(questionId){
 
@@ -594,7 +593,8 @@ function get_question(questionId){
         else{
 
             // Returns error if the question wasn't found
-            let error = JSON.parse(xhr.responseText);  
+            let notfounderror = JSON.parse(xhr.responseText);
+            console.log(notfounderror);
         }
     };
 
@@ -605,7 +605,6 @@ function get_question(questionId){
 
 // Runs the get question function
 get_question(questionIdInt);
-
 
 
 // Gets an answer's form id

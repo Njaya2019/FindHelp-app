@@ -23,6 +23,7 @@ def askQuestion(current_user_id):
         print(questionData)
         print(request.files)
         tags_string = regularExValidation.format_tags_values(questionData['tags'])
+        print(tags_string)
         dataAvailable = jsonvalues.emptyValues(**questionData)
         keysAvailable = jsonvalues.jsonKeys(**questionData)
         requiredKeys = ('title', 'description')
@@ -78,9 +79,7 @@ def editQuestion(current_user_id, questionid):
         keysAvailable = jsonvalues.jsonKeys(**editQuestionData)
         requiredKeys = ('title', 'description')
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **editQuestionData)
-        if not editQuestionData['title'] or not editQuestionData['description']:
-            return jsonify({'status':400, 'error':'Please provide values for title and description'}), 400
-        elif not keysAvailable:
+        if not keysAvailable:
             return jsonify({'status':400, 'error':'please provide a valid question title or description'}), 400
         elif not isvalidKey:
             return jsonify({'status':400, 'error':'please provide a valid question title or description'}), 400
@@ -91,6 +90,8 @@ def editQuestion(current_user_id, questionid):
             isString = regularExValidation.validAlphabetName(*editquestionStrings)
             spaceQuestionStrings = (editQuestionData['title'], editQuestionData['description'])
             spaceCharacters = jsonvalues.absoluteSpaceCharacters(*spaceQuestionStrings)
+            if not editQuestionData['title'] or not editQuestionData['description']:
+                return jsonify({'status':400, 'error':'Please provide values for title and description'}), 400
             if spaceCharacters:
                     return jsonify({'status':400, 'error':'The question\'s title and description values can not be space characters'}), 400
             elif not isString:

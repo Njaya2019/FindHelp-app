@@ -28,7 +28,7 @@ class TestAnswers():
     def test_question_posted(client, token):
         """ Test if a question has been successfully posted """
         TestAnswers.headers['x-access-token'] = token
-        response=client.post("/questions", headers = TestAnswers.headers, data = dict(title = TestAnswers.title, description = TestAnswers.description), content_type="multipart/form-data")
+        response=client.post("/questions", headers = TestAnswers.headers, data = dict(title = TestAnswers.title, description = TestAnswers.description, tags='{}'), content_type="multipart/form-data")
         data = loads(response.data)
         assert response.status_code==201
         assert data["question"]["questionId"] == 1

@@ -18,10 +18,8 @@ def answer_question(current_user_id, questionid):
         keysAvailable = jsonvalues.jsonKeys(**answerData)
         requiredKeys = ('answer',)
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **answerData)
-        if not answerData['answer']:
-            return jsonify({'status':400, 'error':'Please provide an answer first'}), 400
-        elif not keysAvailable:
-            return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400
+        if not keysAvailable:
+           return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400
         elif not isvalidKey:
             return jsonify({'status':400, 'error':'please provide a valid answer key'}), 400
         else:
@@ -29,6 +27,8 @@ def answer_question(current_user_id, questionid):
             spaceCharacters = jsonvalues.absoluteSpaceCharacters(*spaceAsAnswer)
             if spaceCharacters:
                 return jsonify({'status':400, 'error':'The answer value can not be space characters'}), 400
+            elif not answerData['answer']:
+                return jsonify({'status':400, 'error':'Please provide an answer first'}), 400
             else:
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
                 if not image_url:
@@ -55,9 +55,7 @@ def editAnswer(current_user_id, answerid):
         keysAvailable = jsonvalues.jsonKeys(**answerEditedData)
         requiredKeys = ('answer',)
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **answerEditedData)
-        if not answerEditedData['answer']:
-            return jsonify({'status':400, 'error':'Please provide values for your answer'}), 400
-        elif not keysAvailable:
+        if not keysAvailable:
             return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400
         elif not isvalidKey:
             return jsonify({'status':400, 'error':'please provide a valid answer key'}), 400
@@ -67,6 +65,8 @@ def editAnswer(current_user_id, answerid):
             if spaceCharacters:
                 return jsonify({'status':400, 'error':'The answer value can not be space characters'}), 400
             else:
+                if not answerEditedData['answer']:
+                    return jsonify({'status':400, 'error':'Please provide values for your answer'}), 400
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
                 if not image_url:
                     return jsonify({"status":400, "error":"The file key doesn't exist"}), 400
