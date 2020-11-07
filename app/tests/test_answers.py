@@ -140,3 +140,119 @@ class TestEditAnswers:
         assert response.status_code == 200
         assert data["answeredited"]["answerEdited"] == TestEditAnswers.answer
         assert data["answeredited"]["user"] == 1
+
+
+class TestsComments():
+    comment = "And what of variables in classes"
+    headers = {'x-access-token':''}
+    answerid = 1
+
+    @staticmethod
+    def test_empty_comment(client, token):
+        """ Test if user tries to post an empty comment value"""
+        TestsComments.headers['x-access-token'] = token
+        response = client.post("/comments/"+str(TestsComments.answerid)+"/add_comment", headers = TestsComments.headers, data = dict(comment = ''), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 400
+        assert data["error"] == 'Please provide a comment first'
+
+    @staticmethod
+    def test_comment_valid_key(client, token):
+        """ Test if user tries to post a comment without its key"""
+        TestsComments.headers['x-access-token'] = token
+        response = client.post("/comments/"+str(TestsComments.answerid)+"/add_comment", headers = TestsComments.headers, data = dict(answer = TestsComments.comment), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 400
+        assert data["error"] == 'please provide a valid comment key'
+
+    @staticmethod
+    def test_comment_space_characters(client, token):
+        """ Test if user tries to post a comment as space characters"""
+        TestsComments.headers['x-access-token'] = token
+        response = client.post("/comments/"+str(TestsComments.answerid)+"/add_comment", headers = TestsComments.headers, data = dict(comment = ' '), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 400
+        assert data["error"] == 'The comment value can not be space characters'
+
+    @staticmethod
+    def test_answer_exists(client, token):
+        """ Test if a user tries to post a comment on an answer that doesn't exist"""
+        TestsComments.headers['x-access-token'] = token
+        response = client.post("/comments/"+str(10000)+"/add_comment", headers = TestsComments.headers, data = dict(comment = TestsComments.comment), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 404
+        assert data["error"] == 'The answer you commenting on doesn\'t exist'
+
+    @staticmethod
+    def test_comment_posted(client, token):
+        """ Test if the comment was successfully posted"""
+        TestsComments.headers['x-access-token'] = token
+        response = client.post("/comments/"+str(TestsComments.answerid)+"/add_comment", headers = TestsComments.headers, data = dict(comment = TestsComments.comment), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 201
+        print(data["postedComment"]['user'])
+        assert data["postedComment"]['commentPosted'] == TestsComments.comment
+
+
+class TestsEditComments():
+    comment = "And what of instance variables in classes"
+    headers = {'x-access-token':''}
+    commentid = 1
+
+    @staticmethod
+    def test_empty_edited_comment(client, token):
+        """ Test if user tries to post an edited empty comment value"""
+        TestsEditComments.headers['x-access-token'] = token
+        response = client.put("/comments/"+str(TestsEditComments.commentid)+"/edit", headers = TestsComments.headers, data = dict(comment = ''), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 400
+        assert data["error"] == 'Please provide an edited comment first'
+
+    @staticmethod
+    def test_edited_comment_valid_key(client, token):
+        """ Test if user tries to post an edited comment without its key"""
+        TestsEditComments.headers['x-access-token'] = token
+        response = client.put("/comments/"+str(TestsEditComments.commentid)+"/edit", headers = TestsEditComments.headers, data = dict(answer = TestsEditComments.comment), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 400
+        assert data["error"] == 'please provide a valid edit comment key'
+
+    @staticmethod
+    def test_edit_comment_space_characters(client, token):
+        """ Test if user tries to post an edited comment as space characters"""
+        TestsEditComments.headers['x-access-token'] = token
+        response = client.put("/comments/"+str(TestsEditComments.commentid)+"/edit", headers = TestsEditComments.headers, data = dict(comment = ' '), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 400
+        assert data["error"] == 'The editted comment value can not be space characters'
+
+    @staticmethod
+    def test_comment_exists(client, token):
+        """ Tests if a comment being edited exists"""
+        TestsEditComments.headers['x-access-token'] = token
+        response = client.put("/comments/"+str(10000)+"/edit", headers = TestsEditComments.headers, data = dict(comment = TestsEditComments.comment), content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 404
+        assert data["error"] == 'The comment doesn\'t exist'
+
+    # @staticmethod
+    # def test_edited_comment_posted(client, token):
+    #     """ Test if the comment was successfully posted"""
+    #     TestsEditComments.headers['x-access-token'] = token
+    #     response = client.put("/comments/"+str(TestsEditComments.commentid)+"/edit", headers = TestsEditComments.headers, data = dict(comment = TestsEditComments.comment), content_type="multipart/form-data")
+    #     data = loads(response.data)
+    #     assert response.status_code == 200
+    #     assert data["postedEditedComment"]['commentEdited'] == TestsEditComments.comment
+
+
+class TestsDeleteComments():
+    headers = {'x-access-token':''}
+
+    @staticmethod
+    def test_delete_comment_notFound(client, token):
+        """ Test if a user tries to delete a question that doesn't exist"""
+        TestsDeleteComments.headers['x-access-token'] = token
+        response = client.delete("/comments/"+str(10)+"/delete", headers = TestsDeleteComments.headers, content_type="multipart/form-data")
+        data = loads(response.data)
+        assert response.status_code == 404
+        assert data["error"] == 'The comment you want to delete doesn\'t exist'

@@ -56,7 +56,8 @@ class comments():
                 userExists = cur.fetchone()
                 if userExists:
                     if commentExists['userid'] != userid:
-                        return 'You can not edit other users comments'
+                        # 'You can not edit other users comments'
+                        return 'not owner'
                     else:
                         editComment_sql = "UPDATE comments SET comment=%s, timecommented=CURRENT_TIMESTAMP WHERE commentid=%s RETURNING commentid, comment, userid, timecommented"
                         editCommentData = (comment,)
@@ -91,7 +92,8 @@ class comments():
                 userExists = cur.fetchone()
                 if userExists:
                     if commentExists['userid'] != userid:
-                        return 'You can not delete other users comments'
+                        # 'You can not delete other users comments'
+                        return 'not owner'
                     else:
                         deleteComment_sql = "DELETE FROM comments WHERE commentid=%s RETURNING commentid"
                         deleteCommentData = (commentid,)

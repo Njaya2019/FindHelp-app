@@ -73,7 +73,7 @@ class db():
             # con_cur = db.connectToDatabase(db_url)
             con = con_cur[0]
             cur = con_cur[1]
-            table_names = ('users', 'questions')
+            table_names = ('users', 'questions', 'answers', 'votes', 'comments')
             for table_name in table_names:
                 del_query = 'DROP TABLE IF EXISTS {} CASCADE'.format(table_name)
                 cur.execute(del_query)
