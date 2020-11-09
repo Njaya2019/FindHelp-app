@@ -73,7 +73,7 @@ class TestAskQuetions():
         response = client.get("/questions", headers = TestAskQuetions.headers)
         data = json.loads(response.data)
         assert response.status_code==200
-        assert data["Questions"][0]["questionid"] == 1
+        assert data["Questions"][0]["questionid"] == 2
         assert data["Questions"][0]["title"] == TestAskQuetions.title
         assert data["Questions"][0]["description"] == TestAskQuetions.description
     

@@ -108,7 +108,7 @@ class TestEditQuetions():
         response=client.post("/questions", headers = TestEditQuetions.headers, data=dict(title=TestEditQuetions.editedTitle, description=TestEditQuetions.editedDescription, tags='{}'), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==201
-        assert data["question"]["questionId"] == 1
+        assert data["question"]["questionId"] == 2
         assert data["question"]["title"] == TestEditQuetions.editedTitle
         assert data["question"]["description"] == TestEditQuetions.editedDescription
         assert data["question"]["user"] == 1
