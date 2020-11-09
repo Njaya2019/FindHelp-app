@@ -221,7 +221,7 @@ function postQuestion(e){
     let xhr = new XMLHttpRequest();
 
     // open the request
-    xhr.open('POST', 'http://127.0.0.1:5000/questions', true);
+    xhr.open('POST', `${base_url}/questions`, true);
 
     // What should happen if the reponse received from the server
     xhr.onload = function(onloadevent){
@@ -299,7 +299,7 @@ function get_questions(){
     xhr = new XMLHttpRequest();
 
     // open request to get all questions
-    xhr.open('GET', 'http://127.0.0.1:5000/questions/answers_count/');
+    xhr.open('GET', `${base_url}/questions/answers_count/`);
 
     // Response from the server
     xhr.onload = function (onloadevent) {

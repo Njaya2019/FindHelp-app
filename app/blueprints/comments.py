@@ -41,6 +41,7 @@ def comment_an_answer(current_user_id, answerid):
                     postedComment = {'answerCommented': newComment['answerid'], 'commentPosted': newComment['comment'], 'commentedAt': datetime_commentedAt_string, 'user': newComment['userid']}
                     return jsonify({'status': 201,'postedComment': postedComment}), 201
 
+
 @comments_blueprint.route('/comments/<int:commentid>/edit', methods = ['PUT'])
 @token_required
 def editAComment(current_user_id, commentid):
@@ -97,4 +98,4 @@ def delete_answer(current_user_id, commentid):
         return jsonify({'status':404, 'error': 'The user deleting the comment doesn\'t exist'}), 404
     
     return jsonify({'status':200, 'message':'The comment has been successfully deleted'}), 200
-    
+ 

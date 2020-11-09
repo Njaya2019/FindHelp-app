@@ -168,7 +168,7 @@ function clickActions(e){
 
 
 
-//====== Creates an answers line seperator =======\\
+//====== Creates an answers line seperator ====================
 // selecting answers' container
 let answers = document.querySelectorAll('#container #body-container #answers-container .user-answer');
 
@@ -184,7 +184,7 @@ if (answers){
 
 
 
-//====== A class that has all submit functions =======\\
+//====== A class that has all submit functions ================
 class SubmitFunctions{
 
     static submitEditedAnswer(e, question_id){
@@ -200,7 +200,7 @@ class SubmitFunctions{
         let xhr = new XMLHttpRequest();
 
         // opens the request
-        xhr.open('PUT', `http://127.0.0.1:5000/answers/${answer_id}`)
+        xhr.open('PUT', `${base_url}/answers/${answer_id}`)
 
         // gets the response from the server
         xhr.onload = function(onloadevent){
@@ -308,12 +308,72 @@ class SubmitFunctions{
         }, 3000);
     }
 
+    static submitComment(e, answer_id){
+        // Gets the form data
+        let commentFormData = new FormData(e.target);
+
+        // Initialize ajax request
+        let xhr =new XMLHttpRequest();
+
+        // open the request
+        xhr.open('POST', `${base_url}/comments/${answer_id}/add_comment`);
+
+        // Gets the response from the server
+        xhr.onload = function(onloadevent){
+            
+            if(xhr.status == 201){
+                // successfully added the comment
+
+                // resets the comment form input text
+                e.target.reset();
+
+            }
+            else{
+                // Posting a comment was unsuccessful
+                const error = JSON.parse(xhr.responseText);
+                console.log(error);
+                // gets the error container
+                let commetErrorContainer = e.target.parentNode.previousElementSibling;
+                // gets the list (li) tag
+                let errorTag = commetErrorContainer.children[0];
+
+                // if the list tag doesn't contain an error message,
+                // adds one.
+                if(errorTag.innerHTML == ''){
+
+                    errorTag.innerHTML = error.error;
+                }
+                else{
+
+                    // If list tag has an error text replace it with a new one
+                    errorTag.innerHTML = error.error;
+                }
+
+                // Display the error container, to display the error,
+                // message.
+                commetErrorContainer.style.maxHeight = commetErrorContainer.scrollHeight + 'px';
+
+                // makes the errors disappear in 30 seconds
+                setTimeout(function(){
+
+                    // Replace the current error text with an empty string
+                    errorTag.innerHTML = '';
+
+                    // Makes the error container to disappear
+                    commetErrorContainer.style.maxHeight = null;
+                }, 3000);
+            }
+        }
+        // Sends the request
+        xhr.send(commentFormData);
+    }
+
 }
 
 
 
 
-//======= Performs the submit events =======\\
+//======= Performs the submit events ===========================
 document.body.addEventListener('submit', submitActions);
 function submitActions(e){
     if(e.target.classList.contains('submit-edited-answer-form')){
@@ -322,6 +382,14 @@ function submitActions(e){
         // Prevent automatic route
         e.preventDefault();
         SubmitFunctions.submitEditedAnswer(e, questionIdInt);
+    }
+    else if(e.target.classList.contains("add-comment-form")){
+        // Prevent automatic route
+        e.preventDefault();
+        let answerToCommentTo = e.target.getAttribute("data-comment-answerid");
+        SubmitFunctions.submitComment(e, answerToCommentTo);
+        console.log(answerToCommentTo);
+        // console.log('Commented submited');
     }
     else{
         
@@ -335,6 +403,7 @@ function submitActions(e){
 // gets the URL search string, that is the path
 let currentLocation = window.location.pathname;
 let base_url = window.location.origin;
+console.log(base_url );
 
 
 // splits the url to an array and gets question's id as a string
@@ -349,7 +418,7 @@ let questionIdString = urlArray[2];
 let questionIdInt = parseInt(urlArray[2]);
 
 
-// ===========A function that gets the question and all it's answers============
+// ===========A function that gets the question and all it's answers=
 function get_question(questionId){
 
     // initialises the ajax request object
@@ -569,7 +638,7 @@ function get_question(questionId){
                         </div>
                         <div class="add-comment">
                             <div class="add-comment-title">Add comment:</div>
-                            <form class="add-comment-form">
+                            <form class="add-comment-form" data-comment-answerid=${answer.answerid}>
                                 <input type="text" name="comment" class="coment-text-box">
                                 <input type="submit" name="submit-comment" class="submit-comment-button" value="Save">
 
@@ -602,11 +671,11 @@ function get_question(questionId){
     xhr.send();
 }
 
-
 // Runs the get question function
 get_question(questionIdInt);
 
 
+// Posts an answer
 // Gets an answer's form id
 submitAnswer = document.querySelector("#submit-answer-form");
 function postAnswer(question_id){
@@ -624,7 +693,7 @@ function postAnswer(question_id){
         // creates a ajax request object
         xhr = new XMLHttpRequest();
 
-        // opens the reques
+        // opens the request
         xhr.open('POST', `http://127.0.0.1:5000/answers/${question_id}`);
 
         // Response from the server
@@ -861,8 +930,7 @@ function delete_answer(event, answer_id, questionId){
 }
 
 
-
-// ================== Displays an answer picture to be uploaded ===================
+// ================== Displays an answer picture to be uploaded ======
 // Display answer image to be uploaded
 function readURL(input) {
     if (input.files && input.files[0]) {
@@ -891,7 +959,6 @@ imageUploadInput.onchange = function(e){
     // reads the file and displays the image
     readURL(this);
 }
-
 
 
 // =================== Marks an answer correct ======================

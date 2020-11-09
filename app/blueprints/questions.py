@@ -97,7 +97,7 @@ def editQuestion(current_user_id, questionid):
             elif not isString:
                 return jsonify({'status':400, 'error':'Please provide atleast two words for question title and description'}), 400
             else:
-                editedQuestion = question.editQuestion(con_cur, editQuestionData['title'], editQuestionData['description'], image_url, questionid, current_user_id, tags_string)
+                editedQuestion = question.editQuestion(con_cur, editQuestionData['title'], editQuestionData['description'], image_url, questionid, current_user_id, tags_string, current_app, current_app.config['UPLOAD_FOLDER'])
                 if type(editedQuestion) == str:
                     return jsonify({'status':404, 'error':editedQuestion}), 404
                 timePassed = timefunctions.calculateTimePassed(editedQuestion['timeposted'])

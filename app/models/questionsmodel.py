@@ -1,5 +1,7 @@
 from .dataBase import db
 import os
+from os import remove
+
 
 class question():
     
@@ -79,7 +81,7 @@ class question():
             print(err)
     
     @staticmethod
-    def editQuestion(con_cur, title, description, imageurl, questionid, userid, tags):
+    def editQuestion(con_cur, title, description, imageurl, questionid, userid, tags, current_app, upload_folder):
         """A method to edit a question"""
         try:
             con = con_cur[0]
@@ -92,7 +94,9 @@ class question():
                 if questionToEdit['userid'] != userid:
                     return 'You can not edit this question but only the owner'
                 if questionToEdit['questionimage'] != 'noimagekey':
-                    remove(questionToEdit['questionimage'])
+                    uploads_dir = os.path.join(current_app.root_path, upload_folder)
+                    image_path = os.path.join(uploads_dir, questionToEdit['questionimage'])
+                    remove(image_path)
                 editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s, tags=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
                 editedQuestionData = (title, description, imageurl, tags, questionid)
                 cur.execute(editQuestion_sql, editedQuestionData)
