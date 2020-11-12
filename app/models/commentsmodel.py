@@ -59,8 +59,8 @@ class comments():
                         # 'You can not edit other users comments'
                         return 'not owner'
                     else:
-                        editComment_sql = "UPDATE comments SET comment=%s, timecommented=CURRENT_TIMESTAMP WHERE commentid=%s RETURNING commentid, comment, userid, timecommented"
-                        editCommentData = (comment,)
+                        editComment_sql = "UPDATE comments SET comment=%s WHERE commentid=%s RETURNING commentid, comment, userid, timecommented"
+                        editCommentData = (comment, commentid,)
                         cur.execute(editComment_sql, editCommentData)
                         con.commit()
                         editedComment = cur.fetchone()
@@ -97,7 +97,7 @@ class comments():
                     else:
                         deleteComment_sql = "DELETE FROM comments WHERE commentid=%s RETURNING commentid"
                         deleteCommentData = (commentid,)
-                        cur.execute(deleteComment_sql, editCommentData)
+                        cur.execute(deleteComment_sql, deleteCommentData)
                         con.commit()
                         deletedComment = cur.fetchone()
                         return deletedComment

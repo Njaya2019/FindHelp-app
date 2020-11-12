@@ -281,33 +281,6 @@ class SubmitFunctions{
         xhr.send(editedanswerData);
     }
 
-
-    static submitAnswer(e){
-        // gets error div element
-        let submitAnswerErrorContainer = e.target.parentNode.previousElementSibling;
-        // Accesses the list tag to display the error
-        let editErrorTag = submitAnswerErrorContainer.children[0];
-        // if the list tag doesn't contain an error message,
-        // add one.
-        if(editErrorTag.innerHTML == ''){
-            editErrorTag.innerHTML = "Please provide correct username and password";
-        }
-        else{
-            // If list tag has an error text replace it with a new one
-            editErrorTag.innerHTML = "Please fill all values to login";
-        }
-        // Display the error container, to display the error,
-        // message.
-        submitAnswerErrorContainer.style.maxHeight = submitAnswerErrorContainer.scrollHeight + 'px';
-        // makes the errors disappear in 30 seconds
-        setTimeout(function(){
-            // Replace the current error text with an empty string
-            editErrorTag.innerHTML = '';
-            // Makes the error container to disappear
-            submitAnswerErrorContainer.style.maxHeight = null;
-        }, 3000);
-    }
-
     static submitComment(e, answer_id){
         // Gets the form data
         let commentFormData = new FormData(e.target);
@@ -326,6 +299,36 @@ class SubmitFunctions{
 
                 // resets the comment form input text
                 e.target.reset();
+                get_question(questionIdInt);
+
+                let falsh_container = document.getElementById("flash-messages");
+
+                // displays the flash container
+                falsh_container.style.display = 'block';
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                // Adds the message to the container
+                falsh_container.innerHTML = "The comment was successfully added";
+    
+                // Scroll to the top of page to see the message
+                window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth' 
+                });
+                
+                
+                // makes the flash container to disappear in 4 seconds
+                setTimeout(function() {
+    
+                    // makes the container to disappear
+                    falsh_container.style.display = 'none';
+                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                    // makes sure it's content is empty after it disappears
+                    falsh_container.innerHTML = '';
+    
+                }, 4000);
 
             }
             else{
@@ -368,6 +371,96 @@ class SubmitFunctions{
         xhr.send(commentFormData);
     }
 
+    static submitEditedComment(e, comment_id){
+        // Gets the form data
+        let commentEditFormData = new FormData(e.target);
+
+        // Initialize ajax request
+        let xhr =new XMLHttpRequest();
+
+        // open the request
+        xhr.open('PUT', `${base_url}/comments/${comment_id}/edit`);
+
+        // Gets the response from the server
+        xhr.onload = function(onloadevent){
+            
+            if(xhr.status == 200){
+                // successfully edited the comment
+
+                // resets the comment form input text
+                e.target.reset();
+                get_question(questionIdInt);
+
+                let falsh_container = document.getElementById("flash-messages");
+
+                // displays the flash container
+                falsh_container.style.display = 'block';
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                // Adds the message to the container
+                falsh_container.innerHTML = "The comment was successfully edited";
+    
+                // Scroll to the top of page to see the message
+                window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth' 
+                });
+                
+                
+                // makes the flash container to disappear in 4 seconds
+                setTimeout(function() {
+    
+                    // makes the container to disappear
+                    falsh_container.style.display = 'none';
+                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                    // makes sure it's content is empty after it disappears
+                    falsh_container.innerHTML = '';
+    
+                }, 4000);
+
+            }
+            else{
+                // Posting a comment was unsuccessful
+                const error = JSON.parse(xhr.responseText);
+                console.log(error);
+                // gets the error container
+                let commetErrorContainer = e.target.children[0];
+                // gets the list (li) tag
+                let errorTag = commetErrorContainer.children[0];
+
+                // if the list tag doesn't contain an error message,
+                // adds one.
+                if(errorTag.innerHTML == ''){
+
+                    errorTag.innerHTML = error.error;
+                }
+                else{
+
+                    // If list tag has an error text replace it with a new one
+                    errorTag.innerHTML = error.error;
+                }
+
+                // Display the error container, to display the error,
+                // message.
+                commetErrorContainer.style.maxHeight = commetErrorContainer.scrollHeight + 'px';
+
+                // makes the errors disappear in 30 seconds
+                setTimeout(function(){
+
+                    // Replace the current error text with an empty string
+                    errorTag.innerHTML = '';
+
+                    // Makes the error container to disappear
+                    commetErrorContainer.style.maxHeight = null;
+                }, 3000);
+            }
+        }
+        // Sends the request
+        xhr.send(commentEditFormData);
+    }
+
 }
 
 
@@ -384,11 +477,20 @@ function submitActions(e){
         SubmitFunctions.submitEditedAnswer(e, questionIdInt);
     }
     else if(e.target.classList.contains("add-comment-form")){
+        // Adding a comment
         // Prevent automatic route
         e.preventDefault();
         let answerToCommentTo = e.target.getAttribute("data-comment-answerid");
         SubmitFunctions.submitComment(e, answerToCommentTo);
         console.log(answerToCommentTo);
+    }
+    else if(e.target.classList.contains("edit-comment-form")){
+        // Editting a comment
+        // Prevent automatic route
+        e.preventDefault();
+        let commentToEdit = e.target.getAttribute("data-edit-comment");
+        console.log('Comment edited '+commentToEdit);
+        SubmitFunctions.submitEditedComment(e, commentToEdit);
         // console.log('Commented submited');
     }
     else{
@@ -402,6 +504,7 @@ function submitActions(e){
 
 // gets the URL search string, that is the path
 let currentLocation = window.location.pathname;
+
 let base_url = window.location.origin;
 console.log(base_url );
 
@@ -559,20 +662,21 @@ function get_question(questionId){
                     <div class="comments">
                         <!-- comment -->
                         <div class="coment-section">
-                            <div class="comment">
-                                <div class="the-comment" id="the-comment-1">How do i go about creating an instance of the class</div>
+                           ${answer.comments.length === 0?"No comments yet":answer.comments.map(comment =>
+                            `<div class="comment">
+                                <div class="the-comment" id="the-comment-1">${comment.comment}</div>
                                 <div class="user-comment">
-                                    <a href="#">Andrew Njaya</a>
+                                    <a href="#">${comment.userwhocommented}</a>
                                     <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
                                     <p class="edit-comment">Edit</p>
                                     <p class="delete-comment">Delete</p>   
                                 </div>
-                                <form class="edit-comment-form">
+                                <form class="edit-comment-form" data-edit-comment=${comment.commentid}>
                                     <div class="comment-errors">
                                         <li></li>
                                     </div>
                                     <div class="edit-comment-div">
-                                        <input type="text" class="edit-comment-input">
+                                        <input type="text" class="edit-comment-input" name="comment">
                                     </div>
                                     <div class="edit-comment-submit-div">
                                         <input type="submit" class="edit-comment-submit" value="Save">
@@ -590,48 +694,13 @@ function get_question(questionId){
                                         </div>
                                         <div class="confirm-delete-comment-footer">
                                             <input type="button" class="delete-comment-cancel" value="cancel">
-                                            <input type="button" class="delete-comment-delete" value="delete">
+                                            <input type="button" class="delete-comment-delete" value="delete" onclick="delete_comment(event, ${comment.commentid})" data-delete-comment=${comment.commentid}>
                                         </div>
                                     </div>
                                 </div>
                                 
-                            </div>
-                            <div class="comment">
-                                <div class="the-comment">How do i go about creating an instance of the class</div>
-                                <div class="user-comment">
-                                    <a href="#">Andrew Njaya</a>
-                                    <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
-                                    <p class="edit-comment">Edit</p>
-                                    <p class="delete-comment">Delete</p>               
-                                </div>
-                                <form class="edit-comment-form">
-                                    <div class="comment-errors">
-                                        <li></li>
-                                    </div>
-                                    <div class="edit-comment-div">
-                                        <input type="text" class="edit-comment-input">
-                                    </div>
-                                    <div class="edit-comment-submit-div">
-                                        <input type="submit" class="edit-comment-submit" value="Save">
-                                        <input type="button" class="edit-comment-cancel" value="Cancel">
-                                    </div>
-                                </form>
-                                <div class="confirm-delete-comment-background" id="delete-comment-modal">
-                                    <!-- Confirm delete comment dialog box -->
-                                    <div class="confirm-delete-comment">
-                                        <div class="confirm-delete-comment-title">
-                                            <h4>Delete comment</h4>
-                                        </div>
-                                        <div class="confirm-delete-comment-body">
-                                            <h5>Are you sure you want to delete the comment ?</h5>
-                                        </div>
-                                        <div class="confirm-delete-comment-footer">
-                                            <input type="button" class="delete-comment-cancel" value="cancel">
-                                            <input type="button" class="delete-comment-delete" value="delete">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div>`
+                            ).join('')}
                         </div>
                         <div class="add-comment-errors" >
                             <li>Please provide a comment</li>
@@ -929,6 +998,81 @@ function delete_answer(event, answer_id, questionId){
     xhr.send();
 }
 
+
+// A function that deletes an answer
+function delete_comment(event, comment_id){
+
+    // initialises ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // opens the request
+    xhr.open('DELETE', `${base_url}/comments/${comment_id}/delete`);
+
+    // response from the server
+    xhr.onload = function(onloadevent){
+
+        // answer successfully deleted
+        if(xhr.status == 200){
+            let delete_message = JSON.parse(xhr.responseText);
+            console.log(delete_message);
+            get_question(questionIdInt);
+            // console.log(delete_message.message);
+            let falsh_container = document.getElementById("flash-messages");
+
+            // Displays the deletion successful massage
+            falsh_container.innerHTML = delete_message.message;
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+            falsh_container.style.display = "block";
+            // Scroll to the top of page to see the error
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                falsh_container.innerHTML = "";
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+                falsh_container.style.display = 'none';
+
+            }, 4000); 
+
+        }
+        else{
+            // changes the response text to a javascript object
+            let error = JSON.parse(xhr.responseText);
+            get_question(questionIdInt);
+        
+            let falsh_container = document.getElementById("flash-messages");
+
+            // Displays the deletion successful massage
+            falsh_container.innerHTML = error.error;
+            falsh_container.style.backgroundColor = "rgba(255, 51, 0, 1)";
+            falsh_container.style.display = "block";
+            // Scroll to the top of page to see the error
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                falsh_container.innerHTML = "";
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+                falsh_container.style.display = 'none';
+
+            }, 4000); 
+
+        }
+    };
+
+    // sends the delete request
+    xhr.send();
+}
 
 // ================== Displays an answer picture to be uploaded ======
 // Display answer image to be uploaded

@@ -169,15 +169,46 @@ def view_question(current_user_id, questionid):
             users_and_answers_dictionary_copy = {}
             # a dictionary variable that will store all answers
             users_and_answers_dictionary = {}
-            # users and answers list that stores dictionaries of user as key and answer as value.
+            # users and answers list that stores splitted answer strings
             users_and_answers_list =[]
             # Loop through the answers and create a dictionary of the answers, 
             # name of the user as key and the answer as value.
             for useranswer in aQuestion["usersandanswers"]:
                 user_and_answer_list = useranswer.rsplit("----")
                 total_votes = int(user_and_answer_list[3])-int(user_and_answer_list[4])
+                # converts the string datetime to a datetime object
                 date_time_obj = iso8601.parse_date(user_and_answer_list[5])
+                # Calculates the timedelta
                 time_passed_answered = timefunctions.calculateTimePassed(date_time_obj)
+
+                # Get answers' comments
+                # print(user_and_answer_list[7])
+
+                # a dictionary variable that will store all comments
+                users_and_comments_dictionary_copy = {}
+                users_and_comments_dictionary = {}
+                # users and comments list that stores splitted comments.
+                users_and_comments_list =[]
+
+                user_comment_list = []
+                users_and_comments_list_final =[]
+                # Checks if the answer has comments
+                if user_and_answer_list[7]:
+                    users_and_comments_list = user_and_answer_list[7].rsplit("*****")
+                    for user_comment in users_and_comments_list:
+                        user_comment_list = user_comment.rsplit(":::::")
+                        commented_date_time_obj = iso8601.parse_date(user_comment_list[3])
+                        # Calculates the timedelta
+                        time_passed_commented = timefunctions.calculateTimePassed(commented_date_time_obj)
+                        users_and_comments_dictionary.update({
+                            "userwhocommented":user_comment_list[0],
+                            "commentid":user_comment_list[1],
+                            "comment":user_comment_list[2],
+                            "timecommented":time_passed_commented,
+                        })
+                        users_and_comments_dictionary_copy = users_and_comments_dictionary.copy()
+                        users_and_comments_list_final.append(users_and_comments_dictionary_copy)
+                # Adds an answer to the users_and_answers_dictionary dictionary
                 users_and_answers_dictionary.update(
                     {
                         'whoanswered': user_and_answer_list[0],
@@ -185,7 +216,8 @@ def view_question(current_user_id, questionid):
                         'answer':user_and_answer_list[1],
                         'votes': total_votes,
                         'time': time_passed_answered,
-                        'answerimage':user_and_answer_list[6]
+                        'answerimage': user_and_answer_list[6],
+                        'comments': users_and_comments_list_final
                     }
                 )
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
@@ -249,7 +281,7 @@ def delete_question(current_user_id, questionid):
 @questions_blueprint.route('/questions/', methods = ['GET', 'POST'])
 @token_required
 def home_view_questions(current_user_id):
-    ''' This is a view function displays a page, where
+    ''' This is a view function that renders a page, where
         a user can create, view, edit and delete a question.
     '''
     if request.method == 'POST':

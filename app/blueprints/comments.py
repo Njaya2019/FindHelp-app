@@ -71,15 +71,15 @@ def editAComment(current_user_id, commentid):
                 elif editedComment == 'user not found':
                     return jsonify({'status':404, 'error': 'The user editting the comment doesn\'t exist'}), 404
                 else:
-                    datetime_commenteEditeddAt = editedComment['timecommented']
+                    datetime_commentedEditedAt = editedComment['timecommented']
                     datetime_commentedEditedAt_string = datetime_commentedEditedAt.strftime('%B %d, %Y')
                     postedEditedComment = {'commentid':editedComment['commentid'], 'commentEdited':editedComment['comment'], 'commentedEditedAt':datetime_commentedEditedAt_string, 'user':editedComment['userid']}
-                    return jsonify({'status':200,'postedEditedComment':postedComment}), 200
+                    return jsonify({'status': 200,'postedEditedComment': postedEditedComment}), 200
 
 
 @comments_blueprint.route('/comments/<int:commentid>/delete', methods = ['DELETE'])
 @token_required
-def delete_answer(current_user_id, commentid):
+def delete_comment(current_user_id, commentid):
     """An endpoint to delete a comment"""
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     commentDeleted = comments.deleteAcomment(
