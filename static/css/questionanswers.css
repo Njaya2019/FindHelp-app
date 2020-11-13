@@ -557,7 +557,21 @@ body{
     border: 1px solid rgba(0,0,0,0.2);
     border-radius: 3px;
     padding: 5px;
-    background-color: rgba(133, 133, 173, 0.3);  
+    background-color: rgba(133, 133, 173, 0.3);
+    position: relative;
+    
+}
+
+/* comment flash message*/
+#container #body-container #answers-container .user-answer .comments .coment-section .comment .comment-flash-messages{
+    background-color: rgba(102, 153, 255, 1);
+    color: white;
+    border-radius: 5px;
+    position: absolute;
+    top: 0;
+    left: 20px;
+    padding: 2px;
+    display: none;
 }
 
 /* The comment */
@@ -566,6 +580,7 @@ body{
     display: inline;
     padding: 5px;
     border-radius: 5px;
+    
 }
 
 /* comment container animation */

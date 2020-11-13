@@ -71,9 +71,10 @@ def editAComment(current_user_id, commentid):
                 elif editedComment == 'user not found':
                     return jsonify({'status':404, 'error': 'The user editting the comment doesn\'t exist'}), 404
                 else:
-                    datetime_commentedEditedAt = editedComment['timecommented']
-                    datetime_commentedEditedAt_string = datetime_commentedEditedAt.strftime('%B %d, %Y')
-                    postedEditedComment = {'commentid':editedComment['commentid'], 'commentEdited':editedComment['comment'], 'commentedEditedAt':datetime_commentedEditedAt_string, 'user':editedComment['userid']}
+                    # 'commentedEditedAt':datetime_commentedEditedAt_string,
+                    # datetime_commentedEditedAt = editedComment['timecommented']
+                    # datetime_commentedEditedAt_string = datetime_commentedEditedAt.strftime('%B %d, %Y')
+                    postedEditedComment = {'commentid':editedComment['commentid'], 'commentEdited': editedComment['comment'], 'userid': editedComment['userid'], 'username': editedComment['fullname']}
                     return jsonify({'status': 200,'postedEditedComment': postedEditedComment}), 200
 
 

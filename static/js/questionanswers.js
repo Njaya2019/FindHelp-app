@@ -66,7 +66,7 @@ function clickActions(e){
         let userContainer = e.target.parentNode;
         let commentContainer = e.target.parentNode.previousElementSibling;
         let comment = e.target.parentNode.previousElementSibling.innerHTML;
-        let editcommentForm = e.target.parentNode.parentNode.children[2];
+        let editcommentForm = e.target.parentNode.parentNode.children[3];
         editcommentForm.children[1].children[0].value = comment;
         userContainer.style.display = 'none';
         commentContainer.style.display = 'none';
@@ -83,7 +83,7 @@ function clickActions(e){
     }
     else if(e.target.classList.contains('delete-comment')){
         // Brings up confirm delete comment modal
-        let deleteCommentModalContainer = e.target.parentNode.parentNode.children[3];
+        let deleteCommentModalContainer = e.target.parentNode.parentNode.children[4];
         deleteCommentModalContainer.style.display = 'block';
     }
     else if(e.target.classList.contains('confirm-delete-comment-background')){
@@ -389,9 +389,19 @@ class SubmitFunctions{
 
                 // resets the comment form input text
                 e.target.reset();
-                get_question(questionIdInt);
 
-                let falsh_container = document.getElementById("flash-messages");
+                // get_question(questionIdInt);
+                let comment = JSON.parse(xhr.responseText);
+                console.log(comment);
+                e.target.parentNode.children[1].innerHTML = comment.postedEditedComment.commentEdited;
+                // Closes the editing form
+                e.target.style.display = "none";
+                // Displays the comment container new comment
+                e.target.parentNode.children[1].style.display = "block";
+                // Displays back the comment author's name
+                e.target.parentNode.children[2].style.display = "flex";
+                // Gets the comment flash message container
+                let falsh_container = e.target.parentNode.children[0];
 
                 // displays the flash container
                 falsh_container.style.display = 'block';
@@ -400,13 +410,6 @@ class SubmitFunctions{
                 // Adds the message to the container
                 falsh_container.innerHTML = "The comment was successfully edited";
     
-                // Scroll to the top of page to see the message
-                window.scroll({
-                    top: 0, 
-                    left: 0, 
-                    behavior: 'smooth' 
-                });
-                
                 
                 // makes the flash container to disappear in 4 seconds
                 setTimeout(function() {
@@ -418,7 +421,7 @@ class SubmitFunctions{
                     // makes sure it's content is empty after it disappears
                     falsh_container.innerHTML = '';
     
-                }, 4000);
+                }, 3000);
 
             }
             else{
@@ -664,6 +667,7 @@ function get_question(questionId){
                         <div class="coment-section">
                            ${answer.comments.length === 0?"No comments yet":answer.comments.map(comment =>
                             `<div class="comment">
+                                <div class="comment-flash-messages"></div>
                                 <div class="the-comment" id="the-comment-1">${comment.comment}</div>
                                 <div class="user-comment">
                                     <a href="#">${comment.userwhocommented}</a>
@@ -1018,6 +1022,7 @@ function delete_comment(event, comment_id){
             get_question(questionIdInt);
             // console.log(delete_message.message);
             let falsh_container = document.getElementById("flash-messages");
+            // let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.children[0]
 
             // Displays the deletion successful massage
             falsh_container.innerHTML = delete_message.message;
@@ -1043,9 +1048,10 @@ function delete_comment(event, comment_id){
         else{
             // changes the response text to a javascript object
             let error = JSON.parse(xhr.responseText);
-            get_question(questionIdInt);
-        
-            let falsh_container = document.getElementById("flash-messages");
+            // get_question(questionIdInt);
+
+            let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.children[0]
+            // let falsh_container = document.getElementById("flash-messages");
 
             // Displays the deletion successful massage
             falsh_container.innerHTML = error.error;

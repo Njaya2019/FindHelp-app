@@ -59,12 +59,15 @@ class comments():
                         # 'You can not edit other users comments'
                         return 'not owner'
                     else:
-                        editComment_sql = "UPDATE comments SET comment=%s WHERE commentid=%s RETURNING commentid, comment, userid, timecommented"
+                        editComment_sql = "UPDATE comments SET comment=%s WHERE commentid=%s"
                         editCommentData = (comment, commentid,)
                         cur.execute(editComment_sql, editCommentData)
                         con.commit()
-                        editedComment = cur.fetchone()
-                        return editedComment
+                        get_comment_sql ="SELECT users.fullname, users.userid, comments.commentid, comments.comment FROM users INNER JOIN comments ON users.userid = comments.userid WHERE comments.commentid=%s and users.userid=%s"
+                        getCommentData = (commentid, userid,)
+                        cur.execute(get_comment_sql, getCommentData)
+                        commentFetched = cur.fetchone()
+                        return commentFetched
                 else:
                     # 'The user editting the comment doesn\'t exist'
                     return 'user not found'
