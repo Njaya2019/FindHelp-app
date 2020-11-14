@@ -7,14 +7,14 @@ function clickActions(e){
     if(e.target.classList.contains('edit-icon')){
         // edit element clicked
         // Gets the answer tag
-        let answerParagraph = e.target.parentNode.parentNode.nextElementSibling.children[0];
+        let answerParagraph = e.target.parentNode.parentNode.nextElementSibling.children[1];
         // Hides the image container
             // answerParagraph.nextElementSibling.style.overflow = "hidden";
             // answerParagraph.nextElementSibling.style.maxHeight = 0 + 'px'
             answerParagraph.nextElementSibling.style.display = "none";
         // answerParagraph.nextElementSibling.children[0].style.maxHeight = 0 + 'px'
         // Gets edit div's container
-        let editAnswerContainer = e.target.parentNode.parentNode.nextElementSibling.children[2];
+        let editAnswerContainer = e.target.parentNode.parentNode.nextElementSibling.children[3];
         
         // Grabs the answer text value
         answerOriginalValue = answerParagraph.innerHTML;
@@ -98,7 +98,7 @@ function clickActions(e){
     }
     else if(e.target.classList.contains('delete-icon')){
         // displays delete modal
-        let deleteModal = e.target.parentNode.parentNode.parentNode.children[2].children[3];
+        let deleteModal = e.target.parentNode.parentNode.parentNode.children[2].children[4];
         deleteModal.style.display = "block";
     }
     else if(e.target.classList.contains('delete-modal')){
@@ -146,26 +146,26 @@ function clickActions(e){
             }
         });
     }
-    else if(e.target.classList.contains('edit-answer-image-btn')){
-        // Upload answer image buttonclicked
-        // uploads the answer picture and displays its name on the button.
-        let labelTag = e.target.nextElementSibling;
-        e.target.addEventListener('change', function(event){
-            // splits the string with a back slash and returns the last element
-            // of the array which is the image's name.
-            // This returns the last element of the array whicj is the name of the image.
-            let imageName = event.target.value.split("\\").pop();
-            if (imageName){
-                labelTag.innerHTML = imageName;
-            }
-        });
-    }
     else{
         
     }
 
 }
 
+function getImageName(uploadEvent){
+    // Upload answer image buttonclicked
+    // uploads the answer picture and displays its name on the button.
+    let labelTag = uploadEvent.target.nextElementSibling;
+    uploadEvent.target.addEventListener('change', function(event){
+        // splits the string with a back slash and returns the last element
+        // of the array which is the image's name.
+        // This returns the last element of the array whicj is the name of the image.
+        let imageName = event.target.value.split("\\").pop();
+        if (imageName){
+            labelTag.innerHTML = imageName;
+        }
+    });
+}
 
 
 //====== Creates an answers line seperator ====================
@@ -207,25 +207,33 @@ class SubmitFunctions{
             
             // successfully edited the answer response
             if(xhr.status == 200){
-                console.log(answer_id);
-                get_question(question_id);
+                const answer_edited = JSON.parse(xhr.responseText);
+                console.log(answer_edited);
+                // get_question(question_id);
+                // closes the editor's container
+                e.target.parentNode.style.maxHeight = 0 + 'px';
 
-                let falsh_container = document.getElementById("flash-messages");
+                // Updates the new answer and displays it
+                e.target.parentNode.parentNode.children[1].innerHTML = answer_edited.answeredited.answerEdited;
+                e.target.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.children[1].scrollHeight + 'px';
 
+                if(answer_edited.answeredited.editedimage != 'noimagekey'){
+                    e.target.parentNode.previousElementSibling.children[0].src = base_url+"/static/img/"+answer_edited.answeredited.editedimage;
+                    e.target.parentNode.previousElementSibling.style.display = "block";
+                    window.scrollBy(0, -900);
+                }
+                else{
+                    // editAnswerContainer.previousElementSibling.maxHeight = 0 + "px";
+                    e.target.parentNode.previousElementSibling.style.display = "none";
+                }
+                // let falsh_container = document.getElementById("flash-messages");
+                let falsh_container = e.target.parentNode.parentNode.children[0];
                 // displays the flash container
                 falsh_container.style.display = 'block';
                 falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
     
                 // Adds the message to the container
                 falsh_container.innerHTML = "The answer was successfully edited";
-    
-                // Scroll to the top of page to see the message
-                window.scroll({
-                    top: 0, 
-                    left: 0, 
-                    behavior: 'smooth' 
-                });
-                
                 
                 // makes the flash container to disappear in 4 seconds
                 setTimeout(function() {
@@ -237,7 +245,7 @@ class SubmitFunctions{
                     // makes sure it's content is empty after it disappears
                     falsh_container.innerHTML = '';
     
-                }, 4000);
+                }, 3000);
             }
             else{
                 // response text error from server changed to javascript object
@@ -504,7 +512,6 @@ function submitActions(e){
 
 
 
-
 // gets the URL search string, that is the path
 let currentLocation = window.location.pathname;
 
@@ -600,6 +607,7 @@ function get_question(questionId){
                     </div>
                     <!-- answer div -->
                     <div class="the-answer">
+                        <div class="answer-flash-message">The answer has been successfully edited</div>
                         <!-- answer on paragraph -->
                         <p>${answer.answer}</p>
                         <!-- end of paragraph answer -->
@@ -621,8 +629,8 @@ function get_question(questionId){
                                 <!-- cancel, submit and edit image button -->
                                 <div class="cancel-submit">
                                     <div class="edit-answer-image-container">
-                                        <input type="file" name="image" id="edit-answer-image-btn" class="edit-answer-image-btn">
-                                        <label for="edit-answer-image-btn">
+                                        <input type="file" name="image" onclick="getImageName(event)" id="edit-answer-image-btn-${answer.answerid}" class="edit-answer-image-btn">
+                                        <label for="edit-answer-image-btn-${answer.answerid}">
                                             <div class="edit-answer-upload-image">
                                                 <img src="${base_url}/static/img/upload.png"  alt="image" srcset="">
                                             </div>  
@@ -665,10 +673,10 @@ function get_question(questionId){
                     <div class="comments">
                         <!-- comment -->
                         <div class="coment-section">
-                           ${answer.comments.length === 0?"No comments yet":answer.comments.map(comment =>
+                           ${answer.comments.length === 0?"":answer.comments.map(comment =>
                             `<div class="comment">
                                 <div class="comment-flash-messages"></div>
-                                <div class="the-comment" id="the-comment-1">${comment.comment}</div>
+                                <div class="the-comment" id="the-comment-${comment.commentid}">${comment.comment}</div>
                                 <div class="user-comment">
                                     <a href="#">${comment.userwhocommented}</a>
                                     <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
@@ -880,6 +888,7 @@ function voteForAnswer(e, upordownvote, answerid, question_id){
 
             // gets the error container
             let errorPopUpDiv = e.target.parentNode.children[3];
+            errorPopUpDiv.style.backgroundColor = "red";
             
             // displays the error container
             errorPopUpDiv.style.display = 'flex';
@@ -892,11 +901,11 @@ function voteForAnswer(e, upordownvote, answerid, question_id){
 
                 // clears the error message in the error container
                 errorPopUpDiv.innerHTML = '';
-
+                errorPopUpDiv.style.backgroundColor = "red";
                 // hides the error container
                 errorPopUpDiv.style.display = 'none';
 
-            }, 3000);
+            }, 2000);
         }
     };
 

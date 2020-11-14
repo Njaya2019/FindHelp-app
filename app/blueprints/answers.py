@@ -70,14 +70,14 @@ def editAnswer(current_user_id, answerid):
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
                 if not image_url:
                     return jsonify({"status":400, "error":"The file key doesn't exist"}), 400
-                editedAnswer = answer.editAnAnswer(con_cur, current_user_id, answerid, answerEditedData['answer'], image_url)
+                editedAnswer = answer.editAnAnswer(con_cur, current_user_id, answerid, answerEditedData['answer'], image_url, current_app, current_app.config['UPLOAD_FOLDER'])
                 if type(editedAnswer) == str:
                     return jsonify({'status':403, 'error':editedAnswer}), 403
                 if not editedAnswer:
                     return jsonify({'status':404, 'error':'The answer you want to edit dosen\'t exist'}), 404
                 datetime_answer_editedAt = editedAnswer['timeanswered']
                 datetime_answer_editedAt_string = datetime_answer_editedAt.strftime('%B %d, %Y')
-                answerEdited = {'questionAnswered':editedAnswer['questionid'], 'answerEdited':editedAnswer['answer'], 'answerEditedAt':datetime_answer_editedAt_string, 'user':editedAnswer['userid']}
+                answerEdited = {'questionAnswered':editedAnswer['questionid'], 'answerEdited':editedAnswer['answer'], 'answerEditedAt':datetime_answer_editedAt_string, 'user':editedAnswer['userid'], 'editedimage':editedAnswer['answerimage']}
                 return jsonify({'status':200,'answeredited':answerEdited}), 200
 
 # An endpoint to delete an answer.
