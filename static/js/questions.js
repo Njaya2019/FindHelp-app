@@ -36,17 +36,17 @@ function clickActions(e){
         // displays the editing form.
 
         // gets title and description values of the question for editing.
-        let editQuestionTitle =  e.target.parentNode.parentNode.parentNode.parentNode.children[1].children[0].innerHTML;
-        let editQuestionDescription =  e.target.parentNode.parentNode.parentNode.parentNode.children[1].children[1].innerHTML;
+        let editQuestionTitle =  e.target.parentNode.parentNode.parentNode.parentNode.children[2].children[0].innerHTML;
+        let editQuestionDescription =  e.target.parentNode.parentNode.parentNode.parentNode.children[2].children[1].innerHTML;
 
         // Hides the options window after the edit event.
         e.target.parentNode.style.display = "none";
 
         // Hides the posted question.
-        e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = 0 + "px";
+        e.target.parentNode.parentNode.parentNode.parentNode.children[2].style.maxHeight = 0 + "px";
 
         // Gets the form that would facilitate the editing of the question.
-        let editQuestionFormElement = e.target.parentNode.parentNode.parentNode.parentNode.children[3].children[0];
+        let editQuestionFormElement = e.target.parentNode.parentNode.parentNode.parentNode.children[4].children[0];
 
         // gets the edit tags parent element
         let tagEditParentElement = editQuestionFormElement.children[2];
@@ -74,7 +74,7 @@ function clickActions(e){
         // if the form is already open, closes it and places back the posted question.
         if(editQuestionFormElement.style.maxHeight == editQuestionFormElement.scrollHeight + "px"){
             editQuestionFormElement.style.maxHeight = 0 + "px";
-            e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[1].scrollHeight + "px";
+            e.target.parentNode.parentNode.parentNode.parentNode.children[2].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[2].scrollHeight + "px";
         }
         else{
             // Else display the editing question form.
@@ -83,8 +83,8 @@ function clickActions(e){
     }
     else if(e.target.classList.contains('cancel-button')){
         // Closes the editing question form.
-        e.target.parentNode.parentNode.parentNode.parentNode.children[3].children[0].style.maxHeight = null;
-        e.target.parentNode.parentNode.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[1].scrollHeight + "px";
+        e.target.parentNode.parentNode.parentNode.parentNode.children[4].children[0].style.maxHeight = null;
+        e.target.parentNode.parentNode.parentNode.parentNode.children[2].style.maxHeight = e.target.parentNode.parentNode.parentNode.parentNode.children[2].scrollHeight + "px";
         // editTagsArray = [];
         editTagsArray.splice(0,editTagsArray.length);
         // console.log(editTagsArray);
@@ -319,6 +319,7 @@ function get_questions(){
 
                 display_questions += `
                 <div class="posted-question">
+                    <div class="question-flash-messages">The question was edited</div>
                     <!-- Upper section -->
                     <div class="upper-section">
                         <!-- user's name -->
@@ -329,7 +330,7 @@ function get_questions(){
                         <!-- Action options -->
                         <div class="options">
                             <!-- Three dots -->
-                            <div class="three-dots">&#8942;</div>
+                            ${element.is_author?'<div class="three-dots">&#8942;</div>':''}
                             <!-- Action options -->
                             <ul class="ul-options">
                                 <li class="edit-question">&#x270E; Edit</li>
@@ -456,20 +457,34 @@ function editQuestion(e){
             // successful posted question
             if (xhr.status == 200){
 
-                // display all questions
-                get_questions();
-
+                const editedQuestion = JSON.parse(xhr.responseText);
+            
                 // Displays successful edition  message
-                let questioneditedMessageDiv = document.getElementById('question-added-flash-message');
+                let questioneditedMessageDiv = e.target.parentNode.parentNode.children[0];
+                // closes the editing form
+                e.target.style.maxHeight = 0 + "px";
+                // Gets all the tags
+                tags_output = '';
+                editedQuestion.editedquestion.tags.forEach(function(tag){
+                    tags_output +=`
+                    <div>
+                    ${tag}
+                     </div> 
+                    `
+                });
+
+                // Displays the edited question
+                // question title
+                e.target.parentNode.parentNode.children[2].children[0].innerHTML = editedQuestion.editedquestion.title;
+                // the description
+                e.target.parentNode.parentNode.children[2].children[1].innerHTML = editedQuestion.editedquestion.description;
+                // the tags
+                e.target.parentNode.parentNode.children[2].children[2].innerHTML = tags_output;
+                // Displays back the question container
+                e.target.parentNode.parentNode.children[2].style.maxHeight = e.target.parentNode.parentNode.children[2].scrollHeight + "px";
+                // Displays the flash message
                 questioneditedMessageDiv.innerHTML = "The question was edited successfully";
                 questioneditedMessageDiv.style.display = 'block';
-
-                // Scroll to the top of page to see the error
-                window.scroll({
-                    top: 0, 
-                    left: 0, 
-                    behavior: 'smooth' 
-                });
 
                 // Makes the flash message to disappear in 4 seconds
                 setTimeout(function(){

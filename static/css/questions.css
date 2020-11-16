@@ -575,8 +575,21 @@ textarea:focus, input:focus{
    grid-template-columns: 1fr;
    border-radius: 5px;
    background-color: white;
+   position: relative;
 }
 
+/* posted question flash messages */
+#questions-body #questions #posted-questions .posted-question .question-flash-messages{
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: 1;
+    background-color: rgba(102, 153, 255, 1);
+    border-radius: 5px;
+    padding: 2px;
+    color: white;
+    display: none;
+}
 /* Posted question top section */
 #questions-body #questions #posted-questions .posted-question .upper-section{
     display: grid;

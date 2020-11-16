@@ -600,8 +600,7 @@ function get_question(questionId){
                     <!-- answer header -->
                     <div class="answer-header">
                         <div class="edit-delete-icons">
-                            <span class="edit-icon">&#x270E;</span>
-                            <span class="delete-icon">&#10060;</span>
+                            ${answer.is_author?'<span class="edit-icon">&#x270E;</span><span class="delete-icon">&#10060;</span>':''}
                         </div>
                         <div class="time-posted">${answer.time}</div>
                     </div>
@@ -680,8 +679,7 @@ function get_question(questionId){
                                 <div class="user-comment">
                                     <a href="#">${comment.userwhocommented}</a>
                                     <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
-                                    <p class="edit-comment">Edit</p>
-                                    <p class="delete-comment">Delete</p>   
+                                    ${comment.is_author?'<p class="edit-comment">Edit</p><p class="delete-comment">Delete</p> ':''}  
                                 </div>
                                 <form class="edit-comment-form" data-edit-comment=${comment.commentid}>
                                     <div class="comment-errors">

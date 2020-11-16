@@ -71,8 +71,8 @@ def editQuestion(current_user_id, questionid):
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     if request.method == 'PUT':
         editQuestionData = request.form.to_dict()
-        print(editQuestionData)
-        print(request.files)
+        # print(editQuestionData)
+        # print(request.files)
         tags_string = regularExValidation.format_tags_values(editQuestionData['tags'])
         image_url = jsonvalues.upload_Image(request, 'edited-question-image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
         dataAvailable = jsonvalues.emptyValues(**editQuestionData)
@@ -95,13 +95,27 @@ def editQuestion(current_user_id, questionid):
             if spaceCharacters:
                     return jsonify({'status':400, 'error':'The question\'s title and description values can not be space characters'}), 400
             elif not isString:
-                return jsonify({'status':400, 'error':'Please provide atleast two words for question title and description'}), 400
+                return jsonify(
+                    {
+                        'status':400,
+                        'error':'Please provide atleast two words for question title and description'
+                    }
+                    ), 400
             else:
-                editedQuestion = question.editQuestion(con_cur, editQuestionData['title'], editQuestionData['description'], image_url, questionid, current_user_id, tags_string, current_app, current_app.config['UPLOAD_FOLDER'])
+                editedQuestion = question.editQuestion(
+                    con_cur,
+                    editQuestionData['title'],
+                    editQuestionData['description'],
+                    image_url, questionid,
+                    current_user_id,
+                    tags_string, current_app,
+                    current_app.config['UPLOAD_FOLDER']
+                    )
+                # print(editedQuestion)
                 if type(editedQuestion) == str:
                     return jsonify({'status':404, 'error':editedQuestion}), 404
                 timePassed = timefunctions.calculateTimePassed(editedQuestion['timeposted'])
-                editedQuestionDict = {'questionId':editedQuestion['questionid'], 'title':editedQuestion['questiontitle'], 'description':editedQuestion['questiondescription'], 'edited_just':timePassed, 'user':editedQuestion['userid']}
+                editedQuestionDict = {'questionId':editedQuestion['questionid'], 'title':editedQuestion['questiontitle'], 'description':editedQuestion['questiondescription'], 'edited_just':timePassed, 'user':editedQuestion['userid'], 'tags': editedQuestion['tags']}
                 return jsonify({'status':200,'editedquestion':editedQuestionDict}), 200
             
     # return 'Edit the question'
@@ -192,32 +206,46 @@ def view_question(current_user_id, questionid):
 
                 user_comment_list = []
                 users_and_comments_list_final =[]
+
+                # Instantiates a boolean variable
+                is_comment_author = False
+
                 # Checks if the answer has comments
                 if user_and_answer_list[7]:
                     users_and_comments_list = user_and_answer_list[7].rsplit("*****")
                     for user_comment in users_and_comments_list:
                         user_comment_list = user_comment.rsplit(":::::")
                         commented_date_time_obj = iso8601.parse_date(user_comment_list[3])
+                        if current_user_id == int(user_comment_list[4]):
+                            is_comment_author = True
                         # Calculates the timedelta
                         time_passed_commented = timefunctions.calculateTimePassed(commented_date_time_obj)
                         users_and_comments_dictionary.update({
-                            "userwhocommented":user_comment_list[0],
-                            "commentid":user_comment_list[1],
-                            "comment":user_comment_list[2],
-                            "timecommented":time_passed_commented,
+                            "userwhocommented": user_comment_list[0],
+                            "commentid": user_comment_list[1],
+                            "comment": user_comment_list[2],
+                            "timecommented": time_passed_commented,
+                            "is_author": is_comment_author
                         })
                         users_and_comments_dictionary_copy = users_and_comments_dictionary.copy()
                         users_and_comments_list_final.append(users_and_comments_dictionary_copy)
+                # instaintiates a boolean variable
+                is_author = False
+                # Check if the current user is the author of the answer and changes the
+                # variable to true
+                if current_user_id == int(user_and_answer_list[8]):
+                    is_author = True
                 # Adds an answer to the users_and_answers_dictionary dictionary
                 users_and_answers_dictionary.update(
                     {
                         'whoanswered': user_and_answer_list[0],
                         'answerid': user_and_answer_list[2],
-                        'answer':user_and_answer_list[1],
+                        'answer': user_and_answer_list[1],
                         'votes': total_votes,
                         'time': time_passed_answered,
                         'answerimage': user_and_answer_list[6],
-                        'comments': users_and_comments_list_final
+                        'comments': users_and_comments_list_final,
+                        'is_author': is_author
                     }
                 )
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
@@ -239,20 +267,31 @@ def all_questions_count_answers(current_user_id):
     """
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     questions = question.view_questions_count_answers(con_cur)
+    # Dictionaries to store a question
     new_question_dictionary = {}
     new_question_dictionary_copy = {}
+    # A list to store questions
     all_questions_list = []
+    # A booelan variable to check if the user is the author of a question
+    is_author = False
     if questions:
         for posted_question in questions:
             timepassed = timefunctions.calculateTimePassed(
                 posted_question['timeposted']
             )
+            # changes the boolean variable to true if current user is the author
+            # of the question.
+            print(int(posted_question['userid']))
+            if current_user_id == int(posted_question['userid']):
+                is_author = True
+            else:
+                is_author = False
             new_question_dictionary.update(
                 {
                     'userid':posted_question['userid'], 'whoposted':posted_question['fullname'],
                     'questionid':posted_question['questionid'], 'title':posted_question['questiontitle'],
                     'description':posted_question['questiondescription'], 'timeposted':timepassed, 'tags':posted_question['tags'],
-                    'answers': posted_question['count']
+                    'answers': posted_question['count'], 'is_author': is_author
                 }
             )
             new_question_dictionary_copy = new_question_dictionary.copy()
