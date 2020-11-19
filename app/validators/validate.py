@@ -179,32 +179,10 @@ class jsonvalues():
                 # saves the image to the upload folder
                 image.save(image_path)
                 # returns image name and extenstion
-                return image.filename
+                return imagename
             else:
                 return 'invalid extension'
 
-  
-# pract_dict={'a':1,'b':''}
-# empty = jsonvalues.emptyValues(**pract_dict)
-# print(empty)
-
-# pract_dict={'a':1,'b':2}
-# keyExist = jsonvalues.jsonKeys(**pract_dict)
-# print(keyExist)
-
-# pract_dict={'a':1,'b':2}
-# rk=('a','b')
-# requiredKey = jsonvalues.validKeys(*rk, **pract_dict)
-# print(requiredKey)
-
-# tuple_integers = ('9')
-
-# print(regularExValidation.checkInteger(tuple_integers))
-
-# rk = ("username", "email", "role", "password", "confirmpassword")
-# jd = {"email":"njayaandrew@gmail.com", "role":"True", "password":"1234", "confirmpassword":"1234"}
-# booleanR = jsonvalues.validKeys(*rk, **jd)
-# print(booleanR)
 
 class timefunctions():
     

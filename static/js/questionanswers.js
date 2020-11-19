@@ -927,7 +927,7 @@ function delete_answer(event, answer_id, questionId){
         // answer successfully deleted
         if(xhr.status == 200){
             let delete_message = JSON.parse(xhr.responseText);
-            console.log(delete_message);
+            // console.log(delete_message);
             get_question(questionId);
             // console.log(delete_message.message);
             let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];

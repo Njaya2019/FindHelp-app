@@ -16,7 +16,7 @@ function clickActions(e){
     else if(e.target.classList.contains('delete-question')){
         // Deleting question action option clicked.
         // Displays confirming delete window.
-        confirmDeleteWindow = e.target.parentNode.parentNode.parentNode.parentNode.children[4];
+        confirmDeleteWindow = e.target.parentNode.parentNode.parentNode.parentNode.children[5];
         confirmDeleteWindow.style.display = 'block';
         e.target.parentNode.style.display = 'none';
     }          
@@ -103,6 +103,33 @@ function clickActions(e){
                 labelTag.innerHTML = imageName;
             }
         });
+    }
+    else if(e.target.id == 'remove-question-image'){
+        // closes the container that displays the image to be uploaded
+        e.target.parentNode.style.maxHeight = 0 + 'px';
+        // Makes the image to be uploaded to disappear
+        e.target.previousElementSibling.src = "";
+        // makes the upload input button value to null
+        e.target.parentNode.nextElementSibling.children[0].children[0].value = null;
+        // Replaces the image name with upload image
+        e.target.parentNode.nextElementSibling.children[0].children[1].innerHTML = `
+        <div class="upload-image">
+            <img src="${base_url}/static/img/upload.png" alt="upload image" srcset="">
+        </div>  Choose...`;
+
+    }
+    else if(e.target.classList.contains('remove-edit-image')){
+        // closes the container that displays the image to edit
+        e.target.parentNode.style.maxHeight = 0 + 'px';
+        // Makes the image to be edit to disappear
+        e.target.previousElementSibling.src = "";
+        // makes the edit upload input button value to null
+        e.target.parentNode.nextElementSibling.children[0].children[0].value = null;
+        // Replaces the image name to edit with the upload image
+        e.target.parentNode.nextElementSibling.children[0].children[1].innerHTML = `
+        <div class="edit-question-upload-image">
+            <img src="${base_url}/static/img/upload.png" alt="edited question image" srcset="">
+        </div>  Choose...`;
     }
     else if(e.target.classList.contains('edit-question-image-btn')){
         // Upload edited question image container clicked
@@ -230,9 +257,18 @@ function postQuestion(e){
         if (xhr.status == 201){
 
             get_questions();
-
+            
             // resets form data
             questionform.reset();
+            // makes the display container of the image to be uploaded to disappear
+            e.target.children[3].style.maxHeight = 0 + 'px';
+            // Replaces the src attribute of the displayed image to an empty string
+            e.target.children[3].children[0] = '';
+            // changes image name in the label to the original choose image
+            e.target.children[4].children[0].children[1].innerHTML=`
+            <div class="upload-image">
+                <img src="${base_url}/static/img/upload.png" alt="upload image" srcset="">
+            </div>  Choose...`;
 
             // Displays successful message
             let questionMessageDiv = questionform.previousElementSibling;
@@ -289,6 +325,7 @@ function postQuestion(e){
 
     // Sends the request
     xhr.send(questionData);
+    
 
 }
 
@@ -308,7 +345,7 @@ function get_questions(){
 
             // Changes the questions response text to a javascript array object
             const questions = JSON.parse(xhr.responseText);
-            console.log(questions);
+            // console.log(questions);
             // display all questions
 
             // display variable
@@ -373,6 +410,7 @@ function get_questions(){
                             <!-- Edited image container -->
                             <div class="edited-image">
                                 <img class="the-edited-image" src="" alt="the edited image">
+                                <span class="remove-edit-image">Remove image</span>
                             </div>
                             <div class="cancel-submit">
                                 <div class="edit-question-image-container">
@@ -458,7 +496,7 @@ function editQuestion(e){
             if (xhr.status == 200){
 
                 const editedQuestion = JSON.parse(xhr.responseText);
-            
+                console.log(editedQuestion);
                 // Displays successful edition  message
                 let questioneditedMessageDiv = e.target.parentNode.parentNode.children[0];
                 // closes the editing form
@@ -473,7 +511,7 @@ function editQuestion(e){
                     `
                 });
 
-                // Displays the edited question
+                //=============== Displays the edited question ===============
                 // question title
                 e.target.parentNode.parentNode.children[2].children[0].innerHTML = editedQuestion.editedquestion.title;
                 // the description
@@ -482,6 +520,20 @@ function editQuestion(e){
                 e.target.parentNode.parentNode.children[2].children[2].innerHTML = tags_output;
                 // Displays back the question container
                 e.target.parentNode.parentNode.children[2].style.maxHeight = e.target.parentNode.parentNode.children[2].scrollHeight + "px";
+
+                //=============== Makes the edited image to disappear ===============
+                // closes the container that displays the image to edit
+                e.target.children[3].style.maxHeight = 0 + 'px';
+                // Makes the image to be edit to disappear
+                e.target.children[3].children[0].src = "";
+                // makes the edit upload input button value to null
+                e.target.children[4].children[0].children[0].value = null;
+                // Replaces the image name to edit with the upload image
+                e.target.children[4].children[0].children[1].innerHTML = `
+                <div class="edit-question-upload-image">
+                    <img src="${base_url}/static/img/upload.png" alt="edited question image" srcset="">
+                </div>  Choose...`;
+
                 // Displays the flash message
                 questioneditedMessageDiv.innerHTML = "The question was edited successfully";
                 questioneditedMessageDiv.style.display = 'block';

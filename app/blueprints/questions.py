@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify, current_app, render_template
+from werkzeug.utils import secure_filename
 from datetime import datetime
 import iso8601
 from app.validators.validate import jsonvalues, regularExValidation
@@ -20,10 +21,10 @@ def askQuestion(current_user_id):
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     if request.method == 'POST':
         questionData = request.form.to_dict()
-        print(questionData)
-        print(request.files)
+        # print(questionData)
+        # print(request.files)
         tags_string = regularExValidation.format_tags_values(questionData['tags'])
-        print(tags_string)
+        # print(tags_string)
         dataAvailable = jsonvalues.emptyValues(**questionData)
         keysAvailable = jsonvalues.jsonKeys(**questionData)
         requiredKeys = ('title', 'description')
@@ -115,7 +116,7 @@ def editQuestion(current_user_id, questionid):
                 if type(editedQuestion) == str:
                     return jsonify({'status':404, 'error':editedQuestion}), 404
                 timePassed = timefunctions.calculateTimePassed(editedQuestion['timeposted'])
-                editedQuestionDict = {'questionId':editedQuestion['questionid'], 'title':editedQuestion['questiontitle'], 'description':editedQuestion['questiondescription'], 'edited_just':timePassed, 'user':editedQuestion['userid'], 'tags': editedQuestion['tags']}
+                editedQuestionDict = {'questionId':editedQuestion['questionid'], 'title':editedQuestion['questiontitle'], 'description':editedQuestion['questiondescription'], 'edited_just':timePassed, 'user':editedQuestion['userid'], 'tags': editedQuestion['tags'], 'image': editedQuestion['questionimage']}
                 return jsonify({'status':200,'editedquestion':editedQuestionDict}), 200
             
     # return 'Edit the question'
@@ -148,7 +149,6 @@ def view_questions():
                 # Loop through the answers and create a dictionary of the answers, 
                 # name of the user as key and the answer as value.
                 for useranswer in quest_ion["usersandanswers"]:
-                    print(useranswer)
                     user_and_answer_list = useranswer.rsplit(":")
                     total_votes = int(user_and_answer_list[4])-int(user_and_answer_list[4])
                     # 'upvotes':user_and_answer_list[2], 'downvotes':user_and_answer_list[3]
@@ -281,7 +281,6 @@ def all_questions_count_answers(current_user_id):
             )
             # changes the boolean variable to true if current user is the author
             # of the question.
-            print(int(posted_question['userid']))
             if current_user_id == int(posted_question['userid']):
                 is_author = True
             else:

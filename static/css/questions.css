@@ -356,7 +356,7 @@ textarea:focus, input:focus{
     /* border: 1px solid rgba(0,0,0,0.3); */
     /* padding: 5px; */
     padding: 0px;
-    margin: 0px;
+    /* margin: 0px; */
     max-height: 0;
     overflow: hidden;
     transition: 0.4s ease-in-out;
@@ -369,9 +369,24 @@ textarea:focus, input:focus{
     height: 200px;
     border-radius: 5px;
     padding: 2px;
-    border: 1px solid rgba(0,0,0,0.3);
+    border: 1px solid rgba(0,0,0,0.4);
+    margin: 0px;
 }
 
+/*container to remove the image to be uploaded */
+#questions-body #questions #post-question-form #questionimage-to-upload span{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
+    /* border: 1px solid rgba(0,0,0,0.3); */
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.6s ease-in-out;
+}
+
+/*container to remove the image to be uploaded on hover*/
+#questions-body #questions #post-question-form #questionimage-to-upload span:hover{
+    color: rgba(255, 0, 0, 0.7);
+}
 /* Tags container */
 #questions-body #questions #post-question-form #question-tags{
     grid-area: tags;
@@ -867,7 +882,7 @@ textarea:focus, input:focus{
 
 /* edited question image to be uploaded container */
 #questions-body #questions #posted-questions .posted-question .edit-form .edited-image{
-    border: 1px solid rgba(0,0,0,0.3);
+    /* border: 1px solid rgba(0,0,0,0.3); */
     /* padding: 5px;  */
     padding: 0px;
     margin: 0px;
@@ -884,6 +899,22 @@ textarea:focus, input:focus{
     border-radius: 5px;
     padding: 2px;
     border: 1px solid rgba(0,0,0,0.3);
+}
+
+/*container to remove the image to be edited*/
+#questions-body #questions #posted-questions .posted-question .edit-form .remove-edit-image{
+    color: rgba(0, 0, 255, 0.7);
+    text-decoration: underline;
+    /* border: 1px solid rgba(0,0,0,0.3); */
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.6s ease-in-out;
+}
+
+/*container to remove the image to be edited*/
+#questions-body #questions #posted-questions .posted-question .edit-form .remove-edit-image:hover{
+    color: rgba(255, 0, 0, 0.7);
+
 }
 
 /* cancel and save button div */

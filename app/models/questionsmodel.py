@@ -98,7 +98,7 @@ class question():
                     uploads_dir = os.path.join(current_app.root_path, upload_folder)
                     image_path = os.path.join(uploads_dir, questionToEdit['questionimage'])
                     remove(image_path)
-                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s, tags=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid, tags"
+                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s, tags=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid, tags, questionimage"
                 editedQuestionData = (title, description, imageurl, tags, questionid)
                 cur.execute(editQuestion_sql, editedQuestionData)
                 con.commit()

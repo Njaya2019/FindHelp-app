@@ -8,7 +8,7 @@ body{
     font-family: 'Times New Roman', Times, serif;
     color: black;
 }
-
+#flash-messages{}
 /* Container div */
 #container{
     height: 100vh;
@@ -101,7 +101,7 @@ body{
 
 /* flash error messages */
 #container #body-container #flash-messages{
-    background-color: red;
+    background-color: rgba(102, 153, 255, 1);
     padding: 3px;
     position: absolute;
     top: 250px;
