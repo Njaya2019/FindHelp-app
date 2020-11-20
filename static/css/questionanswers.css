@@ -8,7 +8,7 @@ body{
     font-family: 'Times New Roman', Times, serif;
     color: black;
 }
-#flash-messages{}
+
 /* Container div */
 #container{
     height: 100vh;
@@ -536,6 +536,17 @@ body{
 /*========================================== Comments ==================================*/
 #container #body-container #answers-container .user-answer .comments{
     grid-area: comments;
+}
+#container #body-container #answers-container .user-answer .answer-number .comment-flash-container{
+    position: absolute;
+    background-color: rgba(102, 153, 255, 1);
+    color: white;
+    border-radius: 5px;
+    top: 0;
+    left: 0;
+    padding: 2px;
+    z-index: 1;
+    display: none;
 }
 
 /* comment error container*/

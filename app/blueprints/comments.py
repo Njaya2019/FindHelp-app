@@ -38,7 +38,13 @@ def comment_an_answer(current_user_id, answerid):
                 else:
                     datetime_commentedAt = newComment['timecommented']
                     datetime_commentedAt_string = datetime_commentedAt.strftime('%B %d, %Y')
-                    postedComment = {'answerCommented': newComment['answerid'], 'commentPosted': newComment['comment'], 'commentedAt': datetime_commentedAt_string, 'user': newComment['userid']}
+                    postedComment = {
+                        'commentid': newComment['commentid'],
+                        ' answerCommented': newComment['answerid'],
+                        'commentPosted': newComment['comment'],
+                        'commentedAt': datetime_commentedAt_string,
+                        'user': newComment['userid']
+                    }
                     return jsonify({'status': 201,'postedComment': postedComment}), 201
 
 

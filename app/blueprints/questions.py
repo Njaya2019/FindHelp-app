@@ -172,10 +172,21 @@ def view_questions():
 @token_required
 def view_question(current_user_id, questionid):
     """ A view fuction to display a question """
+    # Gets the connection to the database
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+    # Gets the question
     aQuestion = question.viewQuestion(con_cur, questionid)
+    # declares a question dictionary
     new_question_dictionary = {}
+    # Declares a question's author boolean
+    is_question_author = False
+    # Checks if the question exists
     if aQuestion:
+        # Checks if the current user is the author of the question.
+        if current_user_id == aQuestion['userid']:
+            is_question_author = True
+        else:
+            is_question_author = False
         # print(type(aQuestion["usersandanswers"][0]))
         timepassed = timefunctions.calculateTimePassed(aQuestion['timeposted'])
         NoneType = type(None)
@@ -250,7 +261,18 @@ def view_question(current_user_id, questionid):
                 )
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
                 users_and_answers_list.append(users_and_answers_dictionary_copy)
-            new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'image':aQuestion['questionimage'], 'answers':users_and_answers_list})
+            new_question_dictionary.update(
+                {
+                    'userid': aQuestion['userid'],
+                    'whoposted': aQuestion['fullname'],
+                    'questionid': aQuestion['questionid'],
+                    'title': aQuestion['questiontitle'],
+                    'description': aQuestion['questiondescription'],
+                    'is_question_author': is_question_author,
+                    'timeposted':timepassed, 'image': aQuestion['questionimage'],
+                    'answers':users_and_answers_list
+                }
+            )
         else:
             new_question_dictionary.update({'userid':aQuestion['userid'], 'whoposted':aQuestion['fullname'], 'questionid':aQuestion['questionid'], 'title':aQuestion['questiontitle'], 'description':aQuestion['questiondescription'], 'timeposted':timepassed, 'image':aQuestion['questionimage'], 'answers':[]})
         return jsonify({'status':200, 'Question':new_question_dictionary}), 200

@@ -24,7 +24,7 @@ class comments():
                 cur.execute(findAnswer_sql, (answerid,))
                 answerExists = cur.fetchone()
                 if answerExists:
-                    postComment_sql = "INSERT INTO comments(comment,answerid,userid,timecommented) VALUES(%s,%s,%s,CURRENT_TIMESTAMP) RETURNING comment, answerid, userid, timecommented"
+                    postComment_sql = "INSERT INTO comments(comment,answerid,userid,timecommented) VALUES(%s,%s,%s,CURRENT_TIMESTAMP) RETURNING comment, answerid, userid, timecommented, commentid"
                     commentData = (comment, answerid, userid,)
                     cur.execute(postComment_sql, commentData)
                     con.commit()

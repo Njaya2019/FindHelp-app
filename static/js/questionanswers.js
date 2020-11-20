@@ -307,24 +307,30 @@ class SubmitFunctions{
 
                 // resets the comment form input text
                 e.target.reset();
+                const comment = JSON.parse(xhr.responseText);
+                
                 get_question(questionIdInt);
-
-                let falsh_container = document.getElementById("flash-messages");
+                console.log(comment);
+                // Gets the flash container
+                let falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[5];
+                // let falsh_container = document.getElementById("flash-messages");
 
                 // displays the flash container
                 falsh_container.style.display = 'block';
-                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
     
                 // Adds the message to the container
                 falsh_container.innerHTML = "The comment was successfully added";
-    
+
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
                 // Scroll to the top of page to see the message
-                window.scroll({
-                    top: 0, 
-                    left: 0, 
-                    behavior: 'smooth' 
+                e.target.parentNode.parentNode.parentNode.children[0].scrollIntoView({
+                    behavior: "smooth"
                 });
-                
+                // window.scroll({
+                //     top: 0, 
+                //     left: 0, 
+                //     behavior: 'smooth' 
+                // });
                 
                 // makes the flash container to disappear in 4 seconds
                 setTimeout(function() {
@@ -593,9 +599,8 @@ function get_question(questionId){
                         <div class="vote-error-container">
                         <!-- You can not upvote an answer twice -->
                         </div>
-                        <div class="mark-answer-correct">
-                            <span class="correct">&#10004</span> 
-                        </div>
+                        ${questionObject.is_question_author?'<div class="mark-answer-correct"><span class="correct">&#10004</span></div>':''}
+                        <div class="comment-flash-container">The comment was added successfully</div>
                     </div>
                     <!-- answer header -->
                     <div class="answer-header">
@@ -1028,7 +1033,8 @@ function delete_comment(event, comment_id){
             console.log(delete_message);
             get_question(questionIdInt);
             // console.log(delete_message.message);
-            let falsh_container = document.getElementById("flash-messages");
+            // let falsh_container = document.getElementById("flash-messages");
+            let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
             // let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.children[0]
 
             // Displays the deletion successful massage
@@ -1036,11 +1042,14 @@ function delete_comment(event, comment_id){
             falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
             falsh_container.style.display = "block";
             // Scroll to the top of page to see the error
-            window.scroll({
-                top: 0, 
-                left: 0, 
-                behavior: 'smooth' 
+            event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].scrollIntoView({
+                behavior: "smooth"
             });
+            // window.scroll({
+            //     top: 0, 
+            //     left: 0, 
+            //     behavior: 'smooth' 
+            // });
             // Makes the flash message to disappear in 4 seconds
             setTimeout(function(){
 
