@@ -312,7 +312,13 @@ class SubmitFunctions{
                 get_question(questionIdInt);
                 console.log(comment);
                 // Gets the flash container
-                let falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[5];
+                let falsh_container;
+                if (e.target.parentNode.parentNode.parentNode.children[0].children.length == 6){
+                    falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[5];
+                }else{
+                    falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[4];
+                }
+                
                 // let falsh_container = document.getElementById("flash-messages");
 
                 // displays the flash container
@@ -684,7 +690,7 @@ function get_question(questionId){
                                 <div class="user-comment">
                                     <a href="#">${comment.userwhocommented}</a>
                                     <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
-                                    ${comment.is_author?'<p class="edit-comment">Edit</p><p class="delete-comment">Delete</p> ':''}  
+                                    ${comment.is_author===true?'<p class="edit-comment">Edit</p><p class="delete-comment">Delete</p>':''}  
                                 </div>
                                 <form class="edit-comment-form" data-edit-comment=${comment.commentid}>
                                     <div class="comment-errors">
@@ -709,7 +715,7 @@ function get_question(questionId){
                                         </div>
                                         <div class="confirm-delete-comment-footer">
                                             <input type="button" class="delete-comment-cancel" value="cancel">
-                                            <input type="button" class="delete-comment-delete" value="delete" onclick="delete_comment(event, ${comment.commentid})" data-delete-comment=${comment.commentid}>
+                                            <input type="button" class="delete-comment-delete" value="delete" onclick="new_delete_comment(event, ${comment.commentid})" data-delete-comment=${comment.commentid}>
                                         </div>
                                     </div>
                                 </div>
@@ -1096,6 +1102,91 @@ function delete_comment(event, comment_id){
     xhr.send();
 }
 
+
+function new_delete_comment(event, comment_id){
+    // creates a new promise
+    new Promise(function(resolve, reject){
+        // instantiates an ajax request object
+        let xhr = new XMLHttpRequest();
+        // open the connection
+        xhr.open('DELETE', `${base_url}/comments/${comment_id}/delete`);
+        // Getting data from the server
+        xhr.onload = function onload(onloadevent){
+            if (xhr.status == 200){
+                // comment deleted successfully
+                resolve(JSON.parse(xhr.responseText));
+            }
+            else{
+                // Deletion denied message
+                reject(JSON.parse(xhr.responseText));
+            }
+        };
+        // sends the request
+        xhr.send();
+    }).then((delete_message) => {
+        // Refreshes the whole page by getting the question
+        setTimeout(function(){
+            get_question(questionIdInt);
+        }, 2000);
+        // event.target.parentNode.parentNode.parentNode.parentNode.remove();
+        return delete_message;
+    }).then((delete_message) => {
+        // Scrolls to the answer container
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].scrollIntoView({
+            behavior: "smooth"
+        });
+        return delete_message;
+    }).then((delete_message) => {
+        // console.log(delete_message.message);
+        // let falsh_container = document.getElementById("flash-messages");
+        let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+        // let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.children[0]
+
+        // Displays the deletion successful massage
+        falsh_container.innerHTML = delete_message.message;
+        falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+        falsh_container.style.display = "block";
+        // makes the delete modal to disappear
+        event.target.parentNode.parentNode.parentNode.style.display = 'none';
+        setTimeout(function(){
+
+            // Makes the message container to disappear
+            falsh_container.innerHTML = "";
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+            falsh_container.style.display = 'none';
+
+        }, 4000); 
+    }).catch((error) => {
+  
+        //let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+        let falsh_container;
+        if (event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children.length == 6){
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+        }else{
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[4];
+        }
+        
+        // Displays the deletion successful massage
+        falsh_container.innerHTML = error.error;
+        falsh_container.style.backgroundColor = "rgba(255, 51, 0, 1)";
+                    falsh_container.style.display = "block";
+        // Scroll to the top of page to see the error
+        window.scroll({
+            top: 0, 
+            left: 0, 
+            behavior: 'smooth' 
+        });
+        // Makes the flash message to disappear in 4 seconds
+        setTimeout(function(){
+        
+            // Makes the message container to disappear
+            falsh_container.innerHTML = "";
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+            falsh_container.style.display = 'none';
+        
+        }, 4000); 
+    });
+}
 // ================== Displays an answer picture to be uploaded ======
 // Display answer image to be uploaded
 function readURL(input) {
