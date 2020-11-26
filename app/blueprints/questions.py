@@ -229,6 +229,8 @@ def view_question(current_user_id, questionid):
                         commented_date_time_obj = iso8601.parse_date(user_comment_list[3])
                         if current_user_id == int(user_comment_list[4]):
                             is_comment_author = True
+                        else:
+                            is_comment_author = False
                         # Calculates the timedelta
                         time_passed_commented = timefunctions.calculateTimePassed(commented_date_time_obj)
                         users_and_comments_dictionary.update({
