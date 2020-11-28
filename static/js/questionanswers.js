@@ -146,6 +146,13 @@ function clickActions(e){
             }
         });
     }
+    else if(e.target.classList.contains('correct')){
+        // Gets the answer and the question id
+        console.log(e.target);
+        let answerid = parseInt(e.target.getAttribute("data-mark-correct-answer"));
+        let questionid = parseInt(e.target.getAttribute("data-mark-correct-question"));
+        mark_answer_correct(e, questionid, answerid);
+    }
     else{
         
     }
@@ -290,105 +297,111 @@ class SubmitFunctions{
     }
 
     static submitComment(e, answer_id){
-        // Gets the form data
-        let commentFormData = new FormData(e.target);
 
-        // Initialize ajax request
-        let xhr =new XMLHttpRequest();
+        new Promise((resolve, reject)=>{
+            // Gets the form data
+            let commentFormData = new FormData(e.target);
 
-        // open the request
-        xhr.open('POST', `${base_url}/comments/${answer_id}/add_comment`);
+            // Initialize ajax request
+            let xhr =new XMLHttpRequest();
 
-        // Gets the response from the server
-        xhr.onload = function(onloadevent){
-            
-            if(xhr.status == 201){
-                // successfully added the comment
+            // open the request
+            xhr.open('POST', `${base_url}/comments/${answer_id}/add_comment`);
 
-                // resets the comment form input text
-                e.target.reset();
-                const comment = JSON.parse(xhr.responseText);
+            // Gets the response from the server
+            xhr.onload = function(onloadevent){
                 
-                get_question(questionIdInt);
-                console.log(comment);
-                // Gets the flash container
-                let falsh_container;
-                if (e.target.parentNode.parentNode.parentNode.children[0].children.length == 6){
-                    falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[5];
-                }else{
-                    falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[4];
-                }
-                
-                // let falsh_container = document.getElementById("flash-messages");
+                if(xhr.status == 201){
+                    // successfully added the comment
 
-                // displays the flash container
-                falsh_container.style.display = 'block';
-    
-                // Adds the message to the container
-                falsh_container.innerHTML = "The comment was successfully added";
+                    // resets the comment form input text
+                    e.target.reset();
+                    const comment = JSON.parse(xhr.responseText);
+                    resolve(comment);
 
-                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
-                // Scroll to the top of page to see the message
-                e.target.parentNode.parentNode.parentNode.children[0].scrollIntoView({
-                    behavior: "smooth"
-                });
-                // window.scroll({
-                //     top: 0, 
-                //     left: 0, 
-                //     behavior: 'smooth' 
-                // });
-                
-                // makes the flash container to disappear in 4 seconds
-                setTimeout(function() {
-    
-                    // makes the container to disappear
-                    falsh_container.style.display = 'none';
-                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
-    
-                    // makes sure it's content is empty after it disappears
-                    falsh_container.innerHTML = '';
-    
-                }, 4000);
-
-            }
-            else{
-                // Posting a comment was unsuccessful
-                const error = JSON.parse(xhr.responseText);
-                console.log(error);
-                // gets the error container
-                let commetErrorContainer = e.target.parentNode.previousElementSibling;
-                // gets the list (li) tag
-                let errorTag = commetErrorContainer.children[0];
-
-                // if the list tag doesn't contain an error message,
-                // adds one.
-                if(errorTag.innerHTML == ''){
-
-                    errorTag.innerHTML = error.error;
                 }
                 else{
-
-                    // If list tag has an error text replace it with a new one
-                    errorTag.innerHTML = error.error;
+                    // Posting a comment was unsuccessful
+                    const error = JSON.parse(xhr.responseText);
+                    reject(error);
                 }
-
-                // Display the error container, to display the error,
-                // message.
-                commetErrorContainer.style.maxHeight = commetErrorContainer.scrollHeight + 'px';
-
-                // makes the errors disappear in 30 seconds
-                setTimeout(function(){
-
-                    // Replace the current error text with an empty string
-                    errorTag.innerHTML = '';
-
-                    // Makes the error container to disappear
-                    commetErrorContainer.style.maxHeight = null;
-                }, 3000);
             }
-        }
-        // Sends the request
-        xhr.send(commentFormData);
+            // Sends the request
+            xhr.send(commentFormData);
+        }).then((comment)=>{
+            setTimeout(function(){
+                get_question(questionIdInt);
+            }, 2000);
+        }).then((comment)=>{
+
+            // Scroll to the top of page to see the message
+            e.target.parentNode.parentNode.parentNode.children[0].scrollIntoView({
+                 behavior: "smooth"
+            });
+
+        }).then(()=>{
+            // Gets the flash container
+            let falsh_container;
+            if (e.target.parentNode.parentNode.parentNode.children[0].children.length == 6){
+                falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[5];
+            }else{
+                falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[4];
+            }
+                    
+            // let falsh_container = document.getElementById("flash-messages");
+
+            // displays the flash container
+            falsh_container.style.display = 'block';
+
+            // Adds the message to the container
+            falsh_container.innerHTML = "The comment was successfully added";
+
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+            // makes the flash container to disappear in 4 seconds
+            setTimeout(function() {
+
+                // makes the container to disappear
+                falsh_container.style.display = 'none';
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+                // makes sure it's content is empty after it disappears
+                falsh_container.innerHTML = '';
+
+            }, 4000);
+        }).catch((error)=>{
+            // console.log(error);
+            // gets the error container
+            let commetErrorContainer = e.target.parentNode.previousElementSibling;
+            // gets the list (li) tag
+            let errorTag = commetErrorContainer.children[0];
+
+            // if the list tag doesn't contain an error message,
+            // adds one.
+            if(errorTag.innerHTML == ''){
+
+                errorTag.innerHTML = error.error;
+            }
+            else{
+
+                // If list tag has an error text replace it with a new one
+                errorTag.innerHTML = error.error;
+            }
+
+            // Display the error container, to display the error,
+            // message.
+            commetErrorContainer.style.maxHeight = commetErrorContainer.scrollHeight + 'px';
+
+            // makes the errors disappear in 30 seconds
+            setTimeout(function(){
+
+                // Replace the current error text with an empty string
+                errorTag.innerHTML = '';
+
+                // Makes the error container to disappear
+                commetErrorContainer.style.maxHeight = null;
+            }, 3000);
+        });
     }
 
     static submitEditedComment(e, comment_id){
@@ -605,7 +618,7 @@ function get_question(questionId){
                         <div class="vote-error-container">
                         <!-- You can not upvote an answer twice -->
                         </div>
-                        ${questionObject.is_question_author?'<div class="mark-answer-correct"><span class="correct">&#10004</span></div>':''}
+                        ${questionObject.is_question_author?'<div class="mark-answer-correct"><span class="correct'+`${answer.marked_correct?' activetick':''}`+'" '+'data-mark-correct-answer='+answer.answerid+' '+'data-mark-correct-question='+questionObject.questionid+'>&#10004</span></div>':''}
                         <div class="comment-flash-container">The comment was added successfully</div>
                     </div>
                     <!-- answer header -->
@@ -1114,36 +1127,44 @@ function new_delete_comment(event, comment_id){
         xhr.onload = function onload(onloadevent){
             if (xhr.status == 200){
                 // comment deleted successfully
-                resolve(JSON.parse(xhr.responseText));
+                const delete_message_info=JSON.parse(xhr.responseText);
+                resolve(delete_message_info);
             }
             else{
                 // Deletion denied message
-                reject(JSON.parse(xhr.responseText));
+                const delete_comment_error=JSON.parse(xhr.responseText);
+                reject(delete_comment_error);
             }
         };
         // sends the request
         xhr.send();
-    }).then((delete_message) => {
+    }).then((delete_message_info) => {
         // Refreshes the whole page by getting the question
         setTimeout(function(){
             get_question(questionIdInt);
         }, 2000);
         // event.target.parentNode.parentNode.parentNode.parentNode.remove();
-        return delete_message;
-    }).then((delete_message) => {
+        return delete_message_info;
+    }).then((delete_message_info) => {
         // Scrolls to the answer container
         event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].scrollIntoView({
             behavior: "smooth"
         });
-        return delete_message;
-    }).then((delete_message) => {
+        return delete_message_info;
+    }).then((delete_message_info) => {
         // console.log(delete_message.message);
         // let falsh_container = document.getElementById("flash-messages");
-        let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+        //let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+        let falsh_container;
+        if (event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children.length == 6){
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+        }else{
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[4];
+        }
         // let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.children[0]
 
         // Displays the deletion successful massage
-        falsh_container.innerHTML = delete_message.message;
+        falsh_container.innerHTML = delete_message_info.message;
         falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
         falsh_container.style.display = "block";
         // makes the delete modal to disappear
@@ -1155,8 +1176,9 @@ function new_delete_comment(event, comment_id){
             falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
             falsh_container.style.display = 'none';
 
-        }, 4000); 
-    }).catch((error) => {
+        }, 4000);
+        return delete_message_info;
+    }).catch((delete_comment_error) => {
   
         //let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
         let falsh_container;
@@ -1167,7 +1189,7 @@ function new_delete_comment(event, comment_id){
         }
         
         // Displays the deletion successful massage
-        falsh_container.innerHTML = error.error;
+        falsh_container.innerHTML = delete_comment_error.error;
         falsh_container.style.backgroundColor = "rgba(255, 51, 0, 1)";
                     falsh_container.style.display = "block";
         // Scroll to the top of page to see the error
@@ -1219,28 +1241,47 @@ imageUploadInput.onchange = function(e){
 
 
 // =================== Marks an answer correct ======================
-// let allTicks = document.querySelectorAll('.correct');
 
-// if(allTicks.length < 2){
-//     console.log(allTicks.length);
-//     allTicks[0].addEventListener('click', function(e){
-//         if(allTicks[0].classList.contains("activetick")){
-//             allTicks[0].className = allTicks[0].className.replace("activetick", "");
-//         }
-//         else{
-//             allTicks[0].className += " activetick";
-//         }
-//     });
-// }
-// else{
-//     console.log(allTicks.length);
-//     for(i=0; i<allTicks.length; i++){
-//         allTicks[i].addEventListener('click', function(e){
-//             currentActiveTick = document.querySelectorAll('.activetick');
-//             currentActiveTick[0].className = currentActiveTick[0].className.replace("activetick", "");
-//             this.className += " activetick";
-//         });
-//     }
-// }
+function mark_answer_correct(e, questionid, answerid){
+    
+    // instantiates an ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // opens the connection
+    xhr.open('POST', `${base_url}/mark/answer/${questionid}/${answerid}`);
+
+    // Checks the response from the server
+    xhr.onload = function (event){
+        let span = e.target;
+        if(xhr.status == 200){
+            // Marks the tick green
+            let c = JSON.parse(xhr.responseText);
+            // console.log(c);
+            currentActiveTickIcon = document.querySelectorAll('.activetick');
+            if(!currentActiveTickIcon[0]){
+                span.className += " active";
+            }
+            else{
+                currentActiveTickIcon[0].className = currentActiveTickIcon[0].className.replace("activetick", "");
+                span.className += " active";
+            }
+            get_question(questionIdInt);
+            span.parentNode.parentNode.parentNode.scrollIntoView({
+                behavior: "smooth"
+            });
+            
+        }
+        else{
+            // Displays the error encountered after the marking failed.
+            let er = JSON.parse(xhr.responseText);
+            console.log(er);
+
+        }
+    };
+    // Sends the request
+    xhr.send();
+}
+
+
 
 

@@ -198,7 +198,6 @@ def view_question(current_user_id, questionid):
             users_and_answers_list =[]
             # Loop through the answers and create a dictionary of the answers, 
             # name of the user as key and the answer as value.
-            print(aQuestion["usersandanswers"])
             for useranswer in aQuestion["usersandanswers"]:
                 user_and_answer_list = useranswer.rsplit("----")
                 total_votes = int(user_and_answer_list[3])-int(user_and_answer_list[4])
@@ -249,6 +248,11 @@ def view_question(current_user_id, questionid):
                 # variable to true
                 if current_user_id == int(user_and_answer_list[8]):
                     is_author = True
+                marked_correct = False
+                if user_and_answer_list[9] == 'false':
+                    marked_correct = False
+                else:
+                    marked_correct = True
                 # Adds an answer to the users_and_answers_dictionary dictionary
                 users_and_answers_dictionary.update(
                     {
@@ -259,7 +263,8 @@ def view_question(current_user_id, questionid):
                         'time': time_passed_answered,
                         'answerimage': user_and_answer_list[6],
                         'comments': users_and_comments_list_final,
-                        'is_author': is_author
+                        'is_author': is_author,
+                        'marked_correct': marked_correct
                     }
                 )
                 users_and_answers_dictionary_copy = users_and_answers_dictionary.copy()
