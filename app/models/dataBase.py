@@ -36,7 +36,7 @@ class db():
             """,
             """CREATE TABLE IF NOT EXISTS answers(answerid SERIAL PRIMARY KEY,userid INT REFERENCES users(userid) ON DELETE CASCADE,
                questionid INT REFERENCES questions(questionid) ON DELETE CASCADE,
-               answer TEXT NOT NULL,answerimage TEXT,timeanswered TIMESTAMPTZ)
+               answer TEXT NOT NULL,answerimage TEXT,timeanswered TIMESTAMPTZ, markedcorrect BOOLEAN NOT NULL DEFAULT false)
             """,
             """CREATE TABLE IF NOT EXISTS votes(userid INT REFERENCES users(userid) ON DELETE CASCADE,answerid INT REFERENCES answers(answerid) ON DELETE CASCADE,
                upvote INT DEFAULT 0  NOT NULL, downvote INT DEFAULT 0 NOT NULL, PRIMARY KEY(userid, answerid))

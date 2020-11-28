@@ -198,6 +198,7 @@ def view_question(current_user_id, questionid):
             users_and_answers_list =[]
             # Loop through the answers and create a dictionary of the answers, 
             # name of the user as key and the answer as value.
+            print(aQuestion["usersandanswers"])
             for useranswer in aQuestion["usersandanswers"]:
                 user_and_answer_list = useranswer.rsplit("----")
                 total_votes = int(user_and_answer_list[3])-int(user_and_answer_list[4])
@@ -363,3 +364,35 @@ def renders_view_question(current_user_id, questionid, question_title):
         Renders a page to display a question and all it's answers
     '''
     return render_template('questionanswers.html')
+
+
+@questions_blueprint.route('/mark/answer/<int:questionid>/<int:answerid>', methods = ['POST'])
+@token_required
+def mark_an_correct_answer(current_user_id, questionid, answerid):
+    ''' 
+        A view to mark an answer correct.
+        parameters:
+        current_user_id-> the id of a user
+        questionid-> the id of a question
+        answerid-> the id of an answer
+    '''
+    # handles post request
+    if request.method == 'POST':
+
+        con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+        
+        marked_correct = question.mark_answer_correct(
+            con_cur, current_user_id, questionid, answerid
+        )
+        # returns answer marked correct successfully
+        if marked_correct == 'marked correct':
+            return jsonify({'status':200, 'correct': True}), 200
+        else:
+            # returns if the question, answer or user wasn't found
+            return jsonify(
+                {
+                    'status':404,
+                    'error': 'The question, answer or user doesn\'t exist or the user is not '\
+                        'authorized to mark the answer'
+                }
+            ), 404
