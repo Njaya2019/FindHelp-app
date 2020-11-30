@@ -1,4 +1,5 @@
-import {base_url} from './questionanswers.js';
+// import {base_url} from './questionanswers.js';
+let base_url = window.location.origin;
 // Gets all submit events of the entire signup html page
 
 document.body.addEventListener('submit', submitSignupData);

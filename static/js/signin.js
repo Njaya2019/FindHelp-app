@@ -1,4 +1,5 @@
-import {base_url} from './questionanswers.js';
+// import {base_url} from './questionanswers.js';
+let base_url = window.location.origin;
 // Gets all submit events of the entire login html page
 
 document.body.addEventListener('submit', submitLoginData);
@@ -25,9 +26,9 @@ class LoginFunctions{
             
               // Login was successful
               const response = JSON.parse(this.responseText);
-
+              console.log(base_url);
               localStorage.setItem('token', response.token);
-              window.location.href = `questions/`;
+              window.location.href = `${base_url}/questions/`;
             }
             else {
 

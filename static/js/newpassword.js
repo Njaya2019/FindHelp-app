@@ -1,4 +1,5 @@
-import {base_url}  from './questionanswers.js';
+// import {base_url}  from './questionanswers.js';
+let base_url = window.location.origin;
 // Listens to a submit event
 // document.body.addEventListener("submit", submitEvent);
 

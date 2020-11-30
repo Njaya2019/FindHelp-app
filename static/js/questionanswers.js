@@ -17,10 +17,10 @@ function clickActions(e){
         let editAnswerContainer = e.target.parentNode.parentNode.nextElementSibling.children[3];
         
         // Grabs the answer text value
-        answerOriginalValue = answerParagraph.innerHTML;
+        let answerOriginalValue = answerParagraph.innerHTML;
         // Gets the textarea element and set the answer value
         // in it.
-        textareaElement = editAnswerContainer.children[1].children[0];
+        let textareaElement = editAnswerContainer.children[1].children[0];
         textareaElement.value = answerOriginalValue;
         textareaElement.style.maxHeight = textareaElement.scrollHeight + 'px';
         
@@ -152,17 +152,31 @@ function clickActions(e){
         let questionid = parseInt(e.target.getAttribute("data-mark-correct-question"));
         mark_answer_correct(e, questionid, answerid);
     }
+    else if(e.target.classList.contains('edit-answer-image-btn')){
+        let labelTag =e.target.nextElementSibling;
+        e.target.addEventListener('change', function(event){
+            // splits the string with a back slash and returns the last element
+            // of the array which is the image's name.
+            // This returns the last element of the array whicj is the name of the image.
+            let imageName = event.target.value.split("\\").pop();
+            if (imageName){
+                labelTag.innerHTML = imageName;
+            }
+        });
+    }
     else{
         
     }
 
 }
 
-function getImageName(uploadEvent){
+
+function getImageName(pevent){
+    //console.log('clicked');
     // Upload answer image buttonclicked
     // uploads the answer picture and displays its name on the button.
-    let labelTag = uploadEvent.target.nextElementSibling;
-    uploadEvent.target.addEventListener('change', function(event){
+    let labelTag =pevent.target.nextElementSibling;
+    pevent.target.addEventListener('change', function(event){
         // splits the string with a back slash and returns the last element
         // of the array which is the image's name.
         // This returns the last element of the array whicj is the name of the image.
@@ -172,7 +186,6 @@ function getImageName(uploadEvent){
         }
     });
 }
-
 
 //====== Creates an answers line seperator ====================
 // selecting answers' container
@@ -558,6 +571,7 @@ let questionIdInt = parseInt(urlArray[2]);
 // ===========A function that gets the question and all it's answers=
 function get_question(questionId){
 
+
     // initialises the ajax request object
     let xhr = new XMLHttpRequest();
 
@@ -601,7 +615,7 @@ function get_question(questionId){
             document.querySelector('#title-description-container').innerHTML = title_description_html;
 
             // answers variable to display all answers in html
-            answers_html = '';
+            let answers_html = '';
 
             // Checks if the answers array is not empty
             if(questionObject.answers && questionObject.answers.length){
@@ -651,7 +665,7 @@ function get_question(questionId){
                                 <!-- cancel, submit and edit image button -->
                                 <div class="cancel-submit">
                                     <div class="edit-answer-image-container">
-                                        <input type="file" name="image" onclick="getImageName(event)" id="edit-answer-image-btn-${answer.answerid}" class="edit-answer-image-btn">
+                                        <input type="file" name="image" id="edit-answer-image-btn-${answer.answerid}" class="edit-answer-image-btn">
                                         <label for="edit-answer-image-btn-${answer.answerid}">
                                             <div class="edit-answer-upload-image">
                                                 <img src="${base_url}/static/img/upload.png"  alt="image" srcset="">
@@ -779,7 +793,7 @@ get_question(questionIdInt);
 
 // Posts an answer
 // Gets an answer's form id
-submitAnswer = document.querySelector("#submit-answer-form");
+let submitAnswer = document.querySelector("#submit-answer-form");
 function postAnswer(question_id){
 
     // A submit event to provide an answer to a question
@@ -1256,7 +1270,7 @@ function mark_answer_correct(e, questionid, answerid){
             // Marks the tick green
             let c = JSON.parse(xhr.responseText);
             // console.log(c);
-            currentActiveTickIcon = document.querySelectorAll('.activetick');
+            let currentActiveTickIcon = document.querySelectorAll('.activetick');
             if(!currentActiveTickIcon[0]){
                 span.className += " active";
             }
@@ -1280,7 +1294,6 @@ function mark_answer_correct(e, questionid, answerid){
     // Sends the request
     xhr.send();
 }
-
 
 export {base_url};
 

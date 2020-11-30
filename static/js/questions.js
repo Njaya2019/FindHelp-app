@@ -60,7 +60,7 @@ function clickActions(e){
             editTagsArray.splice(0,editTagsArray.length);
         }
         // Then adds the posted tags to the edit input text box automatically
-        for(i=0; i<children.length; i++){
+        for(let i=0; i<children.length; i++){
             // the trim method of the string to remove white spaces on both
             // sides of the text content
             editTagsArray.push(children[i].textContent.trim());
@@ -220,7 +220,7 @@ function clickActions(e){
 
 
 // Gets the question's form id 
-submitQuestion = document.querySelector("#post-question-form");
+let submitQuestion = document.querySelector("#post-question-form");
 
 // A submit event to post a question
 submitQuestion.addEventListener('submit', postQuestion);
@@ -333,7 +333,7 @@ function postQuestion(e){
 function get_questions(){
 
     // initialise the ajax request
-    xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
     // open request to get all questions
     xhr.open('GET', `${base_url}/questions/answers_count/`);
@@ -502,7 +502,7 @@ function editQuestion(e){
                 // closes the editing form
                 e.target.style.maxHeight = 0 + "px";
                 // Gets all the tags
-                tags_output = '';
+                let tags_output = '';
                 editedQuestion.editedquestion.tags.forEach(function(tag){
                     tags_output +=`
                     <div>
@@ -682,9 +682,9 @@ function get_user_fullname(){
         // sets the user name
         if(xhr.status == 200){
 
-            user_name = JSON.parse(this.responseText);
+            let user_name = JSON.parse(this.responseText);
 
-            fullname_header = document.getElementById('user-fullname');
+            let fullname_header = document.getElementById('user-fullname');
 
             fullname_header.innerHTML = user_name.fullname
         }
@@ -762,10 +762,10 @@ function createQuestionTags(tagName){
 let tagsArray = [];
 
 // Input text box container for the tags
-questionTagContainer = document.querySelector('#question-tags');
+let questionTagContainer = document.querySelector('#question-tags');
 
 // Input text box for the tags
-tagsInput = document.querySelector('#tags-input');
+let tagsInput = document.querySelector('#tags-input');
 
 // This is because the elements already exists on the interface, it will add
 // identical tags, so they are all removed first.
