@@ -148,7 +148,6 @@ function clickActions(e){
     }
     else if(e.target.classList.contains('correct')){
         // Gets the answer and the question id
-        console.log(e.target);
         let answerid = parseInt(e.target.getAttribute("data-mark-correct-answer"));
         let questionid = parseInt(e.target.getAttribute("data-mark-correct-question"));
         mark_answer_correct(e, questionid, answerid);
@@ -618,7 +617,7 @@ function get_question(questionId){
                         <div class="vote-error-container">
                         <!-- You can not upvote an answer twice -->
                         </div>
-                        ${questionObject.is_question_author?'<div class="mark-answer-correct"><span class="correct'+`${answer.marked_correct?' activetick':''}`+'" '+'data-mark-correct-answer='+answer.answerid+' '+'data-mark-correct-question='+questionObject.questionid+'>&#10004</span></div>':''}
+                        ${questionObject.is_question_author || answer.marked_correct?'<div class="mark-answer-correct"><span class="correct'+`${answer.marked_correct?' activetick':''}`+'" '+'data-mark-correct-answer='+answer.answerid+' '+'data-mark-correct-question='+questionObject.questionid+'>&#10004</span></div>':''}
                         <div class="comment-flash-container">The comment was added successfully</div>
                     </div>
                     <!-- answer header -->
