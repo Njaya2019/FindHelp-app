@@ -807,7 +807,7 @@ function postAnswer(question_id){
         let answerData = new FormData(answerform);
 
         // creates a ajax request object
-        xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
 
         // opens the request
         xhr.open('POST', `${base_url}/answers/${question_id}`);
