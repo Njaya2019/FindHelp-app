@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 class Config(object):
     DEBUG = False
     TESTING = False
-    UPLOAD_FOLDER = "app\\image_uploads"
+    UPLOAD_FOLDER = "app/image_uploads"
     # MAX_CONTENT_LENGTH = 
     DATABASE_URI = os.getenv('DATABASE_URL')
     # DATABASE_URI = os.environ['DB_URL']
@@ -19,7 +19,7 @@ class ProductionConfig(Config):
 class DevelopmentConfig(Config):
     DEBUG = True
     DEVELOPMENT = True
-    UPLOAD_FOLDER = "static\\img"
+    UPLOAD_FOLDER = "static/img"
     SEND_FILE_MAX_AGE_DEFAULT = 0
     SECRET_KEY = b'_5#y2L"F4Q8z\n\xec]/'
     MAIL_SERVER = 'smtp.googlemail.com'
