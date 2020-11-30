@@ -559,7 +559,7 @@ let questionIdInt = parseInt(urlArray[2]);
 function get_question(questionId){
 
     // initialises the ajax request object
-    xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
     // Opens the request
     xhr.open('GET', `${base_url}/questions/${questionId}`);
