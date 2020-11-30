@@ -1,3 +1,4 @@
+import base_url from './questionanswers.js';
 // Listens to a submit event
 // document.body.addEventListener("submit", submitEvent);
 

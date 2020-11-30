@@ -1,3 +1,4 @@
+import base_url from './questionanswers.js';
 // Gets all submit events of the entire html page
 
 document.body.addEventListener('submit', submitEmail);
@@ -88,7 +89,7 @@ function submitEmail(e){
                 let emailform = e.target;
                 let emailData = new FormData(emailform);
                 let xhr = new XMLHttpRequest();
-                xhr.open('POST', 'http://127.0.0.1:5000/resetpassword');
+                xhr.open('POST', `${base_url}/resetpassword`);
                 xhr.onload = function () {
                     if (this.status >= 200 && this.status < 300) {
                         console.log('instructions were sent');

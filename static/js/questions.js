@@ -487,7 +487,7 @@ function editQuestion(e){
         let xhr = new XMLHttpRequest();
 
         // opens the request
-        xhr.open('PUT', `http://127.0.0.1:5000/questions/${int_question_id}`);
+        xhr.open('PUT', `${base_url}/questions/${int_question_id}`);
 
         // What should happen if the reponse received from the server
         xhr.onload = function(onloadevent){
@@ -602,7 +602,7 @@ function delete_question(event, question_id){
     xhr = new XMLHttpRequest();
 
     // opens the request to delete the question
-    xhr.open('DELETE', `http://127.0.0.1:5000/questions/${question_id}`);
+    xhr.open('DELETE', `${base_url}/questions/${question_id}`);
 
     // the request was successfully sent to the server
     xhr.onload = function(onloadevent){
@@ -674,7 +674,7 @@ function get_user_fullname(){
     let xhr = new XMLHttpRequest();
 
     // opens the request
-    xhr.open('POST', 'http://127.0.0.1:5000/questions/');
+    xhr.open('POST', `${base_url}/questions/`);
 
     // response from the server
     xhr.onload = function(onload){
@@ -708,7 +708,7 @@ function sign_out_user(){
     let xhr = new XMLHttpRequest();
 
     // opens the request
-    xhr.open('GET', 'http://127.0.0.1:5000/logout');
+    xhr.open('GET', `${base_url}/logout`);
 
     // response from the server
     xhr.onload = function(onload){

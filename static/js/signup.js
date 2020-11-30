@@ -1,3 +1,4 @@
+import base_url from './questionanswers.js';
 // Gets all submit events of the entire signup html page
 
 document.body.addEventListener('submit', submitSignupData);
@@ -18,7 +19,7 @@ class SignupFunctions{
         let xhr = new XMLHttpRequest();
 
         // opens the request
-        xhr.open('POST', `http://127.0.0.1:5000/signup`);
+        xhr.open('POST', `${base_url}/signup`);
 
         // response from the server
         xhr.onload = function(onloadevent) {

@@ -1,3 +1,4 @@
+import base_url from './questionanswers.js';
 // Gets all submit events of the entire login html page
 
 document.body.addEventListener('submit', submitLoginData);
@@ -16,7 +17,7 @@ class LoginFunctions{
         let xhr = new XMLHttpRequest()
 
         // Opens the request
-        xhr.open("POST", "http://127.0.0.1:5000/signin", true);
+        xhr.open("POST", `${base_url}/signin`, true);
         
         xhr.onload = function(onloadevent) {
 

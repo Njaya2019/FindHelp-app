@@ -540,7 +540,7 @@ function submitActions(e){
 let currentLocation = window.location.pathname;
 
 let base_url = window.location.origin;
-console.log(base_url );
+// console.log(base_url );
 
 
 // splits the url to an array and gets question's id as a string
@@ -562,7 +562,7 @@ function get_question(questionId){
     xhr = new XMLHttpRequest();
 
     // Opens the request
-    xhr.open('GET', `http://127.0.0.1:5000/questions/${questionId}`);
+    xhr.open('GET', `${base_url}/questions/${questionId}`);
 
     // When the request has been processed
     xhr.onload = function (onloadevent){
@@ -572,7 +572,7 @@ function get_question(questionId){
 
             // changes the response text to JavaScript Object
             let question = JSON.parse(xhr.responseText);
-            console.log(question);
+            // console.log(question);
             // variable to display question title and description
             let title_description_html = '';
 
@@ -796,7 +796,7 @@ function postAnswer(question_id){
         xhr = new XMLHttpRequest();
 
         // opens the request
-        xhr.open('POST', `http://127.0.0.1:5000/answers/${question_id}`);
+        xhr.open('POST', `${base_url}/answers/${question_id}`);
 
         // Response from the server
         xhr.onload = function (onloadevent) {
@@ -895,7 +895,7 @@ function voteForAnswer(e, upordownvote, answerid, question_id){
     let xhr = new XMLHttpRequest();
 
     // Opens the request
-    xhr.open('POST', `http://127.0.0.1:5000/${upordownvote}/${answerid}/answer`);
+    xhr.open('POST', `${base_url}/${upordownvote}/${answerid}/answer`);
 
     // Response from the server
     xhr.onload = function(onloadevent){
@@ -942,7 +942,7 @@ function delete_answer(event, answer_id, questionId){
     let xhr = new XMLHttpRequest();
 
     // opens the request
-    xhr.open('DELETE', `http://127.0.0.1:5000/answers/${answer_id}`);
+    xhr.open('DELETE', `${base_url}/answers/${answer_id}`);
 
     // response from the server
     xhr.onload = function(onloadevent){
@@ -1282,5 +1282,5 @@ function mark_answer_correct(e, questionid, answerid){
 }
 
 
-
+export {base_url};
 
