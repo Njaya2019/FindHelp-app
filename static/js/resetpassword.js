@@ -1,4 +1,4 @@
-import base_url from './questionanswers.js';
+import {base_url} from './questionanswers.js';
 // Gets all submit events of the entire html page
 
 document.body.addEventListener('submit', submitEmail);
