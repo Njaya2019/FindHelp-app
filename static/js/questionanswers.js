@@ -1295,5 +1295,5 @@ function mark_answer_correct(e, questionid, answerid){
     xhr.send();
 }
 
-export {base_url};
+// export {base_url};
 
