@@ -63,6 +63,11 @@ body{
 #container #footer{
     grid-area: footer;
     background-color: rgba(60, 179, 113, 0.6);
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
 }
 
 /* ================== Navigation components =========================*/
