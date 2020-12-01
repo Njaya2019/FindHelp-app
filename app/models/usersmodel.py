@@ -119,7 +119,7 @@ class users():
         try:
             # gets the userid from the payload
             userid = serializer_object.loads(token)['userid']
-        except expression:
+        except Exception:
             return None
         
         user = users.get_user_fullname(con_cur, userid)

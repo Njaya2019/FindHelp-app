@@ -552,13 +552,12 @@ function submitActions(e){
 // gets the URL search string, that is the path
 let currentLocation = window.location.pathname;
 
+// console.log(currentLocation);
 let base_url = window.location.origin;
-// console.log(base_url );
 
 
 // splits the url to an array and gets question's id as a string
 let urlArray = currentLocation.split('/', 3);
-
 
 // question's id as a string
 let questionIdString = urlArray[2];

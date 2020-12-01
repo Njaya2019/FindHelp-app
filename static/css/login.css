@@ -352,7 +352,7 @@ body{
         margin-right: 4px;
     }
     #login-body #login-errors{
-        border: 1px solid black;
+        /* border: 1px solid black; */
         width: 360px;
     }
 

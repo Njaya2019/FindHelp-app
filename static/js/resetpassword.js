@@ -104,6 +104,8 @@ function submitEmail(e){
                 };
                 xhr.send(emailData);
             }).then(function(result){
+                // displays a message to the user, the email was sent.
+                e.target.parentNode.innerHTML = result.message;
                 console.log(result);
             }).catch(function(result){
                 // error response
@@ -126,7 +128,7 @@ function submitEmail(e){
 
                 // Display the error container, to display the error,
                 // message.
-                resesetErrorContainer.style.display = 'block';
+                resesetErrorContainer.style.display = 'grid';
 
                 // Makes the error message disappear in 30 seconds
                 // and sets the value of the list tag to an empty text.
