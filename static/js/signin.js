@@ -10,6 +10,9 @@ class LoginFunctions{
     // A function to submit signin data
     static submitSigninData(e){
 
+        // Shows the login spinner
+        e.target.nextElementSibling.style.display = 'block';
+
         // Gets form's login data
         let loginform = e.target;
         let loginData = new FormData(loginform);
@@ -23,7 +26,8 @@ class LoginFunctions{
         xhr.onload = function(onloadevent) {
 
             if (xhr.status == 200) {
-            
+              // first hides the login spinner
+              e.target.nextElementSibling.style.display = 'none';  
               // Login was successful
               const response = JSON.parse(this.responseText);
               console.log(base_url);
@@ -31,7 +35,8 @@ class LoginFunctions{
               window.location.href = `${base_url}/questions/`;
             }
             else {
-
+              // first hides the login spinner
+              e.target.nextElementSibling.style.display = 'none';  
               // Login failed
               const loginFailedResponse = JSON.parse(this.responseText);
 

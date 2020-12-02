@@ -53,6 +53,10 @@ class SignupFunctions{
                 // Display the error container, to display the error,
                 // message.
                 signupErrorContainer.style.display = 'block';
+                // Scroll up on small screen devices to see the error
+                signupErrorContainer.parentNode.scrollIntoView({
+                        behavior: "smooth"
+                });
 
                 // Makes the error message disappear in 4 seconds
                 // and sets the value of the list tag to an empty text.

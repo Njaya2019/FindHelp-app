@@ -31,6 +31,13 @@ def answer_question(current_user_id, questionid):
                 return jsonify({'status':400, 'error':'Please provide an answer first'}), 400
             else:
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
+                if image_url == 'invalid extension':
+                    return jsonify(
+                        {
+                            "status":400, 
+                            "error": "Please provide an image with the following extensions, 'png', 'jpg', 'jpeg' or 'gif'"
+                        }
+                    ), 400
                 if not image_url:
                     return jsonify({"status":400, "error":"The file key doesn't exist"}), 400
                 newAnswer = answer.postAnAnswer(con_cur, current_user_id, questionid, answerData['answer'], image_url)

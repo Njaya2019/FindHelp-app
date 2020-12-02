@@ -225,8 +225,8 @@ body{
 }
 
 #login-body #login-form #submitdiv input{
-    background-color: rgba(0, 0, 255, 0.5);;
-    border: 1px solid rgba(0, 0, 255, 0.5);;
+    background-color: rgba(0, 0, 255, 0.5);
+    border: 1px solid rgba(0, 0, 255, 0.5);
     border-radius: 3px;
     cursor: pointer;
     font-weight: bold;
@@ -248,6 +248,36 @@ body{
     text-decoration-line: underline;
 }
 
+#login-body #login-loader{
+    display: none;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* height: 40px;
+    width: 40px; */
+    /* border: 1px solid black; */
+}
+
+.login-loading {
+    border: 2px solid rgba(0, 0, 255, 0.5);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border-top-color: rgba(60, 179, 113, 0.6);
+    border-left-color:  rgba(60, 179, 113, 0.6);
+    animation: loginspin 1s infinite ease-in;
+ }
+
+@keyframes loginspin{
+    0%{
+       transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+
+}
 
 
 
