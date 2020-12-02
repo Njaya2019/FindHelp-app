@@ -11,7 +11,7 @@ body{
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr;
-    grid-template-rows: 40px auto auto auto 40px;
+    grid-template-rows: 110px auto auto auto 40px;
     grid-row-gap: 5px;
     grid-template-areas: 
     "nav"
@@ -28,8 +28,8 @@ body{
     /* background-color: rgba(34, 167, 240, 0.8); */
     background-color: rgba(60, 179, 113, 0.6);
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    flex-direction: column;
+    justify-content: center;
     align-items: center;
     /* box-shadow: 6px 6px 5px lightslategray; */
 }
@@ -75,6 +75,10 @@ body{
 
 /* ==================================== Navigation components ================================= */
 /* home link  (Right navigation link) */
+#questions-body #questions-nav h3 {
+    /* border: 1px solid black; */
+    margin-bottom: 4px;
+}
 #questions-body #questions-nav h3 a{
     /* font-family: Impact, Charcoal, sans-serif; */
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -92,7 +96,7 @@ body{
     justify-content: space-between;
     align-items: center;
     height: 35px;
-    width: 200px;
+    width: auto;
     margin-right: 5px;
     /* border: 1px solid black; */
 }
@@ -125,6 +129,12 @@ body{
     color: rgba(0, 0, 255, 1);
     font-weight: bolder;
     font-size: 13px;
+    width: 60px;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    /* border: 1px solid black; */
+    /* border: 1px solid rgb(26, 23, 23); */
 }
 
 /* logout button */
@@ -169,6 +179,7 @@ body{
     height: 35px;
     width: 35px;
     /* border: 1px solid black; */
+    margin-right: 4px;
 }
 /* Notification bell */
 #questions-body #questions-nav #left-nav div #bell-div{
@@ -595,6 +606,7 @@ textarea:focus, input:focus{
    grid-template-columns: 1fr;
    border-radius: 5px;
    background-color: white;
+   padding: 5px;
    position: relative;
 }
 
@@ -615,7 +627,6 @@ textarea:focus, input:focus{
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 30px;
-    padding-left: 5px;
     /* border: 1px solid red; */
 }
 
@@ -624,15 +635,17 @@ textarea:focus, input:focus{
     display: flex;
     flex-direction: row;
     align-items: center;
-    margin-left: 0px;
     /* border: 1px solid black; */
 }
 
 /* Time posted paragraph element */
 #questions-body #questions #posted-questions .posted-question .upper-section .name p{
-    font-size: 13px;
+    font-size: 9px;
     margin-right: 0px;
+    margin-left: 0;
     color: rgba(0, 0, 0, 0.7);
+    width: auto;
+    /* border: 1px solid black; */
 }
 
 /* Posted question top section, name section anchor tag*/
@@ -644,6 +657,10 @@ textarea:focus, input:focus{
     transition: 0.4s ease-in-out;
     margin-left: 0px;
     margin-right: 10px;
+    width: 50px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* on hover */
@@ -743,6 +760,13 @@ textarea:focus, input:focus{
 #questions-body #questions #posted-questions .posted-question .question-body *{
     padding: 0;
     margin: 3px 0 3px 0;
+}
+#questions-body #questions #posted-questions .posted-question .question-body .question-paragraph{
+    height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /* border: 1px solid black; */
 }
 
 /* Total answers */
@@ -993,7 +1017,6 @@ textarea:focus, input:focus{
     font-size: 1.25em;
     font-weight: 700;
     color: white;
-    background-color: black;
     display: inline-block;
     background-color: rgba(0, 0, 255, 0.5);
 }
@@ -1002,7 +1025,6 @@ textarea:focus, input:focus{
 #questions-body #questions #posted-questions .posted-question .edit-form .cancel-submit .edit-question-image-container label{
     font-size: 15px;
     font-weight: 700;
-    background-color: black;
     display: inline-block;
     cursor: pointer;
     border: 1px solid rgba(0, 0, 255, 0.5);
@@ -1015,6 +1037,10 @@ textarea:focus, input:focus{
     color: white;
     border-radius: 5px;
     transition: 0.4s ease-in-out;
+    width: 80px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* Edit question image background image container*/ 
@@ -1028,7 +1054,7 @@ textarea:focus, input:focus{
     margin-left: 5px;
     background-color: white;
     border-radius: 5px;
-    padding: 0px;
+    padding: 0px 2px 0px 2px;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -1148,6 +1174,18 @@ textarea:focus, input:focus{
         "footer footer footer";
         height: 100vh;
     }
+    #questions-body #questions-nav{
+        background-color: rgba(60, 179, 113, 0.6);
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    /* Profile link name */
+    #questions-body #questions-nav #left-nav a{
+        width: auto;
+
+    }
     #questions-body #my-profile-links{
         grid-area: profile;
     }
@@ -1170,7 +1208,7 @@ textarea:focus, input:focus{
         display: flex;
         flex-direction: row;
         align-items: center;
-        margin-left: -5px;
+        
     }
 
     #questions-body #questions-nav #left-nav{
@@ -1188,6 +1226,17 @@ textarea:focus, input:focus{
     #questions-body #questions-nav #left-nav #notifications{
         grid-template-columns: 240px;
 
+    }
+    /* Time posted paragraph element */
+    #questions-body #questions #posted-questions .posted-question .upper-section .name p{
+        font-size: 13px;
+    }
+    /* Posted question top section, name section anchor tag*/
+    #questions-body #questions #posted-questions .posted-question .upper-section .name a{
+        width: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
 }

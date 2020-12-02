@@ -310,6 +310,11 @@ function postQuestion(e){
             // message.
             questionErrorContainer.style.maxHeight = questionErrorContainer.scrollHeight + 'px';
 
+            // Scroll up on small screen devices to see the error
+            questionErrorContainer.parentNode.scrollIntoView({
+                 behavior: "smooth"
+            });
+
             // Deletes all list error tags after 30 seconds
             setTimeout(function(){
 
@@ -380,7 +385,7 @@ function get_questions(){
                         <!-- question title -->
                         <a href="${base_url}/questions/${element.questionid}/${element.title.split(" ").join("-")}" class="question-title">${element.title}</a>
                         <!-- Question description -->
-                        <p>${element.description}</p>
+                        <p class="question-paragraph">${element.description}</p>
                         <!-- Tags -->
                         <div class="tags">
                             ${ element.tags?

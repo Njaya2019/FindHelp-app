@@ -70,6 +70,13 @@ def editAnswer(current_user_id, answerid):
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
                 if not image_url:
                     return jsonify({"status":400, "error":"The file key doesn't exist"}), 400
+                if image_url == 'invalid extension':
+                        return jsonify(
+                        {
+                            "status":400, 
+                            "error": "Please provide an image with the following extensions, 'png', 'jpg', 'jpeg' or 'gif'"
+                        }
+                    ), 400
                 editedAnswer = answer.editAnAnswer(con_cur, current_user_id, answerid, answerEditedData['answer'], image_url, current_app, current_app.config['UPLOAD_FOLDER'])
                 if type(editedAnswer) == str:
                     return jsonify({'status':403, 'error':editedAnswer}), 403
