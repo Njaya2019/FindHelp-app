@@ -3,6 +3,7 @@ document.body.addEventListener('click', clickActions);
 // Gets the confirming delete parent element
 let confirmDeleteWindow = '';
 
+
 function clickActions(e){
     if(e.target.classList.contains('three-dots')){
         // Displays actions on a question.
@@ -218,6 +219,20 @@ function clickActions(e){
 
 }
 
+// Gets the loading spinner parent container
+let spinner = document.getElementById('loader');
+
+// This function starts the loader spinner
+function start_spinner(){
+    // Starts the loader spinner
+    spinner.style.display = 'block';
+}
+
+// This function stops the loader spinner
+function stop_spinner(){
+    // Starts the loader spinner
+    spinner.style.display = 'none';
+}
 
 // Gets the question's form id 
 let submitQuestion = document.querySelector("#post-question-form");
@@ -227,7 +242,12 @@ submitQuestion.addEventListener('submit', postQuestion);
 
 // A function to run on submit question event
 function postQuestion(e){
-
+    // starts spinner
+    start_spinner();
+    let returnedSpinner = spinner.parentElement.removeChild(spinner);
+    e.target.parentNode.appendChild(returnedSpinner);
+    returnedSpinner.style.top = 100 + 'px';
+    returnedSpinner.style.left = 130 + 'px';
     // Prvents action of the form from routing automatically
     e.preventDefault();
 
@@ -255,7 +275,10 @@ function postQuestion(e){
 
         // successful posted question
         if (xhr.status == 201){
+            // stops the spinner
+            stop_spinner();
 
+            // refreshes the page
             get_questions();
             
             // resets form data
@@ -285,6 +308,8 @@ function postQuestion(e){
             }, 4000); 
         }
         else{
+            // stops the spinner
+            stop_spinner();
             // Response error from the server
             let error = JSON.parse(xhr.responseText);
 
@@ -336,7 +361,8 @@ function postQuestion(e){
 
 // A function to get all questions
 function get_questions(){
-
+    // Starts the loader spinner
+    start_spinner();
     // initialise the ajax request
     let xhr = new XMLHttpRequest();
 
@@ -453,6 +479,8 @@ function get_questions(){
                 `;
             });
             document.querySelector('#posted-questions').innerHTML = display_questions;
+            // stops the spinner
+            stop_spinner()
 
         }
     };
@@ -488,6 +516,12 @@ function editQuestion(e){
         // After posting the question, remove all the tags from the input tag
         resetEditTags(editquestionform.children[2]);
 
+        // starts loading spinner
+        start_spinner();
+        let returnedSpinner = spinner.parentElement.removeChild(spinner);
+        e.target.parentNode.appendChild(returnedSpinner);
+        returnedSpinner.style.top = 100 + 'px';
+        returnedSpinner.style.left = 130 + 'px';
         // initialises ajax request object
         let xhr = new XMLHttpRequest();
 
@@ -499,7 +533,8 @@ function editQuestion(e){
 
             // successful posted question
             if (xhr.status == 200){
-
+                // stops the spiiner
+                stop_spinner();
                 const editedQuestion = JSON.parse(xhr.responseText);
                 console.log(editedQuestion);
                 // Displays successful edition  message
@@ -554,7 +589,8 @@ function editQuestion(e){
 
             }
             else{
-
+                // stops the spinner
+                stop_spinner();
                 // Response error from the server
                 let error = JSON.parse(xhr.responseText);
 
@@ -598,6 +634,13 @@ function editQuestion(e){
 
 // Deletes a question
 function delete_question(event, question_id){
+    // starts spinner
+    start_spinner();
+    let returnedSpinner = spinner.parentElement.removeChild(spinner);
+    event.target.parentNode.parentNode.parentNode.appendChild(returnedSpinner);
+    returnedSpinner.style.top = 50 + '%';
+    returnedSpinner.style.left = 50 + '%';
+    returnedSpinner.style.zIndex = 10;
     // closes the delete modal
     event.target.parentNode.parentNode.parentNode.style.display = "none";
     // Gets the flash message container
@@ -614,7 +657,8 @@ function delete_question(event, question_id){
         
         // successfully deleted the question
         if (xhr.status == 200){
-            
+            stop_spinner();
+            spinner.style.zIndex = 1;
             get_questions();
             // Displays the deletion successful massage
             deleteMessageContainer.innerHTML = "The question has been successfully deleted";
@@ -638,7 +682,8 @@ function delete_question(event, question_id){
             
         }
         else{
-
+            stop_spinner();
+            spinner.style.zIndex = 1;
             // The question doesn't exist error or unauthorized to delete it.
             const error = JSON.parse(xhr.responseText);
             // Displays the deletion denied error message

@@ -825,6 +825,7 @@ textarea:focus, input:focus{
 }
 #questions-body #questions #posted-questions .posted-question #edit-div{
     border: 1px solid rgba(0, 0, 255, 0.3);
+    position: relative;
 }
 /* Edit question form */
 #questions-body #questions #posted-questions .posted-question .edit-form{
@@ -1159,6 +1160,35 @@ textarea:focus, input:focus{
 #questions-body #questions #posted-questions .posted-question .confirm-question-delete-background .confirm-question-delete-footer .delete-question-delete:hover{
     background-color: rgba(255, 0, 0, 0.5);
 }
+/* ========================= Loading spinner =============================== */
+#questions #loader{
+    display: none;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#questions .loading {
+    border: 10px solid rgba(0, 0, 255, 0.5);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border-top-color: rgba(60, 179, 113, 0.6);
+    border-left-color:  rgba(60, 179, 113, 0.6);
+    animation: spin 1s infinite ease-in;
+ }
+
+@keyframes spin{
+    0%{
+       transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+
+}
+
 /* ==================================================== Media queries ========================================================================= */
 
 @media (min-width: 768px){

@@ -161,7 +161,6 @@ class question():
             find_valid_author_question_answer_sql = "SELECT users.userid, questions.questionid, answers.answerid, answers.markedcorrect FROM users INNER JOIN questions ON users.userid=questions.userid INNER JOIN answers ON questions.questionid=answers.questionid WHERE users.userid=%s AND questions.questionid=%s AND answers.answerid=%s"
             cur.execute(find_valid_author_question_answer_sql, [userid,questionid,answerid,])
             valid_author = cur.fetchone()
-            print(valid_author)
             if valid_author:
                 # sql checks for an answer marked correct.
                 find_answer_marked_correct_sql = "SELECT  answers.answerid, answers.markedcorrect FROM questions INNER JOIN answers ON questions.questionid=answers.questionid WHERE questions.questionid=%s AND answers.markedcorrect='yes'"
@@ -192,10 +191,7 @@ class question():
                     if marked_correct_answer:
                         return 'marked correct'
             else:
-                print('something is wrong')
                 return 'not valid'
 
         except Exception as err:
             print(err)   
-    
-    

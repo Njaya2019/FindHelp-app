@@ -237,14 +237,21 @@ class SubmitFunctions{
                 e.target.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.children[1].scrollHeight + 'px';
 
                 if(answer_edited.answeredited.editedimage != 'noimagekey'){
+                    // checks if the edited answer has a picture and displays in
+                    // it's comtainer.
                     e.target.parentNode.previousElementSibling.children[0].src = base_url+"/static/img/"+answer_edited.answeredited.editedimage;
                     e.target.parentNode.previousElementSibling.style.display = "block";
                     window.scrollBy(0, -900);
                 }
                 else{
-                    // editAnswerContainer.previousElementSibling.maxHeight = 0 + "px";
+                    // Hides the answer container image if the edited answer has no
+                    // picture
                     e.target.parentNode.previousElementSibling.style.display = "none";
                 }
+                // This scrolls to the container of the answer
+                e.target.parentNode.parentNode.parentNode.scrollIntoView({
+                    behaviour:'smooth'
+                });
                 // let falsh_container = document.getElementById("flash-messages");
                 let falsh_container = e.target.parentNode.parentNode.children[0];
                 // displays the flash container
@@ -1285,9 +1292,28 @@ function mark_answer_correct(e, questionid, answerid){
         }
         else{
             // Displays the error encountered after the marking failed.
-            let er = JSON.parse(xhr.responseText);
-            console.log(er);
+            let error = JSON.parse(xhr.responseText);
+            // console.log(error);
 
+            let falsh_container = e.target.parentNode.nextElementSibling;
+
+            // Scroll to the top of the answer container
+            e.target.parentNode.parentNode.parentNode.scrollIntoView({behaviour:'smooth'});
+
+            // Displays the deletion successful massage
+            falsh_container.innerHTML = error.error;
+            falsh_container.style.backgroundColor = "rgba(255, 51, 0, 1)";
+            falsh_container.style.display = "block";
+
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                falsh_container.innerHTML = "";
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+                falsh_container.style.display = 'none';
+
+            }, 4000); 
         }
     };
     // Sends the request
