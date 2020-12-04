@@ -115,6 +115,7 @@ body{
     border-radius: 3px;
     display: none;
     width: 200px;
+    z-index: 2;
 }
 
 #container #body-container #title-description-container{
@@ -295,6 +296,7 @@ body{
     "number answer"
     "number answer-footer"
     "number comments";
+    position: relative;
 }
 
 /* change color of the answer container when targeted */
@@ -535,6 +537,7 @@ body{
     flex-direction: row-reverse;
     justify-content: space-between;
     align-items: center;
+    position: relative;
     /* border: 1px solid black; */
 }
 
@@ -689,6 +692,7 @@ body{
     grid-template-rows: 25px 25px;
     align-items: center;
     margin-top: 0px;
+    position: relative;
 }
 
 /* Add comment title */
@@ -741,6 +745,7 @@ body{
     grid-row-gap: 2px;
     /* border: 1px solid black; */
     padding: 3px;
+    position: relative;
 }
 /* edit comment textbox div*/
 #container #body-container #answers-container .user-answer .comments .coment-section .comment .edit-comment-form .edit-comment-div{
@@ -913,6 +918,7 @@ body{
     /* border: 1px solid black; */
     /* overflow: auto; */
 }
+
  /*Answer editing form  */
 #container #body-container #answers-container .user-answer .the-answer .edit-answer form{
     display: grid;
@@ -993,6 +999,20 @@ body{
 /* cancel edited answer button on hover */
 #container #body-container #answers-container .user-answer .the-answer .edit-answer form .cancel-button:hover{
     color: red;
+}
+/*== container to remove answer image to edit ==*/
+#container #body-container #answers-container .user-answer .the-answer .edit-answer form .remove-edited-answer-image{
+    text-decoration: underline;
+    color: rgba(0, 0, 255, 0.5);
+    margin-right: 5px;
+    cursor: pointer;
+    transition: 0.4s ease-in-out;
+    display: none;
+    font-size: 13px;
+}
+/*== container to remove answer image to edit on hover ==*/
+#container #body-container #answers-container .user-answer .the-answer .edit-answer form .remove-edited-answer-image:hover{
+    color: rgba(0, 0, 255, 0.8);
 }
 /* === container to display the edited answer picture to be uploaded === */
 #container #body-container #answers-container .user-answer .the-answer .edit-answer form .edit-answer-image{
@@ -1220,6 +1240,7 @@ body{
     border: 1px solid rgba(0,0,0,0.2);
     margin: 0px 20px 20px 20px;
     background-color: white;
+    position: relative;
 }
 /* Answer form */
 #container #body-container #answers-form-container form{
@@ -1377,6 +1398,36 @@ body{
     height: 20px;
 }
 /*==== end of upload button ===*/
+
+/* ========================= Loading spinner =============================== */
+#body-container #loader{
+    display: none;
+    top: 20%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#loader .loading {
+    border: 10px solid rgba(0, 0, 255, 0.5);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border-top-color: rgba(60, 179, 113, 0.6);
+    border-left-color:  rgba(60, 179, 113, 0.6);
+    animation: spin 1s infinite ease-in;
+ }
+
+@keyframes spin{
+    0%{
+       transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+
+}
+
 /* ======================================= Media queries =========================== */
 
  @media (min-width: 768px){
@@ -1868,5 +1919,9 @@ body{
         border-radius: 3px;
         width: auto;
         display: none;
+    }
+    /*== container to remove answer image to edit ==*/
+    #container #body-container #answers-container .user-answer .the-answer .edit-answer form .remove-edited-answer-image{
+        font-size: 14px;
     }
 }
