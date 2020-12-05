@@ -51,7 +51,7 @@ class answer():
                         uploads_dir = os.path.join(current_app.root_path, upload_folder)
                         image_path = os.path.join(uploads_dir, answerToEdit['answerimage'])
                         os.remove(image_path)
-                    editAnswer_sql = "UPDATE answers SET answer=%s, answerimage=%s, timeanswered=CURRENT_TIMESTAMP WHERE answerid=%s RETURNING answerid, userid, questionid, answer, answerimage, timeanswered"
+                    editAnswer_sql = "UPDATE answers SET answer=%s, answerimage=%s WHERE answerid=%s RETURNING answerid, userid, questionid, answer, answerimage, timeanswered"
                     editedAnswerData = (answer, imageurl, answerid)
                     cur.execute(editAnswer_sql, editedAnswerData)
                     con.commit()
