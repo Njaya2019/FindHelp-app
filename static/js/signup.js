@@ -1,19 +1,21 @@
-// import {base_url} from './questionanswers.js';
+// Gets the url location
 let base_url = window.location.origin;
-// Gets all submit events of the entire signup html page
 
+// Gets all submit events of the entire signup html page
 document.body.addEventListener('submit', submitSignupData);
 
 // A class that has signin functions
-
-
 class SignupFunctions{
 
     // A function to submit signup data
     static submitSignupData(e){
 
+        // starts loader
+        e.target.parentNode.children[3].style.display = 'block';
+
         // Grabs signup form data to be sent to the server by an ajax request
         let signupform = e.target;
+
         let signupData = new FormData(signupform);
 
         // initialises ajax object
@@ -24,12 +26,18 @@ class SignupFunctions{
 
         // response from the server
         xhr.onload = function(onloadevent) {
+
             // user registered successfully
             if(xhr.status == 201){
+
                 // redirects to login page
                 window.location.href = `signin`;
+
             }
             else{
+
+                // stops the loader
+                e.target.parentNode.children[3].style.display = 'none';
 
                 // response error from the server
                 let error = JSON.parse(xhr.responseText);
@@ -43,16 +51,21 @@ class SignupFunctions{
                 // if the list tag doesn't contain an error message,
                 // add one.
                 if(signupErrorTag.innerHTML == ''){
+
                     signupErrorTag.innerHTML = error.error;
+
                 }
                 else{
+
                     // If list tag has an error text replace it with a new one
                     signupErrorTag.innerHTML = error.error;
+
                 }
 
                 // Display the error container, to display the error,
                 // message.
                 signupErrorContainer.style.display = 'block';
+
                 // Scroll up on small screen devices to see the error
                 signupErrorContainer.parentNode.scrollIntoView({
                         behavior: "smooth"
@@ -61,28 +74,35 @@ class SignupFunctions{
                 // Makes the error message disappear in 4 seconds
                 // and sets the value of the list tag to an empty text.
                 setTimeout(function(){
+
                     signupErrorTag.innerHTML = '';
                     signupErrorContainer.style.display = 'none';
+
                 }
                 ,4000)
+
             }
+
         };
 
         // sends the signup data
         xhr.send(signupData);
 
     }
+
 }
 
 
 // Submit function
-
 function submitSignupData(e){
 
     // Event that submits login data
     if(e.target.id === 'signup-form'){
+
         e.preventDefault();
+
         SignupFunctions.submitSignupData(e);
+
     }
 
 }

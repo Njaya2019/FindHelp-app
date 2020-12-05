@@ -842,7 +842,7 @@ function get_question(questionId){
 
             // changes the response text to JavaScript Object
             let question = JSON.parse(xhr.responseText);
-
+           
             // variable to display question title and description
             let title_description_html = '';
 
@@ -960,7 +960,7 @@ function get_question(questionId){
                     <!-- answer's footer -->
                     <div class="answer-footer">
                         <div class="name-image">
-                            <img src="${base_url}/static/img/woman.jpg" alt="" srcset="">
+                            <img src="${base_url}/static/img/man.jpg" alt="${answer.whoanswered}" srcset="">
                             <a href='${base_url}/answers/${answer.answerid}'>${answer.whoanswered}</a>
                         </div>
                     </div>
@@ -974,8 +974,9 @@ function get_question(questionId){
                                 <div class="the-comment" id="the-comment-${comment.commentid}">${comment.comment}</div>
                                 <div class="user-comment">
                                     <a href="#">${comment.userwhocommented}</a>
-                                    <img src="${base_url}/static/img/woman.jpg" alt="Andrew">
-                                    ${comment.is_author===true?'<p class="edit-comment">Edit</p><p class="delete-comment">Delete</p>':''}  
+                                    <img src="${base_url}/static/img/man.jpg" alt="${comment.userwhocommented}">
+                                    ${comment.is_author===true?'<p class="edit-comment">Edit</p><p class="delete-comment">Delete</p>':''}
+                                    <span>${comment.timecommented}</span> 
                                 </div>
                                 <form class="edit-comment-form" data-edit-comment=${comment.commentid}>
                                     <div class="comment-errors">

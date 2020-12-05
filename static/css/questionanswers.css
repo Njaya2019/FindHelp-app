@@ -289,7 +289,7 @@ body{
     display: grid;
     /* grid-template-columns: 100px 1fr; */
     grid-template-columns: minmax(20px, 60px) minmax(100px, 1fr);
-    grid-template-rows: 30px auto 40px auto;
+    grid-template-rows: 30px auto auto auto;
     grid-row-gap: 10px;
     grid-template-areas: 
     "number header"
@@ -507,38 +507,20 @@ body{
 }
 /*==== Uploaded answer image container =====*/
 #container #body-container #answers-container .user-answer .the-answer .uploaded-answer-image{
-    /* border: 1px solid black; */
-    /* border-radius: 5px;
-    padding: 0px; */
-    /* overflow: hidden; */
-    /* max-height: 0; */
-    /* transition: max-height 0.7s ease-in-out; */
     display: grid;
     grid-template-columns: minmax(100px, 1fr);
     grid-template-rows: auto;
     overflow-x: auto;
-    /* display: none; */
 }
 
 /* Uploaded answer image */
 #container #body-container #answers-container .user-answer .the-answer .uploaded-answer-image .the-uploaded-answer-image{
-    /* width: 100px;
-    height: 200px; */
-    /* border: 1px solid rgba(0, 0, 0, 0.3);
-    padding: 5px; */
-    /* margin-top: 5px;
-    margin-left: 5px; */
     border-radius: 5px;
 }
 /* answer's footer */
 #container #body-container #answers-container .user-answer .answer-footer{
     grid-area: answer-footer;
-    display: flex;
-    flex-direction: row-reverse;
-    justify-content: space-between;
-    align-items: center;
     position: relative;
-    /* border: 1px solid black; */
 }
 
 /*========================================== Comments ==================================*/
@@ -635,16 +617,17 @@ body{
 
 /* Comment's author name and picture container */
 #container #body-container #answers-container .user-answer .comments .coment-section .comment .user-comment{
-    /* display: flex;
-    flex-direction: row-reverse;
-    align-items: center; */
     display: flex;
     flex-direction: column-reverse;
     justify-content: center;
     align-items: center;
-    /* border: 1px solid black; */
 }
-
+/* time commented */
+#container #body-container #answers-container .user-answer .comments .coment-section .comment .user-comment span{
+    color: rgba(0, 0, 0, 0.4);
+    font-size: 12px;
+    margin-right: 5px;
+}
 /* Comment's author picture */
 #container #body-container #answers-container .user-answer .comments .coment-section .comment .user-comment img{
     height: 25px;
@@ -1193,12 +1176,10 @@ body{
 
 /* answer's owner container */
 #container #body-container #answers-container .user-answer .answer-footer .name-image{
-    width: 200px;
     display: flex;
     flex-direction: row-reverse;
-    /* justify-content: center; */
     align-items: center;
-    height: 40px;
+    overflow-x: auto;
 }
 
 /* owner's image */
@@ -1216,7 +1197,9 @@ body{
     text-decoration-line: none;
     font-size: 12px;
     color: blue;
+    margin-right: 4px;
 }
+
 /* =============================================== Form to submit an answer ==========================================*/
 /* Answer error container */
 #container #body-container #answer-errors{
@@ -1924,4 +1907,5 @@ body{
     #container #body-container #answers-container .user-answer .the-answer .edit-answer form .remove-edited-answer-image{
         font-size: 14px;
     }
+
 }

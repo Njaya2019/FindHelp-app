@@ -248,6 +248,34 @@ select option:nth-child(2), option:last-child{
     list-style-type: none;
 }
 
+/* ========================= Loading spinner =============================== */
+#signup-body #loader{
+    display: none;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+}
+
+#signup-body .loading {
+    border: 10px solid rgba(0, 0, 255, 0.5);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border-top-color: rgba(60, 179, 113, 0.6);
+    border-left-color:  rgba(60, 179, 113, 0.6);
+    animation: spin 1s infinite ease-in;
+ }
+
+@keyframes spin{
+    0%{
+       transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+
+}
 
 
 /*==================== Media query for screens above 768px ====================*/
