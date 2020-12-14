@@ -28,7 +28,7 @@ class db():
         # field questionimage is set notnull because it's value can be null.
         tables=(
             """CREATE TABLE IF NOT EXISTS users(userid SERIAL PRIMARY KEY,fullname VARCHAR(50) NOT NULL,
-               email VARCHAR(50) NOT NULL,roles BOOLEAN NOT NULL,passwords TEXT NOT NULL)
+               email VARCHAR(50) NOT NULL,roles BOOLEAN NOT NULL,passwords TEXT NOT NULL, emailverified BOOLEAN NOT NULL DEFAULT false)
             """,
             """CREATE TABLE IF NOT EXISTS questions(questionid SERIAL PRIMARY KEY,questiontitle VARCHAR(300) NOT NULL,
                questiondescription TEXT NOT NULL,questionimage TEXT,timeposted TIMESTAMPTZ,
@@ -44,6 +44,8 @@ class db():
             """CREATE TABLE IF NOT EXISTS comments(commentid SERIAL PRIMARY KEY, comment VARCHAR(300) NOT NULL, answerid INT REFERENCES answers(answerid) ON DELETE CASCADE,
                userid INT REFERENCES users(userid) ON DELETE CASCADE,timecommented TIMESTAMPTZ)
             """,
+            """ALTER TABLE users ADD COLUMN emailverified BOOLEAN  NOT NULL DEFAULT false
+            """
 
            )
         try:

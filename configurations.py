@@ -5,9 +5,7 @@ class Config(object):
     DEBUG = False
     TESTING = False
     UPLOAD_FOLDER = "app/image_uploads"
-    # MAX_CONTENT_LENGTH = 
     DATABASE_URI = os.getenv('DATABASE_URL')
-    # DATABASE_URI = os.environ['DB_URL']
 
 class ProductionConfig(Config):
     DEBUG = False
@@ -33,4 +31,3 @@ class TestingConfig(Config):
     DEBUG = True
     TESTING = True
     DATABASE_URI = os.getenv('TDB_URL')
-    # DATABASE_URI = os.environ['TDB_URL']

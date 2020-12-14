@@ -6,7 +6,7 @@ import pytz
 import json
 
 
-'''r infront of a string makes it a raw string and tells python not to hundle a backslash in any special way'''
+'''r in front of a string makes it a raw string and tells python not to hundle a backslash in any special way'''
 class regularExValidation():
     
     @staticmethod

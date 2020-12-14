@@ -10,17 +10,20 @@ body{
     height: 100vh;
     display: grid;
     grid-template-columns: 1fr;
+    grid-row-gap: 5px;
     grid-template-rows: 40px auto;
     grid-template-areas: 
     "nav"
     "body";
 }
 
-/* Navigation bar */
+/*===================================================
+                    NAVIGATION BAR
+=====================================================*/
 #body-container #nav{
     grid-area: nav;
     border: 1px solid lightblue;
-    background-color: lightblue;  
+    background-color: rgba(60, 179, 113, 0.6); 
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -47,38 +50,43 @@ body{
 /* left navigation item */
 #body-container #nav #left-item{
     text-decoration-line: none;
-    font-size: 21px;
-    color: rgba(0, 0, 255, 0.5);
+    font-size: 25px;
+    color: rgba(134, 89, 45, 1);
     font-weight: 900;
 }
 
-/* Body div */
+/*============================================= 
+                    BODY DIV
+===============================================*/
 #body-container #body{
     grid-area: body;
     display: grid;
-    grid-template-columns: 0.1fr 1fr;
+    grid-template-columns: 1fr;
     grid-auto-rows: auto;
     grid-template-areas:
-    "leftbar contentbody"
-    "leftbar contentbody";
+    "leftbar"
+    "contentbody";
     height: 100vh;
+
 }
 
 /* Left bar */
 #body-container #body #left-bar{
     grid-area: leftbar;
+    background-color: rgba(133, 133, 173, 0.3);
 }
 
 /* Menu items */
 #body-container #body #left-bar #menu-items{
-    width: 148px;
+    /* width: 148px; */
     display: grid;
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     grid-auto-rows: 20px;
     grid-row-gap: 10px;
-    margin-top: 12px;
-    margin-right: 0;
-    padding: 0;
+    margin: 12px 18px 0px 18px;
+    padding: 0px;
+    background-color: white;
+    border-radius: 4px;
 }
 
 /* Menu buttons */
@@ -99,61 +107,83 @@ body{
 
 /* Active menu button */
 #body-container #body #left-bar #menu-items .active{
-    border-top: 1px solid rgba(173, 216, 230, 1);
-    border-bottom: 1px solid rgba(173, 216, 230, 1);
-    border-right:4px solid rgba(0, 0, 255, 0.8);
+    /* border-top: 1px solid rgba(173, 216, 230, 1); */
+    border-bottom: 4px solid rgba(0, 0, 255, 0.4);
+    /* border-right:4px solid rgba(0, 0, 255, 0.8); */
+    /* border-right:1px solid rgba(173, 216, 230, 1); */
     background-color: rgba(173, 216, 230, 0.1);
+    padding-bottom: 8px;
 }
 
 /* Content section */
 #body-container #body #content{
     grid-area: contentbody;
-    border-left: 0.5px solid rgba(0, 0, 0, 0.3);
+    height: 100vh;
+    /* border-left: 0.5px solid rgba(0, 0, 0, 0.3); */
+    background-color: rgba(133, 133, 173, 0.3);
 }
 
 /* Update heading */
 #body-container #body #content #update-div h3{
     color: rgba(0, 0, 0, 0.7);
     text-align: center;
-    font-size: 22px;
+    font-size: 18px;
+    background-color: white;
+    margin: 15px 18px 0px 18px;
+    padding: 5px 0px 5px 0px;
+    border-radius: 10px;
+    /* border: 1px solid blue; */
 }
 
-/*====================================================== update form ===============================================================*/
+/*====================================================== 
+                    UPDATE FORM
+========================================================*/
 /* update div */
 #body-container #body #content #update-div{
     display: none;
 }
 #body-container #body #content #update-div #form-div{
     display: grid;
-    grid-template-columns: 150px 2fr 150px;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
     grid-template-areas: 
-    "left-div update-form right-div";
+    "update-form-div"
+    "left-div"
+    "left-div";
+    margin: 10px 18px 10px 18px;
 }
 #body-container #body #content #update-div #form-div #left-div{
     grid-area: left-div;
+    background-color: white;
 }
+
 #body-container #body #content #update-div #form-div #right-div{
     grid-area: right-div;
 }
+#body-container #body #content #update-div #update-form-div{
+    grid-area: update-form-div;
+    padding-bottom: 0;
+}
+/* The update form div */
 #body-container #body #content #update-div #update-form{
-    grid-area: update-form;
-    margin: 20px;
-    padding: 25px;
-    border-top: 1px solid rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    border-radius: 6px;
     display: grid;
-    /* grid-template-columns: 80px 250px 80px 250px 70px; */
-    grid-template-columns: 0.5fr 2fr 0.5fr 2fr;
+    grid-template-columns: minmax(50px, 1fr);
     grid-auto-rows: 30px;
     grid-row-gap: 10px;
-    grid-column-gap: 5px;
     grid-template-areas: 
-    "usernamelabel usernamebox emaillabel emailbox"
-    "rolelabel rolebox . imagebox"
-    "professionlabel professionbox educationlabel educationbox"
-    "companylabel companybox . ."
-    ". . . updatebutton";
+    "usernamelabel"
+    "usernamebox"
+    "emaillabel"
+    "emailbox"
+    "rolelabel"
+    "rolebox"
+    "imagebox"
+    "updatebutton";
+    background-color: white;
 }
+
 
 /* username label */
 #body-container #body #content #update-form #username-label{
@@ -193,36 +223,6 @@ body{
     grid-area: imagebox;
 }
 
-/* profesiion label */
-#body-container #body #content #update-form #profession-label{
-    grid-area: professionlabel;
-}
-
-/* profession textbox */
-#body-container #body #content #update-form #profession{
-    grid-area: professionbox;
-}
-
-/* eduaction label */
-#body-container #body #content #update-form #education-label{
-    grid-area: educationlabel;
-}
-
-/* education textbox */
-#body-container #body #content #update-form #education{
-    grid-area: educationbox;
-}
-
-/* company label */
-#body-container #body #content #update-form #company-label{
-    grid-area: companylabel;
-}
-
-/* company textbox */
-#body-container #body #content #update-form #company{
-    grid-area: companybox;
-}
-
 /* Update submit button */
 #body-container #body #content #update-form #update-button{
     grid-area: updatebutton;
@@ -247,15 +247,32 @@ body{
     outline: none;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 3px;
+    /* background-color: rgba(102, 153, 153, 0.3); */
 }
 
 /* update form labels */
 #body-container #body #content #update-div #update-form label{
     display: flex;
-    flex-direction: row-reverse;
+    flex-direction: row;
     align-items: center;
     font-weight: bold;
-    font-size: 13px;
+    font-size: 12px;
+}
+
+/* edit label button */
+#body-container #body #content #update-form #edit-button-label{
+    grid-area: edit-button;
+    text-decoration: underline;
+    color: rgba(60, 179, 113, 0.6);
+    transition: 0.6s ease-in-out;
+    /* border: 1px solid black; */
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* edit label button on hover*/
+#body-container #body #content #update-form #edit-button-label:hover{ 
+    color: rgba(0,0,0,0.6)
 }
 
 /* Upload picture div */
@@ -308,42 +325,47 @@ body{
     margin-left: 10px;
 }
 
-/* ====================================================Profile information ===================================================== */
+/* =======================================================
+                  PROFILE INFORMATION
+========================================================== */
 #body-container #body #content #profile-div{
     display: none;
 }
+
 #body-container #body #content .profile-div{
     display: grid;
     grid-template-columns: 2fr 1fr 2fr;
-    grid-template-rows: 40px 30px 215px 30px 180px;
-    grid-row-gap: 20px;
+    grid-template-rows: 40px 40px auto 40px;
+    grid-row-gap: 10px;
     grid-template-areas:
     "profile-info-head profile-info-head profile-info-head"
-    ". pic-heading ."
-    ". profile-pic ."
-    ". info-heading ."
-    "info-container info-container info-container";
+    "info-heading info-heading info-heading"
+    "info-container info-container info-container"
+    "stats stats stats"
+    "stats-info-container stats-info-container stats-info-container";
 }
+
 #body-container #body #content .profile-div #info-container{
     grid-area: info-container;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    grid-template-columns: 1fr;
     grid-template-areas: 
-    ". profile-info .";
+    "profile-info";
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 20px 5px 20px;
 }
+
+/* Basic information */
 #body-container #body #content .profile-div #profile-info{
-    padding-top: 25px;
-    /* border: 1px solid rgba(0, 0, 0, 0.3); */
-    border-top: 1px solid rgba(0, 0, 0, 0.3);
-    border-bottom: 1px solid rgba(0, 0, 0, 0.3);
-    /* border-radius: 5px; */
     display: grid;
-    /* grid-template-columns: 0.5fr 2fr 0.5fr 2fr; */
-    grid-template-columns: 90px 300px 90px 300px;
-    grid-template-rows: 35px 35px 35px;
-    grid-row-gap: 10px;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 35px;
+    grid-row-gap: 5px;
     grid-column-gap: 5px;
     grid-area: profile-info;
+    /* border: 1px solid red; */
 }
 
 /* Profile information values */
@@ -351,27 +373,20 @@ body{
     background-color: rgba(245,245,245, 1);
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
 }
 
-/* profile picture */
-#body-container #body #content .profile-div #profile-picture{
-    border-radius: 110px;
-    border: 1px solid rgba(0, 0, 0, 0.3);
-    background-image: url("../img/man.jpg");
-    background-size: cover;
-    grid-area: profile-pic; 
-}
 
 /* information label */
 #body-container #body #content .profile-div #profile-info .info-label{
     display: flex;
-    flex-direction: column-reverse;
-    align-items: flex-end;
+    flex-direction: row;
+    align-items: center;
     font-weight: bold;
     font-size: 14px;
-    /* border: 1px solid black; */
+    /* border: 1px solid brown; */
 }
 
 /* profile information heading */
@@ -379,20 +394,84 @@ body{
     padding-top: 5px;
     color: rgba(0, 0, 0, 0.5);
     text-align: center;
-    font-size: 28px;
+    font-size: 22px;
     font-weight: bold;
-    /* border: 1px solid black; */
     grid-area: profile-info-head;
 }
-/* The profile picture heading */
-#body-container #body #content .profile-div #profile-pic-heading{
-    grid-area: pic-heading;
 
-}
+
 /* The profile information heading */
 #body-container #body #content .profile-div #profile-info-head{
     grid-area: info-heading;
+    background-color: white;
+    margin: 5px 20px 5px 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding-left: 10px;
 }
+
+/* The profile stats heading */
+#body-container #body #content .profile-div #profile-stats{
+    grid-area: stats;
+    background-color: white;
+    margin: 5px 20px 5px 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding-left: 10px;
+    color:rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* status container */
+#body-container #body #content .profile-div #info-stats-container{
+    grid-area: stats-info-container;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "status-info";
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 20px 5px 20px;
+}
+
+/* status information */
+#body-container #body #content .profile-div #profile-info-stats{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 35px;
+    grid-row-gap: 5px;
+    grid-column-gap: 5px;
+    grid-area: status-info;
+}
+
+/* status information values */
+#body-container #body #content .profile-div #profile-info-stats .info-value{
+    background-color: rgba(245,245,245, 1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+}
+
+
+/* status information label */
+#body-container #body #content .profile-div #profile-info-stats .info-label{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
 #body-container #body #content .profile-div .profile-info-sub-heading{
     font-size: 21px;
     font-weight: bold;
@@ -401,8 +480,149 @@ body{
     justify-content: center;
     align-items: center;
     color: rgba(0, 0, 0, 0.5);
-    /* border: 1px solid black; */
 }
 #body-container #body #content #questions-div{
     display: block;
+}
+
+/* ======================================================================
+                              MEDIA QUERIES
+ ========================================================================= */
+
+@media (min-width: 768px){
+
+    /* Body div */
+    #body-container #body{
+        grid-template-columns: 0.1fr 1fr;
+        grid-column-gap: 5px;
+        grid-template-areas:
+        "leftbar contentbody"
+        "leftbar contentbody";
+    }
+
+    /* Menu items */
+    #body-container #body #left-bar #menu-items{
+        width: 148px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-rows: 20px;
+        grid-row-gap: 10px;
+        margin-top: 12px;
+        margin-right: 0;
+        padding: 0px 5px 0px 0px;
+        margin: 7px 8px 0px 5px;
+    }
+
+    /* Active menu button */
+    #body-container #body #left-bar #menu-items .active{
+        border-top: 1px solid rgba(173, 216, 230, 1);
+        border-bottom: 1px solid rgba(173, 216, 230, 1);
+        border-right:4px solid rgba(0, 0, 255, 0.8);
+        background-color: rgba(173, 216, 230, 0.1);
+    }
+
+    /* The update form div */
+    #body-container #body #content #update-div #form-div{
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-areas: 
+        "update-form-div update-form-div update-form-div";
+        margin: 5px 50px 5px 50px;
+        /* border: 1px solid red; */
+    }
+
+    /* Update heading */
+    #body-container #body #content #update-div h3{
+        color: rgba(0, 0, 0, 0.7);
+        text-align: center;
+        font-size: 20px;
+        background-color: white;
+        margin: 5px 50px 5px 50px;
+        padding: 5px 0px 5px 0px;
+        border-radius: 10px;
+    }
+    /* The update form element*/
+    #body-container #body #content #update-div #update-form{
+        grid-template-columns: 0.5fr 2fr 0.5fr 2fr;
+        grid-auto-rows: 30px;
+        grid-row-gap: 10px;
+        grid-column-gap: 5px;
+        grid-template-areas: 
+        "usernamelabel usernamebox emaillabel emailbox"
+        "rolelabel rolebox . imagebox"
+        ". . . updatebutton";
+        /* border: 1px solid green; */
+    }
+
+    /* update form labels */
+    #body-container #body #content #update-div #update-form label{
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        font-size: 13px;
+    }
+
+    /* profile information heading */
+    #body-container #body #content .profile-div #profile-info-heading{
+        font-size: 28px;
+    }
+
+    /* Basic information container */
+    #body-container #body #content .profile-div #profile-info{
+        grid-template-columns: 1fr 2fr 1fr 2fr;
+        grid-template-rows: 35px 35px;
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+        grid-area: profile-info;
+    }
+
+    /* information label */
+    #body-container #body #content .profile-div #profile-info .info-label{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    /* Profile information values */
+    #body-container #body #content .profile-div #profile-info .info-value{
+        background-color: rgba(245,245,245, 1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+    }
+
+    /* status information */
+    #body-container #body #content .profile-div #profile-info-stats{
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr 2fr;
+        grid-template-rows: 35px 35px;
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+        grid-area: status-info;
+    }
+
+    /* status information values */
+    #body-container #body #content .profile-div #profile-info-stats .info-value{
+        background-color: rgba(245,245,245, 1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+    }
+
+
+    /* status information label */
+    #body-container #body #content .profile-div #profile-info-stats .info-label{
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: start;
+        align-items: center;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
 }
