@@ -122,42 +122,42 @@ def signup():
                     displayUser.update(
                         {
                             'userId': newUser['userid'],'fullname': newUser['fullname'],
-                            'email': newUser['email'], 'role': newUser['roles'],
-                            'verified': newUser['emailverified']
+                            'email': newUser['email'], 'role': newUser['roles']   
                         }
                     )
                     
+                    # 'verified': newUser['emailverified']
                     # Sends an email to verify the email address
-                    @copy_current_request_context
-                    def send_email_verification(secret_key, user, current_app):
-                        ''' Sends a mail to verify email'''
+                    # @copy_current_request_context
+                    # def send_email_verification(secret_key, user, current_app):
+                    #     ''' Sends a mail to verify email'''
 
                         # initialise extension
-                        mail = Mail(current_app)
+                        # mail = Mail(current_app)
 
-                        token = users.get_verify_email_token(user['userid'], secret_key)
+                        # token = users.get_verify_email_token(user['userid'], secret_key)
 
                         # Email message
-                        email_message = Message(
-                            'Verify email',
-                            sender='noreply@demo.com',
-                            recipients=[user['email']]
-                        )
+                        # email_message = Message(
+                        #     'Verify email',
+                        #     sender='noreply@demo.com',
+                        #     recipients=[user['email']]
+                        # )
 
                         # Email body
-                        email_message.body = 'Visit link to verify email: {} If you did not make this request please ignore this and no changes will be made'.format(url_for('signin.verify_email', token=token, _external=True))
+                        # email_message.body = 'Visit link to verify email: {} If you did not make this request please ignore this and no changes will be made'.format(url_for('signin.verify_email', token=token, _external=True))
                     
-                        mail.send(email_message)
+                        # mail.send(email_message)
                     
                     # A thread to send an email
-                    send_email_thread = threading.Thread(target=send_email_verification, args=[current_app.config['SECRET_KEY'], newUser, current_app])
+                    # send_email_thread = threading.Thread(target=send_email_verification, args=[current_app.config['SECRET_KEY'], newUser, current_app])
 
                     # Starts the thread
-                    send_email_thread.start()
+                    # send_email_thread.start()
 
-                    if 'x-access-token' in session:
+                    # if 'x-access-token' in session:
                         # removes x-access-token from the session dictionary
-                        session.pop('x-access-token', None)
+                        # session.pop('x-access-token', None)
 
                     return jsonify({'status': 201, 'user': displayUser}), 201        
     

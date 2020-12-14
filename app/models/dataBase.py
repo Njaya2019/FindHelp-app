@@ -44,9 +44,6 @@ class db():
             """CREATE TABLE IF NOT EXISTS comments(commentid SERIAL PRIMARY KEY, comment VARCHAR(300) NOT NULL, answerid INT REFERENCES answers(answerid) ON DELETE CASCADE,
                userid INT REFERENCES users(userid) ON DELETE CASCADE,timecommented TIMESTAMPTZ)
             """,
-            """ALTER TABLE users ADD COLUMN emailverified BOOLEAN  NOT NULL DEFAULT false
-            """
-
            )
         try:
             con=con_cur[0]

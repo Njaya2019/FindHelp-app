@@ -27,7 +27,6 @@ class TestSignin():
         """ Tests if email and password are valid strings """
         response=client.post("/signin",data=dict(email="njayaandrew@gmail.com", password="abcd"), content_type="multipart/form-data")
         data=json.loads(response.data)
-        print(data)
         assert response.status_code==401
         assert data["error"] == "Wrong password"
     

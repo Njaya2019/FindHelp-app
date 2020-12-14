@@ -12,6 +12,7 @@ class ProductionConfig(Config):
     SEND_FILE_MAX_AGE_DEFAULT = 0
     UPLOAD_FOLDER = "static/img"
     SECRET_KEY = b'_5#y2L"F4Q8z\n\xec]/'
+    DATABASE_URI = os.getenv('DATABASE_URL')
 
 
 class DevelopmentConfig(Config):
@@ -26,6 +27,7 @@ class DevelopmentConfig(Config):
     MAIL_USE_TLS = True
     MAIL_USERNAME = os.getenv('EMAIL')
     MAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
+    DATABASE_URI = os.getenv('DATABASE_URL')
 
 class TestingConfig(Config):
     DEBUG = True
