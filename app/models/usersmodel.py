@@ -101,6 +101,52 @@ class users():
         except Exception as err:
 
             print(err)
+
+    @staticmethod
+    def update_user(con_cur, userid, fullname, email, roles):
+        '''
+            This method will update the user's data.
+            userid -> the user to update his/her information.
+            fullname, email, roles -> the information to be updated
+        '''
+        try:
+
+            con = con_cur[0]
+
+            cur = con_cur[1]
+
+            user_sql = "SELECT * FROM users WHERE userid=%s"
+
+            cur.execute(user_sql, (userid,))
+            
+            user = cur.fetchone()
+
+            # Checks if the user exists
+            if user:
+                    
+                # SQL to update the user
+                update_user_sql = "UPDATE users SET fullname=%s, email=%s, roles=%s WHERE userid=%s RETURNING userid, email, fullname"
+                    
+                userData = (fullname, email, roles, userid,)
+
+                cur.execute(update_user_sql, userData)
+
+                # saves the update
+                con.commit()
+
+                # gets the updated user data
+                updated_user_data = cur.fetchone()
+
+                return updated_user_data
+
+            else:
+
+                # the user dosen't exist
+                return 'The user you are updating dosen\'t exist'
+
+        except Exception as err:
+
+            print(err)
     
     @staticmethod
     def update_email_verification(con_cur, userid):

@@ -507,3 +507,118 @@ def verify_email(token):
             ), 400
 
     return render_template('verifyemail.html')
+
+# Updates user's information
+@signin.route('/users/<int:userid>/edit', methods=['PUT'])
+@token_required
+def edit_user_information(userid):
+    '''
+       userid -> the id of the user whose information,
+       is to be edited.
+    '''
+
+    # gets the database connection
+    con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+
+    # Gets the data from the form
+    userData = request.form.to_dict()
+
+    # Checks if the values are empty
+    dataAvailable = jsonvalues.emptyValues(**userData)
+
+    # Checks the form's key
+    keysAvailable = jsonvalues.jsonKeys(**userData)
+
+    requiredKeys = ('fullname', 'email', 'role')
+
+    # checks the required keys in the form
+    isvalidKey = jsonvalues.validKeys(*requiredKeys, **userData)
+
+    if not userData['fullname'] or not userData['email'] or not userData['role']:
+
+        return jsonify(
+            {
+                'status': 400, 
+                'error': 'Please provide values for fullname, email and role'
+            }
+        ), 400
+    elif not keysAvailable:
+
+        return jsonify(
+            {
+                'status': 400,
+                'error': 'Please provide fullname, email and role'
+            }
+        ), 400
+    elif not isvalidKey:
+
+            return jsonify(
+                {
+                    'status': 400,
+                    'error': 'please provide a valid fullname, email and role'
+                }  
+            ), 400
+    else:
+
+        # Checks if the fullname is a string
+        userDataStrings = (userData['fullname'])
+
+        isString = regularExValidation.validAlphabetName(*userDataStrings)
+
+        # checks for space characters in the values
+        spaceUserDataStrings = (
+            userData['fullname'],
+            userData['email'],
+            userData['role']
+        )
+
+        spaceCharacters = jsonvalues.absoluteSpaceCharacters(*spaceUserDataStrings)
+
+        if spaceCharacters:
+
+            return jsonify(
+                {
+                    'status': 400,
+                    'error': 'The user\'s fullname, email and role values can not be space characters'
+                }
+                ), 400
+        elif not isString:
+
+            return jsonify(
+                {
+                    'status': 400,
+                    'error': 'Please provide a string value for the fullname'
+                }
+            ), 400
+        else:
+
+            # updates the user
+            updated_user = users.update_user(
+                con_cur, userid,
+                userData['fullname'],
+                userData['email'],
+                userData['role']
+            )
+
+            # user successfully updated
+            if type(updated_user) != str:
+
+                return jsonify(
+                    {
+                        'status': 200,
+                        'updated_user': updated_user
+                    }
+                ), 200
+            
+            else:
+                # update failed
+                return jsonify(
+                    {
+                        'status': 400,
+                        'updated_user': updated_user
+                    }
+                ), 400
+            
+
+
+    

@@ -358,7 +358,14 @@ def home_view_questions(current_user_id):
 
         user_fullname = users.get_user_fullname(con_cur, current_user_id)
 
-        return jsonify({'fullname': user_fullname['fullname']})
+        return jsonify(
+            {
+                'fullname': user_fullname['fullname'],
+                'userid': user_fullname['userid'],
+                'email': user_fullname['email'],
+                'role': user_fullname['roles']
+            }
+        )
 
     return render_template('questions.html')
 
@@ -389,9 +396,12 @@ def mark_an_correct_answer(current_user_id, questionid, answerid):
         marked_correct = question.mark_answer_correct(
             con_cur, current_user_id, questionid, answerid
         )
+        
         # returns answer marked correct successfully
         if marked_correct == 'marked correct':
+
             return jsonify({'status':200, 'correct': True}), 200
+
         else:
             # returns if the question, answer or user wasn't found
             return jsonify(
