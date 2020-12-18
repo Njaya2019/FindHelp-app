@@ -533,8 +533,18 @@ body{
     border-radius: 50%;
     border-top-color: rgba(60, 179, 113, 0.6);
     border-left-color:  rgba(60, 179, 113, 0.6);
-    animation: loginspin 1s infinite ease-in;
+    animation: info-spinner 1s infinite ease-in;
  }
+
+ @keyframes info-spinner{
+    0%{
+       transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+
+}
 
 /* ======================================================================
                               MEDIA QUERIES
