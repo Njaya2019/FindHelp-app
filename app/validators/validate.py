@@ -46,7 +46,7 @@ class regularExValidation():
         for string in strings:
             # If the whole string matches this regular expression, return a corresponding match object. Return None if the string does not match the pattern
             validAlph = pattern.search(string)
-            print(validAlph)
+            # print(validAlph)
             if not validAlph:
                 return False
         return True
@@ -54,7 +54,8 @@ class regularExValidation():
     @staticmethod
     def validEmail(email):
         ''' A method which checks if the email is valid '''
-        pattern = re.compile(r'[a-zA-Z0-9-]+@[a-zA-Z]+\.[a-z]{3}')
+        # pattern = re.compile(r'[a-zA-Z0-9-]+@[a-zA-Z]+\.[a-z]{3}')
+        pattern = re.compile(r'[\S]+@[a-zA-Z]+\.[a-z]{3}')
         matchEmail = pattern.fullmatch(email)
         if matchEmail:
             return True

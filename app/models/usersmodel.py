@@ -125,7 +125,7 @@ class users():
             if user:
                     
                 # SQL to update the user
-                update_user_sql = "UPDATE users SET fullname=%s, email=%s, roles=%s WHERE userid=%s RETURNING userid, email, fullname"
+                update_user_sql = "UPDATE users SET fullname=%s, email=%s, roles=%s WHERE userid=%s RETURNING userid, email, fullname, roles"
                     
                 userData = (fullname, email, roles, userid,)
 
@@ -216,7 +216,7 @@ class users():
 
             cur = con_cur[1]
 
-            fullname_sql = "SELECT userid, fullname FROM users WHERE userid=%s"
+            fullname_sql = "SELECT userid, fullname, email, roles FROM users WHERE userid=%s"
 
             cur.execute(fullname_sql, (userid,))
 
@@ -343,6 +343,38 @@ class users():
             userdata = cur.fetchone()
 
             return userdata
+
+        except Exception as error:
+
+            print(error)
+    
+    @staticmethod
+    def get_user_status(con_cur, userid):
+        '''
+            Takes one parameter the userid and returns a breif report of the user.
+        '''
+        
+        try:
+
+            con = con_cur[0]
+
+            cur = con_cur[1]
+
+            get_report_sql = "SELECT users.userid, count(questions.questionid) questioncount, answers.answerscount, correct.correctcount FROM users LEFT JOIN questions ON users.userid=questions.userid LEFT JOIN (SELECT users.userid, count(answers.answerid) answerscount FROM users LEFT JOIN answers ON users.userid=answers.userid GROUP BY users.userid) answers ON users.userid=answers.userid LEFT JOIN (SELECT users.userid, sum(CASE WHEN answers.markedcorrect='yes' THEN 1 ELSE 0 END) correctcount FROM users LEFT JOIN answers ON users.userid=answers.userid GROUP BY users.userid) correct ON users.userid=correct.userid WHERE users.userid=%s GROUP BY users.userid, answers.answerscount, correct.correctcount"
+
+            userData = (userid,)
+
+            cur.execute(get_report_sql, userData)
+
+            userreport = cur.fetchone()
+
+            if userreport:
+
+                return userreport
+
+            else:
+
+                return 'The user you getting report from doesn\'t exist' 
 
         except Exception as error:
 

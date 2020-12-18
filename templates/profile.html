@@ -41,16 +41,19 @@
                         <div id="left-div"></div>
                         <div id="right-div"></div>
                         <div id="update-form-div">
-                            <form action="#" method="post" id="update-form">
-                                <!-- username -->
+                            <div id="error">
+                                This an error
+                            </div>
+                            <form  id="update-form">
+                                <!-- Fullname -->
                                 <label for="username" id="username-label">Fullname:</label>
-                                <input type="text" name="username" id="username">
+                                <input type="text" name="fullname" id="username">
                                 <!-- Email -->
                                 <label for="email" id="email-label">Email:</label>
                                 <input type="text" name="email" id="email">
                                 <!-- Role -->
                                 <label for="role" id="role-label">Role:</label>
-                                <select id="role">
+                                <select id="role" name="role">
                                     <option value=""></option>
                                     <option value="false">user</option>
                                     <option value="true">Moderate user</option>
@@ -60,7 +63,7 @@
                                     <label for="image" id="image-label">
                                         <p>Upload image</p> 
                                     </label>
-                                    <input type="file" name="image" id="image">
+                                    <input type="file" name="image" id="image" disabled>
                                 </div>
                                 <!-- submit button -->
                                 <input type="submit" value="Update" id="update-button">
@@ -84,11 +87,11 @@
                         <div id="info-container">
                             <div id="profile-info">
                                 <label for="" class="info-label">Fullname:</label>
-                                <label for="" class="info-value">Andrew Njaya Odhiambo</label>
+                                <label for="" class="info-value"></label>
                                 <label for="" class="info-label">Email:</label>
-                                <label for="" class="info-value">njayaandrew@gmail.com</label>
+                                <label for="" class="info-value"></label>
                                 <label for="" class="info-label">Role:</label>
-                                <label for="" class="info-value">Moderate user</label>
+                                <label for="" class="info-value"></label>
                             </div>
                         </div>
                         <!-- Stats -->
@@ -98,11 +101,11 @@
                         <div id="info-stats-container">
                             <div id="profile-info-stats">
                                 <label for="" class="info-label">Questions:</label>
-                                <label for="" class="info-value">0</label>
+                                <label for="" class="info-value questionscoount">0</label>
                                 <label for="" class="info-label">Answers:</label>
-                                <label for="" class="info-value">0</label>
+                                <label for="" class="info-value answerscoount">0</label>
                                 <label for="" class="info-label">Correct answers:</label>
-                                <label for="" class="info-value">0</label>
+                                <label for="" class="info-value correctanswerscoount">0</label>
                             </div>
                         </div>
                     </div>
@@ -116,6 +119,12 @@
 
             </div>
             <!-- End of content -->
+            <!-- Loading circle -->
+           <div id="loader">
+                <div class="loading">
+            
+                </div>
+            </div>
         </div>
     </div>
 <script src="{{ url_for('static', filename='js/profile.js' ) }}"></script> 

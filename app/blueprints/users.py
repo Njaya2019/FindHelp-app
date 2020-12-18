@@ -116,7 +116,13 @@ def signup():
 
                 elif not validBoolRole:
 
-                    return jsonify({"status": 400, "error": "Please provide a valid boolean role"}), 400
+                    return jsonify(
+                        {
+                            "status": 400,
+                            "error": "Please provide a valid boolean role"
+                        }
+                    ), 400
+
                 else:
                     displayUser = {}
                     displayUser.update(
@@ -509,9 +515,9 @@ def verify_email(token):
     return render_template('verifyemail.html')
 
 # Updates user's information
-@signin.route('/users/<int:userid>/edit', methods=['PUT'])
+@signin.route('/users/edit', methods=['PUT'])
 @token_required
-def edit_user_information(userid):
+def edit_user_information(current_user_id):
     '''
        userid -> the id of the user whose information,
        is to be edited.
@@ -534,15 +540,7 @@ def edit_user_information(userid):
     # checks the required keys in the form
     isvalidKey = jsonvalues.validKeys(*requiredKeys, **userData)
 
-    if not userData['fullname'] or not userData['email'] or not userData['role']:
-
-        return jsonify(
-            {
-                'status': 400, 
-                'error': 'Please provide values for fullname, email and role'
-            }
-        ), 400
-    elif not keysAvailable:
+    if not keysAvailable:
 
         return jsonify(
             {
@@ -560,6 +558,15 @@ def edit_user_information(userid):
             ), 400
     else:
 
+        if not userData['fullname'] or not userData['email'] or not userData['role']:
+
+            return jsonify(
+                {
+                    'status': 400, 
+                    'error': 'Please provide values for fullname, email and role'
+                }
+            ), 400
+        
         # Checks if the fullname is a string
         userDataStrings = (userData['fullname'])
 
@@ -573,6 +580,14 @@ def edit_user_information(userid):
         )
 
         spaceCharacters = jsonvalues.absoluteSpaceCharacters(*spaceUserDataStrings)
+
+        # Checks if the role value is an accepted boolean
+
+        validBoolRole = jsonvalues.validRole(userData["role"])
+
+        # Checks if it's a valid email address
+
+        validEmail = regularExValidation.validEmail(userData['email'])
 
         if spaceCharacters:
 
@@ -590,11 +605,27 @@ def edit_user_information(userid):
                     'error': 'Please provide a string value for the fullname'
                 }
             ), 400
+        elif not validBoolRole:
+    
+            return jsonify(
+                {
+                    "status": 400,
+                    "error": "Please provide a valid boolean role"
+                }
+            ), 400
+        elif not validEmail:
+    
+            return jsonify(
+                {
+                    "status": 400, "error": "Please provide a valid email"
+                }
+            ), 400
+
         else:
 
             # updates the user
             updated_user = users.update_user(
-                con_cur, userid,
+                con_cur, current_user_id,
                 userData['fullname'],
                 userData['email'],
                 userData['role']
@@ -603,10 +634,16 @@ def edit_user_information(userid):
             # user successfully updated
             if type(updated_user) != str:
 
+                display_updated_user = {
+                    'userid': updated_user['userid'],
+                    'email': updated_user['email'],
+                    'role': updated_user['roles'],
+                    'fullname': updated_user['fullname']
+                }
                 return jsonify(
                     {
                         'status': 200,
-                        'updated_user': updated_user
+                        'updated_user': display_updated_user
                     }
                 ), 200
             
@@ -618,7 +655,34 @@ def edit_user_information(userid):
                         'updated_user': updated_user
                     }
                 ), 400
-            
 
 
+@signin.route('/users/status', methods=['GET'])
+@token_required
+def show_user_status(current_user_id):
+    '''
+        An endpoint that gives a user's report.
+        userid parameter-> used to query the user's report
+    '''
+
+    # gets the database connection
+    con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
+
+
+    report = users.get_user_status(con_cur, current_user_id)
+
+    if type(report) != str:
+
+        display_report = {
+            'userid': report['userid'],
+            'questions': report['questioncount'],
+            'answers': report['answerscount'],
+            'correct_answers': report['correctcount']
+        }
+
+        return jsonify({'status': 200, 'report': display_report}), 200
     
+    else:
+
+        return jsonify({'status': 400, 'report': report}), 400
+  

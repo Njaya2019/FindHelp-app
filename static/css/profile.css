@@ -164,6 +164,15 @@ body{
     grid-area: update-form-div;
     padding-bottom: 0;
 }
+/* Error container */
+#body-container #body #content #update-div #error{
+    background-color: white;
+    color: red;
+    text-align: center;
+    margin-bottom: 5px;
+    display: none;
+}
+
 /* The update form div */
 #body-container #body #content #update-div #update-form{
     padding: 5px;
@@ -376,6 +385,7 @@ body{
     flex-direction: row;
     justify-content: start;
     align-items: center;
+    padding-left: 4px;
 }
 
 
@@ -459,6 +469,22 @@ body{
     flex-direction: row;
     justify-content: start;
     align-items: center;
+    padding-left: 4px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* gives the counts color */
+#body-container #body #content .profile-div #profile-info-stats .questionscoount{
+    color: rgba(0, 0, 255, 0.8);
+}
+
+#body-container #body #content .profile-div #profile-info-stats .answerscoount{
+    color:rgba(134, 89, 45, 1);
+}
+
+#body-container #body #content .profile-div #profile-info-stats .correctanswerscoount{
+    color:rgba(60, 179, 113, 0.6);
 }
 
 
@@ -484,6 +510,31 @@ body{
 #body-container #body #content #questions-div{
     display: block;
 }
+
+/* ==================================
+    THE LOADING CIRCLE
+====================================== */
+
+#loader{
+    display: none;
+    top: 15%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* height: 40px;
+    width: 40px; */
+    /* border: 1px solid black; */
+}
+
+#loader .loading {
+    border: 10px solid rgba(0, 0, 255, 0.5);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border-top-color: rgba(60, 179, 113, 0.6);
+    border-left-color:  rgba(60, 179, 113, 0.6);
+    animation: loginspin 1s infinite ease-in;
+ }
 
 /* ======================================================================
                               MEDIA QUERIES

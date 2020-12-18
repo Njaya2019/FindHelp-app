@@ -501,7 +501,7 @@ function get_questions(){
                     <div class="upper-section">
                         <!-- user's name -->
                         <div class="name">
-                            <a href="${base_url}/profile" class="user-name">${element.whoposted}</a>
+                            <a href="${element.is_author?base_url+'/profile':'#'}" class="user-name">${element.whoposted}</a>
                             <p>${element.timeposted}</p>
                         </div>
                         <!-- Action options -->
