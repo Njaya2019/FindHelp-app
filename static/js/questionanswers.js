@@ -3,122 +3,454 @@ document.body.addEventListener('click', clickActions);
 
 function clickActions(e){
 
-    // edit element clicked
+    
     if(e.target.classList.contains('edit-icon')){
+
+        // edit element clicked
+
         // Gets the answer tag
-        let answerParagraph = e.target.parentNode.parentNode.nextElementSibling.children[0];
+        let answerParagraph = e.target.parentNode.parentNode.nextElementSibling.children[1];
+
+        // Hides the image container
+        answerParagraph.nextElementSibling.style.display = "none";
+
         // Gets edit div's container
-        let editAnswerContainer = e.target.parentNode.parentNode.nextElementSibling.children[1];
+        let editAnswerContainer = e.target.parentNode.parentNode.nextElementSibling.children[3];
+        
         // Grabs the answer text value
-        answerOriginalValue = answerParagraph.innerHTML;
+        let answerOriginalValue = answerParagraph.innerHTML;
+
         // Gets the textarea element and set the answer value
         // in it.
-        textareaElement = editAnswerContainer.children[1].children[0];
+        let textareaElement = editAnswerContainer.children[1].children[0];
+
         textareaElement.value = answerOriginalValue;
+
         textareaElement.style.maxHeight = textareaElement.scrollHeight + 'px';
+        
+        editAnswerContainer.children[1].style.maxHeight =  editAnswerContainer.children[1].scrollHeight + 'px';
+
         // Makes the answer paragraph tag disappear. setting
         // it's height 0
         answerParagraph.style.maxHeight = 0 + 'px';
+
         // Brings up the editor container and the editor
+   
+        editAnswerContainer.children[1].style.maxHeight =  editAnswerContainer.children[1].scrollHeight + 'px';
+
         editAnswerContainer.style.maxHeight =  editAnswerContainer.scrollHeight + 'px';
+        
     }
-    // closes edit container
     else if(e.target.classList.contains('cancel-button')){
+
+        // closes edit container
+
         // gets the editor container
         editAnswerContainer = e.target.parentNode.parentNode.parentNode;
+
         // Closes the error container
-        editAnswerContainer.children[0].style.maxHeight = 0 + 'px'
+        editAnswerContainer.children[0].style.maxHeight = 0 + 'px';
+
+        // gets the image container
+        if(editAnswerContainer.previousElementSibling.children[0].getAttribute("src") != ""){
+
+            editAnswerContainer.previousElementSibling.style.display = "block";
+
+            window.scrollBy(0, -900);
+        }
+        else{
+
+            editAnswerContainer.previousElementSibling.style.display = "none";
+
+        }
         // Gets the answer paragraph container
-        answerParagraph = editAnswerContainer.previousElementSibling;
+        let answerParagraph = editAnswerContainer.previousElementSibling.previousElementSibling;
+
+        // Hides the remove answer image edit container, places back the upload button
+        if(e.target.previousElementSibling.children[0].value !== null){
+
+            e.target.previousElementSibling.children[0].value = null;
+
+            // places back the upload button
+            e.target.previousElementSibling.children[1].innerHTML = `
+            <div class="edit-answer-upload-image">
+                <img src="${base_url}/static/img/upload.png" alt="answer image" srcset="">
+            </div>  Choose...`;
+
+            e.target.previousElementSibling.previousElementSibling.style.display = 'none';
+
+        }
+
         // Closes the editor container
-        editAnswerContainer.style.maxHeight = null;
+        editAnswerContainer.style.maxHeight = 0 + 'px';
         // Brings up the answer paragraph
         answerParagraph.style.maxHeight = answerParagraph.scrollHeight + 'px';
+        // Scrolls the window vertically up a bit
+        // window.scrollBy(0, -200);
     }
-    // displays delete modal
+    else if(e.target.classList.contains('edit-comment')){
+
+        // Brings up the comment editing form
+
+        let userContainer = e.target.parentNode;
+
+        // gets the comment form container
+        let commentContainer = e.target.parentNode.previousElementSibling;
+
+        // grabs the text comment
+        let comment = e.target.parentNode.previousElementSibling.innerHTML;
+
+        // gets the comment
+        let editcommentForm = e.target.parentNode.parentNode.children[3];
+
+        // Adds the comment to the input text box for editing
+        editcommentForm.children[1].children[0].value = comment;
+
+        // closes the comment author's container author
+        userContainer.style.display = 'none';
+
+        // closes the comment container
+        commentContainer.style.display = 'none';
+
+        // dispalys the comment form to the user
+        editcommentForm.style.display = 'grid';
+
+    }
+    else if(e.target.classList.contains('edit-comment-cancel')){
+
+        // Closes editing comment container
+
+        // gets the comment form container
+        let form = e.target.parentNode.parentNode;
+
+        // gets the comment author's container author
+        let userContainer = form.previousElementSibling;
+
+        // gets comment container
+        let commentContainer = userContainer.previousElementSibling;
+
+        // Displays the comment's author container
+        userContainer.style.display = 'flex';
+
+        // displays back the original comment container
+        commentContainer.style.display = 'block';
+
+        // closes the editing form
+        form.style.display = 'none';
+    }
+    else if(e.target.classList.contains('delete-comment')){
+
+        // Brings up confirm delete comment modal
+        let deleteCommentModalContainer = e.target.parentNode.parentNode.children[4];
+
+        deleteCommentModalContainer.style.display = 'block';
+
+    }
+    else if(e.target.classList.contains('confirm-delete-comment-background')){
+
+        // Makes the confirm delete modal to disappear
+        e.target.style.display = 'none';
+
+    }
+    else if(e.target.classList.contains('delete-comment-cancel')){
+
+        // Closes the confirm delete comment modal when the cancel button is
+        // clicked
+        e.target.parentNode.parentNode.parentNode.style.display = 'none';
+
+    }
     else if(e.target.classList.contains('delete-icon')){
-        let deleteModal = e.target.parentNode.parentNode.parentNode.children[2].children[2];
+
+        // displays delete modal
+        let deleteModal = e.target.parentNode.parentNode.parentNode.children[2].children[4];
+
         deleteModal.style.display = "block";
     }
-    // closes delete modal, background element
     else if(e.target.classList.contains('delete-modal')){
+
+        // closes delete modal, background element
         e.target.style.display = 'none';
+
     }
-    // closes delete modal, cancel button
     else if(e.target.classList.contains('delete-answer-cancel')){
+
+        // closes delete modal, cancel button
         e.target.parentNode.parentNode.parentNode.style.display = 'none';
+
     }
-    // Vote up or down arrows clicked
     else if(e.target.classList.contains('arrow-up') || e.target.classList.contains('arrow-down')){
+
+        // Vote up or down arrows clicked
         if (e.target.classList.contains('arrow-up')){
-            // console.log("Vote up was clicked");
+
+            // grabs the answer id
             let upvote_answerid = e.target.getAttribute("data-up-answerid");
             
             // Changes the answer id string to an integer
             let answerid = parseInt(upvote_answerid);
-            // console.log(typeof answerid);
+
+            // Calls the the function to vote up an answer
             voteForAnswer(e, 'upvote', answerid, questionIdInt);
 
         }
         else{
-            // console.log("Vote down was clicked")
+
+             // grabs the answer id
             let downvote_answerid = e.target.getAttribute("data-down-answerid");
 
             // Changes the answer id string to an integer
             let answerid = parseInt(downvote_answerid);
-            // console.log(typeof answerid);
+
+            // Calls the the function to vote down an answer
             voteForAnswer(e, 'downvote', answerid, questionIdInt);
             
         }
     }
+    else if(e.target.classList.contains('answer-image-btn')){
+        // Upload answer image buttonclicked
+        // uploads the answer picture and displays its name on the button.
+        let labelTag = e.target.nextElementSibling;
+
+        e.target.addEventListener('change', function(event){
+
+            // splits the string with a back slash and returns the last element
+            // of the array which is the image's name.
+            // This returns the last element of the array whicj is the name of the image.
+            let imageName = event.target.value.split("\\").pop();
+
+            if (imageName){
+
+                labelTag.innerHTML = imageName;
+
+            }
+
+        });
+
+    }
+    else if(e.target.classList.contains('correct')){
+        // Gets the answer and the question id
+        let answerid = parseInt(e.target.getAttribute("data-mark-correct-answer"));
+
+        let questionid = parseInt(e.target.getAttribute("data-mark-correct-question"));
+
+        mark_answer_correct(e, questionid, answerid);
+
+    }
+    else if(e.target.classList.contains('edit-answer-image-btn')){
+
+        // gets label element
+        let labelTag =e.target.nextElementSibling;
+
+        e.target.addEventListener('change', function(event){
+
+            // displays the remove image container
+             e.target.parentNode.previousElementSibling.style.display = 'inline';
+
+            // splits the string with a back slash and returns the last element
+            // of the array which is the image's name.
+            // This returns the last element of the array whicj is the name of the image.
+            let imageName = event.target.value.split("\\").pop();
+
+            if (imageName){
+
+                labelTag.innerHTML = imageName;
+
+            }
+
+        });
+    }
+    else if(e.target.classList.contains('remove-edited-answer-image')){
+        // makes the edit upload input button value to null
+        e.target.nextElementSibling.children[0].value = null;
+
+        e.target.nextElementSibling.children[1].innerHTML = `
+        <div class="edit-answer-upload-image">
+            <img src="${base_url}/static/img/upload.png" alt="answer image" srcset="">
+        </div>  Choose...`;
+
+        // Hides the remove image container
+        e.target.style.display = 'none';
+
+    }
     else{
         
     }
+}
+
+
+// Gets the loading spinner parent container
+let spinner = document.getElementById('loader');
+
+// This function starts the loader spinner
+
+function start_spinner(){
+
+    // Starts the loader spinner
+    spinner.style.display = 'block';
+
+}
+
+// This function stops the loader spinner
+function stop_spinner(){
+
+    // Starts the loader spinner
+    spinner.style.display = 'none';
 
 }
 
 
-//====== Creates an answers line seperator =======\\
+function getImageName(pevent){
+
+    // Upload answer image buttonclicked
+    // uploads the answer picture and displays its name on the button.
+    let labelTag =pevent.target.nextElementSibling;
+
+    pevent.target.addEventListener('change', function(event){
+
+        // splits the string with a back slash and returns the last element
+        // of the array which is the image's name.
+        // This returns the last element of the array which is the name of the image.
+        let imageName = event.target.value.split("\\").pop();
+
+        if (imageName){
+
+            labelTag.innerHTML = imageName;
+
+        }
+
+    });
+}
+
+//====== Creates an answers line seperator ====================
 // selecting answers' container
 let answers = document.querySelectorAll('#container #body-container #answers-container .user-answer');
 
 if (answers){
+
     for(let i=0; i<answers.length; i++){
+
     // Creatting answers separator
     let createDivAnswerSeparator = document.createElement("div");
+
     // Adding class to the new div element
     createDivAnswerSeparator.className = 'answers-separator';
+
     answers[i].insertAdjacentElement("afterend", createDivAnswerSeparator);
+
     }
 }
 
-//====== A class that has all submit functions =======\\
+
+
+//====== A class that has all submit functions ================
 class SubmitFunctions{
 
     static submitEditedAnswer(e, question_id){
+        
+        // Starts loader
+        let returnedSpinner = spinner.parentElement.removeChild(spinner);
+
+        e.target.parentNode.parentNode.parentNode.appendChild(returnedSpinner);
+
+        // positions the loader
+        returnedSpinner.style.top = 60 + 'px';
+
+        returnedSpinner.style.left = 100 + 'px';
+
+        // reduces loading spin diameter
+        returnedSpinner.children[0].style.height = 35 + 'px';
+
+        returnedSpinner.children[0].style.width = 35 + 'px';
+
+        start_spinner();
 
         // gets the answer id
         let answer_id = e.target.getAttribute('data-edit-answerid');
 
         // Grabs form data to be sent to the server by an ajax request
         let editanswerform = e.target;
+
         let editedanswerData = new FormData(editanswerform);
 
         // initialises ajax request object
         let xhr = new XMLHttpRequest();
 
         // opens the request
-        xhr.open('PUT', `http://127.0.0.1:5000/answers/${answer_id}`)
+        xhr.open('PUT', `${base_url}/answers/${answer_id}`)
 
         // gets the response from the server
         xhr.onload = function(onloadevent){
             
             // successfully edited the answer response
             if(xhr.status == 200){
-                console.log(answer_id);
-                get_question(question_id);
+
+                // stops the spinner
+                stop_spinner();
+
+                const answer_edited = JSON.parse(xhr.responseText);
+
+                // closes the editor's container
+                e.target.parentNode.style.maxHeight = 0 + 'px';
+
+                // Updates the new answer and displays it
+                e.target.parentNode.parentNode.children[1].innerHTML = answer_edited.answeredited.answerEdited;
+
+                e.target.parentNode.parentNode.children[1].style.maxHeight = e.target.parentNode.parentNode.children[1].scrollHeight + 'px';
+
+                if(answer_edited.answeredited.editedimage != 'noimagekey'){
+
+                    // checks if the edited answer has a picture and displays in
+                    // it's comtainer.
+
+                    e.target.parentNode.previousElementSibling.children[0].src = base_url+"/static/img/"+answer_edited.answeredited.editedimage;
+
+                    e.target.parentNode.previousElementSibling.style.display = "block";
+
+                    window.scrollBy(0, -900);
+
+                }
+                else{
+
+                    // Hides the answer container image if the edited answer has no
+                    // picture
+
+                    e.target.parentNode.previousElementSibling.style.display = "none";
+
+                }
+
+                // This scrolls to the container of the answer
+                e.target.parentNode.parentNode.parentNode.scrollIntoView({
+                    behaviour:'smooth'
+                });
+
+                // let falsh_container = document.getElementById("flash-messages");
+                let falsh_container = e.target.parentNode.parentNode.children[0];
+
+                // displays the flash container
+                falsh_container.style.display = 'block';
+
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                // Adds the message to the container
+                falsh_container.innerHTML = "The answer was successfully edited";
+                
+                // makes the flash container to disappear in 4 seconds
+                setTimeout(function() {
+    
+                    // makes the container to disappear
+                    falsh_container.style.display = 'none';
+
+                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                    // makes sure it's content is empty after it disappears
+                    falsh_container.innerHTML = '';
+    
+                }, 3000);
+
             }
             else{
+                // stops the loader
+                stop_spinner();
                 // response text error from server changed to javascript object
                 const error = JSON.parse(xhr.responseText);
 
@@ -160,46 +492,306 @@ class SubmitFunctions{
         xhr.send(editedanswerData);
     }
 
+    static submitComment(e, answer_id){
 
-    static submitAnswer(e){
-        // gets error div element
-        let submitAnswerErrorContainer = e.target.parentNode.previousElementSibling;
-        // Accesses the list tag to display the error
-        let editErrorTag = submitAnswerErrorContainer.children[0];
-        // if the list tag doesn't contain an error message,
-        // add one.
-        if(editErrorTag.innerHTML == ''){
-            editErrorTag.innerHTML = "Please provide correct username and password";
+        new Promise((resolve, reject)=>{
+
+        // Starts loader
+        let returnedSpinner = spinner.parentElement.removeChild(spinner);
+
+        e.target.parentNode.appendChild(returnedSpinner);
+
+        // positions the loader
+        returnedSpinner.style.top = 0 + 'px';
+
+        returnedSpinner.style.left = 50 + 'px';
+
+        // reduces loading spin diameter
+        returnedSpinner.children[0].style.height = 35 + 'px';
+
+        returnedSpinner.children[0].style.width = 35 + 'px';
+
+        start_spinner();
+
+            // Gets the form data
+            let commentFormData = new FormData(e.target);
+
+            // Initialize ajax request
+            let xhr =new XMLHttpRequest();
+
+            // open the request
+            xhr.open('POST', `${base_url}/comments/${answer_id}/add_comment`);
+
+            // Gets the response from the server
+            xhr.onload = function(onloadevent){
+                
+                if(xhr.status == 201){
+                    // successfully added the comment
+
+                    // stops loader
+                    stop_spinner();
+
+                    // resets the comment form input text
+                    e.target.reset();
+                    const comment = JSON.parse(xhr.responseText);
+                    resolve(comment);
+
+                }
+                else{
+                    // Posting a comment was unsuccessful
+
+                    // stops loader
+                    stop_spinner();
+
+                    const error = JSON.parse(xhr.responseText);
+                    reject(error);
+                }
+            }
+
+            // Sends the request
+            xhr.send(commentFormData);
+
+        }).then((comment)=>{
+
+            setTimeout(function(){
+                get_question(questionIdInt);
+            }, 2000);
+
+        }).then((comment)=>{
+
+            // Scroll to the top of page to see the message
+            e.target.parentNode.parentNode.parentNode.children[0].scrollIntoView({
+                 behavior: "smooth"
+            });
+
+        }).then(()=>{
+            // Gets the flash container
+            let falsh_container;
+            if (e.target.parentNode.parentNode.parentNode.children[0].children.length == 6){
+                falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[5];
+            }else{
+                falsh_container = e.target.parentNode.parentNode.parentNode.children[0].children[4];
+            }
+                    
+            // let falsh_container = document.getElementById("flash-messages");
+
+            // displays the flash container
+            falsh_container.style.display = 'block';
+
+            // Adds the message to the container
+            falsh_container.innerHTML = "The comment was successfully added";
+
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+            // makes the flash container to disappear in 4 seconds
+            setTimeout(function() {
+
+                // makes the container to disappear
+                falsh_container.style.display = 'none';
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+                // makes sure it's content is empty after it disappears
+                falsh_container.innerHTML = '';
+
+            }, 4000);
+        }).catch((error)=>{
+
+            // gets the error container
+            let commetErrorContainer = e.target.parentNode.previousElementSibling;
+            // gets the list (li) tag
+            let errorTag = commetErrorContainer.children[0];
+
+            // if the list tag doesn't contain an error message,
+            // adds one.
+            if(errorTag.innerHTML == ''){
+
+                errorTag.innerHTML = error.error;
+            }
+            else{
+
+                // If list tag has an error text replace it with a new one
+                errorTag.innerHTML = error.error;
+            }
+
+            // Display the error container, to display the error,
+            // message.
+            commetErrorContainer.style.maxHeight = commetErrorContainer.scrollHeight + 'px';
+
+            // makes the errors disappear in 30 seconds
+            setTimeout(function(){
+
+                // Replace the current error text with an empty string
+                errorTag.innerHTML = '';
+
+                // Makes the error container to disappear
+                commetErrorContainer.style.maxHeight = null;
+            }, 3000);
+        });
+    }
+
+    static submitEditedComment(e, comment_id){
+
+        // Starts loader
+        let returnedSpinner = spinner.parentElement.removeChild(spinner);
+
+        e.target.appendChild(returnedSpinner);
+
+        // positions the loader
+        returnedSpinner.style.top = 0 + 'px';
+
+        returnedSpinner.style.left = 50 + 'px';
+
+        // reduces loading spin diameter
+        returnedSpinner.children[0].style.height = 35 + 'px';
+
+        returnedSpinner.children[0].style.width = 35 + 'px';
+
+        start_spinner();
+
+        // Gets the form data
+        let commentEditFormData = new FormData(e.target);
+
+        // Initialize ajax request
+        let xhr =new XMLHttpRequest();
+
+        // open the request
+        xhr.open('PUT', `${base_url}/comments/${comment_id}/edit`);
+
+        // Gets the response from the server
+        xhr.onload = function(onloadevent){
+            
+            if(xhr.status == 200){
+                stop_spinner();
+                // successfully edited the comment
+
+                // resets the comment form input text
+                e.target.reset();
+
+                let comment = JSON.parse(xhr.responseText);
+
+                e.target.parentNode.children[1].innerHTML = comment.postedEditedComment.commentEdited;
+
+                // Closes the editing form
+                e.target.style.display = "none";
+
+                // Displays the comment container new comment
+                e.target.parentNode.children[1].style.display = "block";
+
+                // Displays back the comment author's name
+                e.target.parentNode.children[2].style.display = "flex";
+
+                // Gets the comment flash message container
+                let falsh_container = e.target.parentNode.children[0];
+
+                // displays the flash container
+                falsh_container.style.display = 'block';
+
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                // Adds the message to the container
+                falsh_container.innerHTML = "The comment was successfully edited";
+    
+                
+                // makes the flash container to disappear in 4 seconds
+                setTimeout(function() {
+    
+                    // makes the container to disappear
+                    falsh_container.style.display = 'none';
+
+                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                    // makes sure it's content is empty after it disappears
+                    falsh_container.innerHTML = '';
+    
+                }, 3000);
+
+            }
+            else{
+                // Stops the loader
+                stop_spinner();
+
+                // Posting a comment was unsuccessful
+                const error = JSON.parse(xhr.responseText);
+
+                // gets the error container
+                let commetErrorContainer = e.target.children[0];
+
+                // gets the list (li) tag
+                let errorTag = commetErrorContainer.children[0];
+
+                // if the list tag doesn't contain an error message,
+                // adds one.
+                if(errorTag.innerHTML == ''){
+
+                    errorTag.innerHTML = error.error;
+                }
+                else{
+
+                    // If list tag has an error text replace it with a new one
+                    errorTag.innerHTML = error.error;
+                }
+
+                // Display the error container, to display the error,
+                // message.
+                commetErrorContainer.style.maxHeight = commetErrorContainer.scrollHeight + 'px';
+
+                // makes the errors disappear in 30 seconds
+                setTimeout(function(){
+
+                    // Replace the current error text with an empty string
+                    errorTag.innerHTML = '';
+
+                    // Makes the error container to disappear
+                    commetErrorContainer.style.maxHeight = null;
+                }, 3000);
+
+            }
         }
-        else{
-            // If list tag has an error text replace it with a new one
-            editErrorTag.innerHTML = "Please fill all values to login";
-        }
-        // Display the error container, to display the error,
-        // message.
-        submitAnswerErrorContainer.style.maxHeight = submitAnswerErrorContainer.scrollHeight + 'px';
-        // makes the errors disappear in 30 seconds
-        setTimeout(function(){
-            // Replace the current error text with an empty string
-            editErrorTag.innerHTML = '';
-            // Makes the error container to disappear
-            submitAnswerErrorContainer.style.maxHeight = null;
-        }, 3000);
+        // Sends the request
+        xhr.send(commentEditFormData);
     }
 
 }
 
-//======= Performs the submit events =======\\
+
+
+
+//======= Performs the submit events ==========================
+
 document.body.addEventListener('submit', submitActions);
 
-
 function submitActions(e){
+
     if(e.target.classList.contains('submit-edited-answer-form')){
+
         // Submits an edited answer
 
         // Prevent automatic route
         e.preventDefault();
+
         SubmitFunctions.submitEditedAnswer(e, questionIdInt);
+    }
+    else if(e.target.classList.contains("add-comment-form")){
+
+        // Adding a comment
+
+        // Prevent automatic route
+        e.preventDefault();
+
+        let answerToCommentTo = e.target.getAttribute("data-comment-answerid");
+
+        SubmitFunctions.submitComment(e, answerToCommentTo);
+    }
+    else if(e.target.classList.contains("edit-comment-form")){
+
+        // Editting a comment
+
+        // Prevent automatic route
+        e.preventDefault();
+
+        let commentToEdit = e.target.getAttribute("data-edit-comment");
+
+        SubmitFunctions.submitEditedComment(e, commentToEdit);
     }
     else{
         
@@ -207,8 +799,14 @@ function submitActions(e){
 
 }
 
+
+
 // gets the URL search string, that is the path
 let currentLocation = window.location.pathname;
+
+// console.log(currentLocation);
+let base_url = window.location.origin;
+
 
 // splits the url to an array and gets question's id as a string
 let urlArray = currentLocation.split('/', 3);
@@ -216,18 +814,22 @@ let urlArray = currentLocation.split('/', 3);
 // question's id as a string
 let questionIdString = urlArray[2];
 
+
 // Changes the question id string to an integer
 let questionIdInt = parseInt(urlArray[2]);
 
 
-// A function that gets the question and all it's answers
+// ===========A function that gets the question and all it's answers=
 function get_question(questionId){
 
+    // Starts loader
+    start_spinner();
+
     // initialises the ajax request object
-    xhr = new XMLHttpRequest();
+    let xhr = new XMLHttpRequest();
 
     // Opens the request
-    xhr.open('GET', `http://127.0.0.1:5000/questions/${questionId}`);
+    xhr.open('GET', `${base_url}/questions/${questionId}`);
 
     // When the request has been processed
     xhr.onload = function (onloadevent){
@@ -235,34 +837,48 @@ function get_question(questionId){
         // the request was successful and the question was retrieved
         if(xhr.status == 200){
 
+            // stops loader
+            stop_spinner();
+
             // changes the response text to JavaScript Object
             let question = JSON.parse(xhr.responseText);
-
+           
             // variable to display question title and description
             let title_description_html = '';
 
             // gets the question object
             let questionObject = question.Question;
+
             document.querySelector('title').innerHTML = questionObject.title;
+
             title_description_html +=`
                 <div id="timeposted-section">posted: ${questionObject.timeposted}, views: 2 times</div>
                 <!-- question title -->
                 <div id="title-section">${questionObject.title}</div>
                 <!-- question description -->
                 <div id="description-section">${questionObject.description}</div>
+                <div id="posted-question-image-container">
+                    <img src="${questionObject.image==="noimagekey"?"":base_url+"/static/img/"+questionObject.image}" alt="" class="posted-question-image" id="posted-question-image">
+                </div>
+                <div id="posted-image-modal">
+                    <div>
+                        <img src="" alt="" id="image-modal">
+                    </div>
+                </div>
                 <div id="who-posted-image">
-                    <img class="posted-by-image" src="http://127.0.0.1:5000/static/img/man.jpg" alt="posted by"> <a href="#">${questionObject.whoposted}</a>
+                    <img class="posted-by-image" src="${base_url}/static/img/man.jpg" alt="posted by"> <a href="#">${questionObject.whoposted}</a>
                 </div>
             `
             document.querySelector('#title-description-container').innerHTML = title_description_html;
 
             // answers variable to display all answers in html
-            answers_html = '';
+            let answers_html = '';
 
             // Checks if the answers array is not empty
             if(questionObject.answers && questionObject.answers.length){
                 
                 questionObject.answers.forEach(function(answer){
+
                 answers_html += `
                 <div class="user-answer" data-del-answerid=${answer.answerid}>
                     <!-- answer's number -->
@@ -271,22 +887,27 @@ function get_question(questionId){
                         <div class="votes">${answer.votes}</div>
                         <div class="arrow-down" data-down-answerid=${answer.answerid}></div>
                         <div class="vote-error-container">
-                            You can not upvote an answer twice
+                        <!-- You can not upvote an answer twice -->
                         </div>
+                        ${questionObject.is_question_author || answer.marked_correct?'<div class="mark-answer-correct"><span class="correct'+`${answer.marked_correct?' activetick':''}`+'" '+'data-mark-correct-answer='+answer.answerid+' '+'data-mark-correct-question='+questionObject.questionid+'>&#10004</span></div>':''}
+                        <div class="comment-flash-container">The comment was added successfully</div>
                     </div>
                     <!-- answer header -->
                     <div class="answer-header">
                         <div class="edit-delete-icons">
-                            <span class="edit-icon">&#x270E;</span>
-                            <span class="delete-icon">&#10060;</span>
+                            ${answer.is_author?'<span class="edit-icon">&#x270E;</span><span class="delete-icon">&#10060;</span>':''}
                         </div>
                         <div class="time-posted">${answer.time}</div>
                     </div>
                     <!-- answer div -->
                     <div class="the-answer">
+                        <div class="answer-flash-message">The answer has been successfully edited</div>
                         <!-- answer on paragraph -->
                         <p>${answer.answer}</p>
                         <!-- end of paragraph answer -->
+                        <div class="uploaded-answer-image">
+                            <img class="the-uploaded-answer-image" src="${answer.answerimage==="noimagekey"?"":base_url+"/static/img/"+answer.answerimage}" alt="${answer.answerimage==="noimagekey"?"":"answer image"}">
+                        </div>
                         <!-- Form to edit an answer -->
                         <div class="edit-answer">
                             <!-- Editing answers errors -->
@@ -295,7 +916,22 @@ function get_question(questionId){
                             </div>
                             <form enctype="multipart/form-data" data-edit-answerid=${answer.answerid} class="submit-edited-answer-form">
                                 <textarea name="answer" id="" cols="30" rows="15" placeholder="Edit answer..."></textarea>
+                                <!-- Display answer image container -->
+                                <div class="edit-answer-image">
+                                    <img id="the-edited-answer-image" class="the-edited-answer-image" src="" alt="the edited answer image">
+                                </div>
+                                <!-- cancel, submit and edit image button -->
                                 <div class="cancel-submit">
+                                    <span class="remove-edited-answer-image">remove image</span>
+                                    <div class="edit-answer-image-container">
+                                        <input type="file" name="image" id="edit-answer-image-btn-${answer.answerid}" class="edit-answer-image-btn">
+                                        <label for="edit-answer-image-btn-${answer.answerid}">
+                                            <div class="edit-answer-upload-image">
+                                                <img src="${base_url}/static/img/upload.png"  alt="image" srcset="">
+                                            </div>  
+                                            Choose...
+                                        </label>
+                                    </div>
                                     <input type="button" class="cancel-button" value="cancel">
                                     <input type="submit" name="submit-edited-answer" class="submit-edited-answer" value="save">
                                 </div>
@@ -324,27 +960,95 @@ function get_question(questionId){
                     <!-- answer's footer -->
                     <div class="answer-footer">
                         <div class="name-image">
-                            <img src="http://127.0.0.1:5000/static/img/woman.jpg" alt="" srcset="">
-                            <a href='http://127.0.0.1:5000/answers/${answer.answerid}'>${answer.whoanswered}</a>
+                            <img src="${base_url}/static/img/man.jpg" alt="${answer.whoanswered}" srcset="">
+                            <a href='${base_url}/answers/${answer.answerid}'>${answer.whoanswered}</a>
                         </div>
+                    </div>
+                    <!-- Comments section-->
+                    <div class="comments">
+                        <!-- comment -->
+                        <div class="coment-section">
+                           ${answer.comments.length === 0?"":answer.comments.map(comment =>
+                            `<div class="comment">
+                                <div class="comment-flash-messages"></div>
+                                <div class="the-comment" id="the-comment-${comment.commentid}">${comment.comment}</div>
+                                <div class="user-comment">
+                                    <a href="#">${comment.userwhocommented}</a>
+                                    <img src="${base_url}/static/img/man.jpg" alt="${comment.userwhocommented}">
+                                    ${comment.is_author===true?'<p class="edit-comment">Edit</p><p class="delete-comment">Delete</p>':''}
+                                    <span>${comment.timecommented}</span> 
+                                </div>
+                                <form class="edit-comment-form" data-edit-comment=${comment.commentid}>
+                                    <div class="comment-errors">
+                                        <li></li>
+                                    </div>
+                                    <div class="edit-comment-div">
+                                        <input type="text" class="edit-comment-input" name="comment">
+                                    </div>
+                                    <div class="edit-comment-submit-div">
+                                        <input type="submit" class="edit-comment-submit" value="Save">
+                                        <input type="button" class="edit-comment-cancel" value="Cancel">
+                                    </div>
+                                </form>
+                                <div class="confirm-delete-comment-background" id="delete-comment-modal">
+                                    <!-- Confirm delete comment dialog box -->
+                                    <div class="confirm-delete-comment">
+                                        <div class="confirm-delete-comment-title">
+                                            <h4>Delete comment</h4>
+                                        </div>
+                                        <div class="confirm-delete-comment-body">
+                                            <h5>Are you sure you want to delete the comment ?</h5>
+                                        </div>
+                                        <div class="confirm-delete-comment-footer">
+                                            <input type="button" class="delete-comment-cancel" value="cancel">
+                                            <input type="button" class="delete-comment-delete" value="delete" onclick="new_delete_comment(event, ${comment.commentid})" data-delete-comment=${comment.commentid}>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>`
+                            ).join('')}
+                        </div>
+                        <div class="add-comment-errors" >
+                            <li>Please provide a comment</li>
+                        </div>
+                        <div class="add-comment">
+                            <div class="add-comment-title">Add comment:</div>
+                            <form class="add-comment-form" data-comment-answerid=${answer.answerid}>
+                                <input type="text" name="comment" class="coment-text-box">
+                                <input type="submit" name="submit-comment" class="submit-comment-button" value="Save">
+
+                            </form>
+                        </div>
+
                     </div>
                     <!-- End of votes -->
                 </div>
                 `
                 let answers_container = document.querySelector("#answers-container");
+
                 answers_container.innerHTML = answers_html;
                 });
+
             }
             else{
+
                 document.querySelector("#answers-container").innerHTML = `<p>No answers yet be the first to provide an answer</p>`;
+
                 document.querySelector("#container #body-container #answer-errors").style.maxHeight= "0px";
+
             }
 
         }
         else{
 
+            // stops the loader
+            stop_spinner();
+
             // Returns error if the question wasn't found
-            let error = JSON.parse(xhr.responseText);  
+            let notfounderror = JSON.parse(xhr.responseText);
+
+            console.log(notfounderror);
         }
     };
 
@@ -355,27 +1059,45 @@ function get_question(questionId){
 // Runs the get question function
 get_question(questionIdInt);
 
+
+// Posts an answer
 // Gets an answer's form id
-submitAnswer = document.querySelector("#submit-answer-form");
-
-
+let submitAnswer = document.querySelector("#submit-answer-form");
 function postAnswer(question_id){
 
     // A submit event to provide an answer to a question
     submitAnswer.addEventListener('submit', function(e){
+
+        // Starts loader
+        let returnedSpinner = spinner.parentElement.removeChild(spinner);
+
+        e.target.parentNode.appendChild(returnedSpinner);
+            
+        // positions the loader
+        returnedSpinner.style.top = 50 + 'px';
+
+        returnedSpinner.style.left = 50 + 'px';
+            
+        // reduces loading spin diameter
+        returnedSpinner.children[0].style.height = 35 + 'px';
+
+        returnedSpinner.children[0].style.width = 35 + 'px';
+            
+        start_spinner();
 
         // Prvents action of the form from routing automatically
         e.preventDefault();
 
         // Grabs form data to be sent to the server by an ajax request
         let answerform = e.target;
+
         let answerData = new FormData(answerform);
 
         // creates a ajax request object
-        xhr = new XMLHttpRequest();
+        let xhr = new XMLHttpRequest();
 
-        // opens the reques
-        xhr.open('POST', `http://127.0.0.1:5000/answers/${question_id}`);
+        // opens the request
+        xhr.open('POST', `${base_url}/answers/${question_id}`);
 
         // Response from the server
         xhr.onload = function (onloadevent) {
@@ -383,14 +1105,50 @@ function postAnswer(question_id){
             // Answer submited successfully
             if (xhr.status == 201){
 
+                // stops the loader
+                stop_spinner();
+
                 // changes the response text to a javascript object 
                 let answer = JSON.parse(xhr.responseText);
+
                 get_question(question_id);
 
                 // resets the form values
                 answerform.reset();
+                
+                let falsh_container = document.getElementById("flash-messages");
+
+                // displays the flash container
+                falsh_container.style.display = 'block';
+
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+    
+                // Adds the message to the container
+                falsh_container.innerHTML = "The answer was successfully added";
+    
+                // Scroll to the top of page to see the message
+                window.scroll({
+                    top: 0, 
+                    left: 0, 
+                    behavior: 'smooth' 
+                });
+
+                // makes the flash container to disappear in 4 seconds
+                setTimeout(function() {
+
+                    // makes the container to disappear
+                    falsh_container.style.display = 'none';
+
+                    falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+                    // makes sure it's content is empty after it disappears
+                    falsh_container.innerHTML = '';
+
+                }, 4000);
             }
             else{
+                // stops the spinner
+                stop_spinner();
                 // error response
                 let error = JSON.parse(xhr.responseText);
 
@@ -434,29 +1192,59 @@ function postAnswer(question_id){
     });
 }
 
+
+
 // Calls a function to post answer
 postAnswer(questionIdInt);
 
+
+
 // A function to vote for an answer
 function voteForAnswer(e, upordownvote, answerid, question_id){
+
+    // Starts loader
+    let returnedSpinner = spinner.parentElement.removeChild(spinner);
+
+    e.target.parentNode.appendChild(returnedSpinner);
+            
+    // positions the loader
+    returnedSpinner.style.top = 60 + 'px';
+
+    returnedSpinner.style.left = 30 + 'px';
+            
+    // reduces loading spin diameter
+    returnedSpinner.children[0].style.height = 30 + 'px';
+
+    returnedSpinner.children[0].style.width = 30 + 'px';
+            
+    start_spinner();
+
     // initialise ajax request object
     let xhr = new XMLHttpRequest();
 
     // Opens the request
-    xhr.open('POST', `http://127.0.0.1:5000/${upordownvote}/${answerid}/answer`);
+    xhr.open('POST', `${base_url}/${upordownvote}/${answerid}/answer`);
 
     // Response from the server
     xhr.onload = function(onloadevent){
+
         // successful vote
         if (xhr.status == 201){
+
             get_question(question_id);
+
         }
         else{
+            // stops the loader
+            stop_spinner();
+
             // Changes error response text to a javascript object
             let error = JSON.parse(this.responseText);
 
             // gets the error container
             let errorPopUpDiv = e.target.parentNode.children[3];
+
+            errorPopUpDiv.style.backgroundColor = "red";
             
             // displays the error container
             errorPopUpDiv.style.display = 'flex';
@@ -470,40 +1258,69 @@ function voteForAnswer(e, upordownvote, answerid, question_id){
                 // clears the error message in the error container
                 errorPopUpDiv.innerHTML = '';
 
+                errorPopUpDiv.style.backgroundColor = "red";
+
                 // hides the error container
                 errorPopUpDiv.style.display = 'none';
 
-            }, 3000);
+            }, 2000);
         }
     };
 
     xhr.send()
 }
 
+
+
 // A function that deletes an answer
 function delete_answer(event, answer_id, questionId){
+
+    // Starts loader
+    let returnedSpinner = spinner.parentElement.removeChild(spinner);
+
+    event.target.parentNode.parentNode.parentNode.parentNode.parentNode.previousElementSibling.appendChild(returnedSpinner);
+            
+    // positions the loader
+    returnedSpinner.style.top = 60 + 'px';
+
+    returnedSpinner.style.left = 30 + 'px';
+            
+    // reduces loading spin diameter
+    returnedSpinner.children[0].style.height = 30 + 'px';
+
+    returnedSpinner.children[0].style.width = 30 + 'px';
+    
+    start_spinner();
 
     // initialises ajax request object
     let xhr = new XMLHttpRequest();
 
     // opens the request
-    xhr.open('DELETE', `http://127.0.0.1:5000/answers/${answer_id}`);
+    xhr.open('DELETE', `${base_url}/answers/${answer_id}`);
 
     // response from the server
     xhr.onload = function(onloadevent){
 
         // answer successfully deleted
         if(xhr.status == 200){
+
+            // stops loader
+            stop_spinner();
+
             let delete_message = JSON.parse(xhr.responseText);
+           
             get_question(questionId);
-            // console.log(delete_message.message);
+
+            // gets error container
             let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
 
             // displays the flash container
-            falsh_container.style.display = 'flex';
+            falsh_container.style.display = 'block';
 
             // Adds the message to the container
             falsh_container.innerHTML = delete_message.message;
+
+            falsh_container.style.backgroundColor = "red";
 
             // Scroll to the top of page to see the message
             window.scroll({
@@ -519,6 +1336,8 @@ function delete_answer(event, answer_id, questionId){
                 // makes the container to disappear
                 falsh_container.style.display = 'none';
 
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
                 // makes sure it's content is empty after it disappears
                 falsh_container.innerHTML = '';
 
@@ -526,8 +1345,13 @@ function delete_answer(event, answer_id, questionId){
 
         }
         else if(xhr.status === 403){
+
+            // stops loader
+            stop_spinner();
+
             // changes the response text to a javascript object
             let error = JSON.parse(xhr.responseText);
+
             get_question(questionId);
         
             let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0];
@@ -564,6 +1388,8 @@ function delete_answer(event, answer_id, questionId){
 
         }
         else{
+            // stops loader
+            stop_spinner();
             // error response
             let error= JSON.parse(xhr.responseText);
             console.log(error.error);
@@ -573,3 +1399,362 @@ function delete_answer(event, answer_id, questionId){
     // sends the delete request
     xhr.send();
 }
+
+
+// A function that deletes an answer
+function delete_comment(event, comment_id){
+
+    // initialises ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // opens the request
+    xhr.open('DELETE', `${base_url}/comments/${comment_id}/delete`);
+
+    // response from the server
+    xhr.onload = function(onloadevent){
+
+        // answer successfully deleted
+        if(xhr.status == 200){
+
+            let delete_message = JSON.parse(xhr.responseText);
+
+            console.log(delete_message);
+
+            get_question(questionIdInt);
+    
+            // gets error container
+            let falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+            // let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.children[0]
+
+            // Displays the deletion successful massage
+            falsh_container.innerHTML = delete_message.message;
+
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+            falsh_container.style.display = "block";
+
+            // Scroll to the top of page to see the error
+            event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].scrollIntoView({
+                behavior: "smooth"
+            });
+  
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                falsh_container.innerHTML = "";
+
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+                falsh_container.style.display = 'none';
+
+            }, 4000); 
+
+        }
+        else{
+            // changes the response text to a javascript object
+            let error = JSON.parse(xhr.responseText);
+
+            let falsh_container = e.target.parentNode.parentNode.parentNode.parentNode.children[0];
+
+            // Displays the deletion successful massage
+
+            falsh_container.innerHTML = error.error;
+
+            falsh_container.style.backgroundColor = "rgba(255, 51, 0, 1)";
+
+            falsh_container.style.display = "block";
+
+            // Scroll to the top of page to see the error
+            window.scroll({
+                top: 0, 
+                left: 0, 
+                behavior: 'smooth' 
+            });
+
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                falsh_container.innerHTML = "";
+
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+                falsh_container.style.display = 'none';
+
+            }, 4000); 
+
+        }
+    };
+
+    // sends the delete request
+    xhr.send();
+}
+
+
+function new_delete_comment(event, comment_id){
+    // creates a new promise
+    new Promise(function(resolve, reject){
+
+        // Starts loader
+        let returnedSpinner = spinner.parentElement.removeChild(spinner);
+
+        // Checks if the previous element is a comment, if it doesn't exist, it moves
+        // to the answer footer
+        if(event.target.parentNode.parentNode.parentNode.parentNode.previousElementSibling == null){
+
+            event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.previousElementSibling.appendChild(returnedSpinner);
+
+            // positions the loader
+
+            returnedSpinner.style.top = 10 + 'px';
+
+            returnedSpinner.style.left = 70 + 'px';
+        }
+        else{
+            // this is when the previous element is a comment
+
+            event.target.parentNode.parentNode.parentNode.parentNode.previousElementSibling.appendChild(returnedSpinner);
+
+            // positions the loader
+
+            returnedSpinner.style.top = 60 + 'px';
+
+            returnedSpinner.style.left = 70 + 'px';
+        }
+                
+        // reduces loading spin diameter
+        returnedSpinner.children[0].style.height = 30 + 'px';
+
+        returnedSpinner.children[0].style.width = 30 + 'px';
+            
+        start_spinner();
+
+        // instantiates an ajax request object
+        let xhr = new XMLHttpRequest();
+
+        // open the connection
+        xhr.open('DELETE', `${base_url}/comments/${comment_id}/delete`);
+
+        // Getting data from the server
+        xhr.onload = function onload(onloadevent){
+            if (xhr.status == 200){
+
+                // comment deleted successfully
+
+                // stops the loader
+                stop_spinner();
+                const delete_message_info=JSON.parse(xhr.responseText);
+
+                resolve(delete_message_info);
+            }
+            else{
+                // Deletion denied message
+
+                //stops the loader
+                stop_spinner();
+
+                const delete_comment_error=JSON.parse(xhr.responseText);
+
+                reject(delete_comment_error);
+            }
+        };
+
+        // sends the request
+        xhr.send();
+
+    }).then((delete_message_info) => {
+
+        // Refreshes the whole page by getting the question
+        setTimeout(function(){
+            get_question(questionIdInt);
+        }, 2000);
+
+        // event.target.parentNode.parentNode.parentNode.parentNode.remove();
+
+        return delete_message_info;
+
+    }).then((delete_message_info) => {
+
+        // Scrolls to the answer container
+        event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].scrollIntoView({
+            behavior: "smooth"
+        });
+
+        return delete_message_info;
+
+    }).then((delete_message_info) => {
+
+        let falsh_container;
+
+        if (event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children.length == 6){
+
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+        
+        }else{
+
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[4];
+
+        }
+
+        // Displays the deletion successful massage
+        falsh_container.innerHTML = delete_message_info.message;
+
+        falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+        falsh_container.style.display = "block";
+
+        // makes the delete modal to disappear
+        event.target.parentNode.parentNode.parentNode.style.display = 'none';
+
+        setTimeout(function(){
+
+            // Makes the message container to disappear
+            falsh_container.innerHTML = "";
+
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+            falsh_container.style.display = 'none';
+
+        }, 4000);
+
+        return delete_message_info;
+
+    }).catch((delete_comment_error) => {
+
+        // gets the error container
+        let falsh_container;
+
+        if (event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children.length == 6){
+
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[5];
+
+        }else{
+
+            falsh_container = event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[4];
+
+        }
+        
+        // Displays the deletion successful massage
+        falsh_container.innerHTML = delete_comment_error.error;
+
+        falsh_container.style.backgroundColor = "rgba(255, 51, 0, 1)";
+
+        falsh_container.style.display = "block";
+
+        // Scroll to the top of page to see the error
+        window.scroll({
+            top: 0, 
+            left: 0, 
+            behavior: 'smooth' 
+        });
+
+        // Makes the flash message to disappear in 4 seconds
+        setTimeout(function(){
+        
+            // Makes the message container to disappear
+            falsh_container.innerHTML = "";
+
+            falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+
+            falsh_container.style.display = 'none';
+        
+        }, 4000); 
+    });
+}
+
+
+// ================== Displays an answer picture to be uploaded ======
+// Display answer image to be uploaded
+function readURL(input) {
+    if (input.files && input.files[0]) {
+      // An api to read contents of a image file content
+      let questionImageReader = new FileReader();
+      
+      questionImageReader.onload = function(e) {
+          // Gets image element to display the image in it
+          let displayImage = document.getElementById("the-answer-image");
+          // Changes image element source attribute
+          displayImage.src = e.target.result
+          // Makes the parent container of the image big to fit the image
+          displayImage.parentNode.style.maxHeight =  displayImage.parentNode.scrollHeight + 'px';
+      }
+      
+      questionImageReader.readAsDataURL(input.files[0]); 
+    }
+}
+
+// Gets the upload input image file element
+let imageUploadInput = document.getElementById("answer-image-btn");
+
+// triggers a change event on the upload button
+// Listens to a change event
+imageUploadInput.onchange = function(e){
+    // reads the file and displays the image
+    readURL(this);
+}
+
+
+// =================== Marks an answer correct ======================
+
+function mark_answer_correct(e, questionid, answerid){
+    
+    // instantiates an ajax request object
+    let xhr = new XMLHttpRequest();
+
+    // opens the connection
+    xhr.open('POST', `${base_url}/mark/answer/${questionid}/${answerid}`);
+
+    // Checks the response from the server
+    xhr.onload = function (event){
+        let span = e.target;
+        if(xhr.status == 200){
+            // Marks the tick green
+            let c = JSON.parse(xhr.responseText);
+            // console.log(c);
+            let currentActiveTickIcon = document.querySelectorAll('.activetick');
+            if(!currentActiveTickIcon[0]){
+                span.className += " active";
+            }
+            else{
+                currentActiveTickIcon[0].className = currentActiveTickIcon[0].className.replace("activetick", "");
+                span.className += " active";
+            }
+            get_question(questionIdInt);
+            span.parentNode.parentNode.parentNode.scrollIntoView({
+                behavior: "smooth"
+            });
+            
+        }
+        else{
+            // Displays the error encountered after the marking failed.
+            let error = JSON.parse(xhr.responseText);
+            // console.log(error);
+
+            let falsh_container = e.target.parentNode.nextElementSibling;
+
+            // Scroll to the top of the answer container
+            e.target.parentNode.parentNode.parentNode.scrollIntoView({behaviour:'smooth'});
+
+            // Displays the deletion successful massage
+            falsh_container.innerHTML = error.error;
+            falsh_container.style.backgroundColor = "rgba(255, 51, 0, 1)";
+            falsh_container.style.display = "block";
+
+            // Makes the flash message to disappear in 4 seconds
+            setTimeout(function(){
+
+                // Makes the message container to disappear
+                falsh_container.innerHTML = "";
+                falsh_container.style.backgroundColor = "rgba(102, 153, 255, 1)";
+                falsh_container.style.display = 'none';
+
+            }, 4000); 
+        }
+    };
+    // Sends the request
+    xhr.send();
+}
+
+// export {base_url};
+

@@ -1,5 +1,7 @@
 from .dataBase import db
+import os
 from os import remove
+
 
 class answer():
 
@@ -32,7 +34,7 @@ class answer():
             print(err)
     
     @staticmethod
-    def editAnAnswer(con_cur, userid, answerid, answer, imageurl):
+    def editAnAnswer(con_cur, userid, answerid, answer, imageurl, current_app, upload_folder):
         try:
             con = con_cur[0]
             cur = con_cur[1]
@@ -46,8 +48,10 @@ class answer():
                     return 'You can not edit other users\' answers'
                 else:
                     if answerToEdit['answerimage'] != 'noimagekey':
-                        remove(answerToEdit['answerimage'])
-                    editAnswer_sql = "UPDATE answers SET answer=%s, answerimage=%s, timeanswered=CURRENT_TIMESTAMP WHERE answerid=%s RETURNING answerid, userid, questionid, answer, answerimage, timeanswered"
+                        uploads_dir = os.path.join(current_app.root_path, upload_folder)
+                        image_path = os.path.join(uploads_dir, answerToEdit['answerimage'])
+                        os.remove(image_path)
+                    editAnswer_sql = "UPDATE answers SET answer=%s, answerimage=%s WHERE answerid=%s RETURNING answerid, userid, questionid, answer, answerimage, timeanswered"
                     editedAnswerData = (answer, imageurl, answerid)
                     cur.execute(editAnswer_sql, editedAnswerData)
                     con.commit()

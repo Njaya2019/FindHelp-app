@@ -3,9 +3,10 @@ from werkzeug.utils import secure_filename
 import os
 from datetime import datetime
 import pytz
+import json
 
 
-'''r infront of a string makes it a raw string and tells python not to hundle a backslash in any special way'''
+'''r in front of a string makes it a raw string and tells python not to hundle a backslash in any special way'''
 class regularExValidation():
     
     @staticmethod
@@ -45,7 +46,7 @@ class regularExValidation():
         for string in strings:
             # If the whole string matches this regular expression, return a corresponding match object. Return None if the string does not match the pattern
             validAlph = pattern.search(string)
-            print(validAlph)
+            # print(validAlph)
             if not validAlph:
                 return False
         return True
@@ -53,7 +54,8 @@ class regularExValidation():
     @staticmethod
     def validEmail(email):
         ''' A method which checks if the email is valid '''
-        pattern = re.compile(r'[a-zA-Z0-9-]+@[a-zA-Z]+\.[a-z]{3}')
+        # pattern = re.compile(r'[a-zA-Z0-9-]+@[a-zA-Z]+\.[a-z]{3}')
+        pattern = re.compile(r'[\S]+@[a-zA-Z]+\.[a-z]{3}')
         matchEmail = pattern.fullmatch(email)
         if matchEmail:
             return True
@@ -78,6 +80,23 @@ class regularExValidation():
         if matchPassword:
             return True
         return False
+    
+    @staticmethod
+    def format_tags_values(tags_json):
+        """
+        tags_json-> is a json string of tags values.
+        returns a string of tags that can be parsed in Array
+         data type of postgreSQL.
+        """
+        # Converts the tags json to string to a python list
+        tags_list = json.loads(tags_json)
+        # Adds double quotes to each list element by escaping the double quotes
+        tags_list = ["\""+str(i)+"\"" for i in tags_list]
+        # Changes the list to a string
+        tags_string = ','.join(tags_list)
+        # makes the string a single quote string
+        tags_string  = str("{"+tags_string +"}")
+        return tags_string
 
 
 class jsonvalues():
@@ -161,32 +180,10 @@ class jsonvalues():
                 # saves the image to the upload folder
                 image.save(image_path)
                 # returns image name and extenstion
-                return image.filename
+                return imagename
             else:
                 return 'invalid extension'
 
-  
-# pract_dict={'a':1,'b':''}
-# empty = jsonvalues.emptyValues(**pract_dict)
-# print(empty)
-
-# pract_dict={'a':1,'b':2}
-# keyExist = jsonvalues.jsonKeys(**pract_dict)
-# print(keyExist)
-
-# pract_dict={'a':1,'b':2}
-# rk=('a','b')
-# requiredKey = jsonvalues.validKeys(*rk, **pract_dict)
-# print(requiredKey)
-
-# tuple_integers = ('9')
-
-# print(regularExValidation.checkInteger(tuple_integers))
-
-# rk = ("username", "email", "role", "password", "confirmpassword")
-# jd = {"email":"njayaandrew@gmail.com", "role":"True", "password":"1234", "confirmpassword":"1234"}
-# booleanR = jsonvalues.validKeys(*rk, **jd)
-# print(booleanR)
 
 class timefunctions():
     
