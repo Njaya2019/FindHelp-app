@@ -1,3 +1,5 @@
+// import {base_url} from './questionanswers.js';
+let base_url = window.location.origin;
 // Gets all submit events of the entire html page
 
 document.body.addEventListener('submit', submitEmail);
@@ -88,7 +90,7 @@ function submitEmail(e){
                 let emailform = e.target;
                 let emailData = new FormData(emailform);
                 let xhr = new XMLHttpRequest();
-                xhr.open('POST', 'http://127.0.0.1:5000/resetpassword');
+                xhr.open('POST', `${base_url}/resetpassword`);
                 xhr.onload = function () {
                     if (this.status >= 200 && this.status < 300) {
                         console.log('instructions were sent');
@@ -102,11 +104,40 @@ function submitEmail(e){
                 };
                 xhr.send(emailData);
             }).then(function(result){
+                // displays a message to the user, the email was sent.
+                e.target.parentNode.innerHTML = result.message;
                 console.log(result);
             }).catch(function(result){
-                console.log(result);
-            });
+                // error response
+                let error = result;
+                // Gets error container
+                let resesetErrorContainer = e.target.previousElementSibling;
 
+                // Accesses the list tag to display the error
+                let resesetErrorTag = resesetErrorContainer.children[0];
+
+                // if the list tag doesn't contain an error message,
+                // add one.
+                if(resesetErrorTag.innerHTML == ''){
+                    resesetErrorTag.innerHTML = error.error;
+                }
+                else{
+                    // If list tag has an error text replace it with a new one
+                    resesetErrorTag.innerHTML = error.error;
+                }
+
+                // Display the error container, to display the error,
+                // message.
+                resesetErrorContainer.style.display = 'grid';
+
+                // Makes the error message disappear in 30 seconds
+                // and sets the value of the list tag to an empty text.
+                setTimeout(function(){
+                    resesetErrorTag.innerHTML = '';
+                    resesetErrorContainer.style.display = 'none';
+                }
+                ,3000);
+            });
         } 
         // makeRequest.then(function(result){
         //     console.log(result);

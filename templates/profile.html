@@ -12,7 +12,7 @@
     <div id="body-container">
         <!-- navigation bar -->
         <div id="nav">
-            <a href="{{ url_for('questions.home_view_questions') }}" id="left-item">FindHelp</a>
+            <a href="{{ url_for('questions.home_view_questions') }}" id="left-item">Help</a>
             <a href="{{ url_for('questions.home_view_questions') }}" id="right-item">Questions</a>
         </div>
         <!-- Body -->
@@ -28,88 +28,103 @@
             </div>
             <!-- content -->
             <div id="content">
-                <!-- Update -->
+                <!--=============================== 
+                              Update 
+                ==================================-->
                 <div id="update-div">
                     <!-- heading -->
                     <h3>Update profile</h3>
-                    <!-- Form to update the profile -->
+                    <!--================================
+                              Form to update the profile 
+                    ====================================-->
                     <div id="form-div">
                         <div id="left-div"></div>
                         <div id="right-div"></div>
-                        <form action="#" method="post" id="update-form">
-                            <!-- username -->
-                            <label for="username" id="username-label">Fullname:</label>
-                            <input type="text" name="username" id="username">
-                            <!-- Email -->
-                            <label for="email" id="email-label">Email:</label>
-                            <input type="text" name="email" id="email">
-                            <!-- Role -->
-                            <label for="role" id="role-label">Role:</label>
-                            <select id="role">
-                                <option value=""></option>
-                                <option value="false">user</option>
-                                <option value="true">Moderate user</option>
-                            </select>
-                            <!-- profile picture -->
-                            <div id="image-div">
-                                <label for="image" id="image-label">
-                                    <p>Upload image</p> 
-                                </label>
-                                <input type="file" name="image" id="image">
+                        <div id="update-form-div">
+                            <div id="error">
+                                This an error
                             </div>
-                            <!-- Profession -->
-                            <label for="profession" id="profession-label">Profession:</label>
-                            <input type="text" name="profession" id="profession">
-                            <!-- Education -->
-                            <label for="education" id="education-label">Education level:</label>
-                            <input type="text" name="education" id="education">
-                            <!-- Company -->
-                            <label for="company" id="company-label">Company:</label>
-                            <input type="text" name="company" id="company">
-                            <!-- submit button -->
-                            <input type="submit" value="Update" id="update-button">
-                        </form>
+                            <form  id="update-form">
+                                <!-- Fullname -->
+                                <label for="username" id="username-label">Fullname:</label>
+                                <input type="text" name="fullname" id="username">
+                                <!-- Email -->
+                                <label for="email" id="email-label">Email:</label>
+                                <input type="text" name="email" id="email">
+                                <!-- Role -->
+                                <label for="role" id="role-label">Role:</label>
+                                <select id="role" name="role">
+                                    <option value=""></option>
+                                    <option value="false">user</option>
+                                    <option value="true">Moderate user</option>
+                                </select>
+                                <!-- profile picture -->
+                                <div id="image-div">
+                                    <label for="image" id="image-label">
+                                        <p>Upload image</p> 
+                                    </label>
+                                    <input type="file" name="image" id="image" disabled>
+                                </div>
+                                <!-- submit button -->
+                                <input type="submit" value="Update" id="update-button">
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <!-- End of update profile -->
-                <!-- Prfile info section -->
+
+                <!--=============================== 
+                            Profile info section 
+                ===================================-->
                 <div id="profile-div">
                     <div class="profile-div">
                         <div id="profile-info-heading">Profile information</div>
-                        <div id="profile-pic-heading" class="profile-info-sub-heading">
-                            Profile picture
-                        </div>
-                        <!-- Profile pic -->
-                        <div id="profile-picture">
-                        </div>
+                   
                         <div id="profile-info-head" class="profile-info-sub-heading">
-                            Background data
+                            Basic information
                         </div>
                         <!-- Profile info -->
                         <div id="info-container">
                             <div id="profile-info">
                                 <label for="" class="info-label">Fullname:</label>
-                                <label for="" class="info-value">Andrew Njaya Odhiambo</label>
+                                <label for="" class="info-value"></label>
                                 <label for="" class="info-label">Email:</label>
-                                <label for="" class="info-value">njayaandrew@gmail.com</label>
+                                <label for="" class="info-value"></label>
                                 <label for="" class="info-label">Role:</label>
-                                <label for="" class="info-value">Moderate user</label>
-                                <label for="" class="info-label">Profession:</label>
-                                <label for="" class="info-value">Software developer</label>
-                                <label for="" class="info-label">Education:</label>
-                                <label for="" class="info-value">Bachelors degree</label>
-                                <label for="" class="info-label">Company:</label>
-                                <label for="" class="info-value">FindHelp</label>
+                                <label for="" class="info-value"></label>
+                            </div>
+                        </div>
+                        <!-- Stats -->
+                        <div id="profile-stats">
+                            Stats
+                        </div>
+                        <div id="info-stats-container">
+                            <div id="profile-info-stats">
+                                <label for="" class="info-label">Questions:</label>
+                                <label for="" class="info-value questionscoount">0</label>
+                                <label for="" class="info-label">Answers:</label>
+                                <label for="" class="info-value answerscoount">0</label>
+                                <label for="" class="info-label">Correct answers:</label>
+                                <label for="" class="info-value correctanswerscoount">0</label>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- questions the user asked -->
+
+                <!--================================== 
+                            questions the user asked 
+                ======================================-->
                 <div id="questions-div">
                 </div>
 
             </div>
             <!-- End of content -->
+            <!-- Loading circle -->
+           <div id="loader">
+                <div class="loading">
+            
+                </div>
+            </div>
         </div>
     </div>
 <script src="{{ url_for('static', filename='js/profile.js' ) }}"></script> 

@@ -28,20 +28,22 @@ class db():
         # field questionimage is set notnull because it's value can be null.
         tables=(
             """CREATE TABLE IF NOT EXISTS users(userid SERIAL PRIMARY KEY,fullname VARCHAR(50) NOT NULL,
-               email VARCHAR(50) NOT NULL,roles BOOLEAN NOT NULL,passwords TEXT NOT NULL)
+               email VARCHAR(50) NOT NULL,roles BOOLEAN NOT NULL,passwords TEXT NOT NULL, emailverified BOOLEAN NOT NULL DEFAULT false)
             """,
             """CREATE TABLE IF NOT EXISTS questions(questionid SERIAL PRIMARY KEY,questiontitle VARCHAR(300) NOT NULL,
                questiondescription TEXT NOT NULL,questionimage TEXT,timeposted TIMESTAMPTZ,
-               userid INT REFERENCES users(userid) ON DELETE CASCADE)
+               userid INT REFERENCES users(userid) ON DELETE CASCADE, tags TEXT [])
             """,
             """CREATE TABLE IF NOT EXISTS answers(answerid SERIAL PRIMARY KEY,userid INT REFERENCES users(userid) ON DELETE CASCADE,
                questionid INT REFERENCES questions(questionid) ON DELETE CASCADE,
-               answer TEXT NOT NULL,answerimage TEXT,timeanswered TIMESTAMPTZ)
+               answer TEXT NOT NULL,answerimage TEXT,timeanswered TIMESTAMPTZ, markedcorrect BOOLEAN NOT NULL DEFAULT false)
             """,
             """CREATE TABLE IF NOT EXISTS votes(userid INT REFERENCES users(userid) ON DELETE CASCADE,answerid INT REFERENCES answers(answerid) ON DELETE CASCADE,
                upvote INT DEFAULT 0  NOT NULL, downvote INT DEFAULT 0 NOT NULL, PRIMARY KEY(userid, answerid))
             """,
-
+            """CREATE TABLE IF NOT EXISTS comments(commentid SERIAL PRIMARY KEY, comment VARCHAR(300) NOT NULL, answerid INT REFERENCES answers(answerid) ON DELETE CASCADE,
+               userid INT REFERENCES users(userid) ON DELETE CASCADE,timecommented TIMESTAMPTZ)
+            """,
            )
         try:
             con=con_cur[0]
@@ -70,7 +72,7 @@ class db():
             # con_cur = db.connectToDatabase(db_url)
             con = con_cur[0]
             cur = con_cur[1]
-            table_names = ('users', 'questions')
+            table_names = ('users', 'questions', 'answers', 'votes', 'comments')
             for table_name in table_names:
                 del_query = 'DROP TABLE IF EXISTS {} CASCADE'.format(table_name)
                 cur.execute(del_query)

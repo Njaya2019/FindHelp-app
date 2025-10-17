@@ -4,6 +4,7 @@ from app.blueprints.users import signin
 from app.blueprints.questions import questions_blueprint
 from app.blueprints.answers import answers_blueprint
 from app.blueprints.votes import votes_blueprint
+from app.blueprints.comments import comments_blueprint
 from app.models.dataBase import db
 from app.errors import errorhandlers
 from os.path import join, dirname
@@ -33,6 +34,7 @@ def create_app(enviroment, configfile=None):
     app.register_blueprint(questions_blueprint)
     app.register_blueprint(answers_blueprint)
     app.register_blueprint(votes_blueprint)
+    app.register_blueprint(comments_blueprint)
     # app.config.from_envvar('SETTINGS')
     # app.config['DEBUG'] = True
 

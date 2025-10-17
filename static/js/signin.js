@@ -1,3 +1,5 @@
+// import {base_url} from './questionanswers.js';
+let base_url = window.location.origin;
 // Gets all submit events of the entire login html page
 
 document.body.addEventListener('submit', submitLoginData);
@@ -8,6 +10,9 @@ class LoginFunctions{
     // A function to submit signin data
     static submitSigninData(e){
 
+        // Shows the login spinner
+        e.target.nextElementSibling.style.display = 'block';
+
         // Gets form's login data
         let loginform = e.target;
         let loginData = new FormData(loginform);
@@ -16,20 +21,22 @@ class LoginFunctions{
         let xhr = new XMLHttpRequest()
 
         // Opens the request
-        xhr.open("POST", "http://127.0.0.1:5000/signin", true);
+        xhr.open("POST", `${base_url}/signin`, true);
         
         xhr.onload = function(onloadevent) {
 
             if (xhr.status == 200) {
-            
+              // first hides the login spinner
+              e.target.nextElementSibling.style.display = 'none';  
               // Login was successful
               const response = JSON.parse(this.responseText);
-
+              console.log(base_url);
               localStorage.setItem('token', response.token);
-              window.location.href = `questions/`;
+              window.location.href = `${base_url}/questions/`;
             }
             else {
-
+              // first hides the login spinner
+              e.target.nextElementSibling.style.display = 'none';  
               // Login failed
               const loginFailedResponse = JSON.parse(this.responseText);
 

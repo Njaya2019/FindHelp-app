@@ -1,10 +1,12 @@
 from .dataBase import db
 import os
+from os import remove
+
 
 class question():
     
     @staticmethod
-    def postQuestion(con_cur, title, description, imageurl, userid):
+    def postQuestion(con_cur, title, description, imageurl, userid, tags):
         """A method to post a question"""
         try:
             con = con_cur[0]
@@ -14,8 +16,8 @@ class question():
             # if there are no rows fetchall returns an empty list.
             userAvailable = cur.fetchone()
             if userAvailable:
-                postQuestion_sql = "INSERT INTO questions(questiontitle,questiondescription,questionimage,timeposted,userid) VALUES(%s,%s,%s,CURRENT_TIMESTAMP,%s) RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
-                questionData = (title, description, imageurl, userid,)
+                postQuestion_sql = "INSERT INTO questions(questiontitle,questiondescription,questionimage,timeposted,userid,tags) VALUES(%s,%s,%s,CURRENT_TIMESTAMP,%s,%s) RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
+                questionData = (title, description, imageurl, userid, tags,)
                 cur.execute(postQuestion_sql, questionData)
                 con.commit()
                 postedQuestion = cur.fetchone()
@@ -51,7 +53,7 @@ class question():
             cur = con_cur[1]
             # getQuestions_sql = "SELECT * FROM questions"
             # INNER JOIN questions to get all users who posted questions. 
-            getQuestions_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, COUNT(answers.answer) FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription ORDER BY timeposted DESC"
+            getQuestions_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, questions.tags, COUNT(answers.answer) FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription ORDER BY timeposted DESC"
             cur.execute(getQuestions_sql)
             # if there are no rows fetchall returns an empty list.
             all_questions = cur.fetchall()
@@ -68,7 +70,10 @@ class question():
             # con = con_cur[0]
             cur = con_cur[1]
             # getQuestion_sql = "SELECT * FROM questions WHERE questionid=%s"
-            getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
+            # getQuestion_sql ="SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, questions.questionimage, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered|| '----' ||answers.answerimage) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, answers.answerimage, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription"
+            # getQuestion_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, questions.questionimage, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered|| '----' ||answers.answerimage|| '----' || array_to_string(answers.usersandcomments, '*****')|| '----' ||userswhoanswered.userid) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, answers.answerimage, sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END) upvotes, sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END) downvotes, ARRAY_AGG(userswhocommented.fullname||':::::'||comments.commentid||':::::'||comments.comment||':::::'||comments.timecommented||':::::'||userswhocommented.userid ORDER BY comments.timecommented ASC) usersandcomments FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid LEFT JOIN comments ON answers.answerid = comments.answerid LEFT JOIN users userswhocommented ON userswhocommented.userid = comments.userid GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription;"
+            # getQuestion_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, questions.questionimage, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered|| '----' ||answers.answerimage|| '----' || array_to_string(answers.groupcomments, '*****')|| '----' ||userswhoanswered.userid) usersandanswers FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, answers.answerimage, sum(votes.upvote) upvotes, sum(votes.downvote) downvotes, usersandcomments.groupcomments FROM answers LEFT JOIN votes ON answers.answerid = votes.answerid LEFT JOIN (SELECT answers.answerid,  ARRAY_AGG(userswhocommented.fullname||':::::'||comments.commentid||':::::'||comments.comment||':::::'||comments.timecommented||':::::'||userswhocommented.userid ORDER BY comments.timecommented ASC) groupcomments FROM answers LEFT JOIN comments ON answers.answerid=comments.answerid INNER JOIN users userswhocommented ON comments.userid=userswhocommented.userid GROUP BY answers.answerid) usersandcomments ON answers.answerid = usersandcomments.answerid  GROUP BY answers.userid, answers.answerid, answers.questionid, answers.answer, usersandcomments.groupcomments) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription;"
+            getQuestion_sql = "SELECT users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription, questions.timeposted, questions.questionimage, ARRAY_AGG(userswhoanswered.fullname|| '----'||answers.answer|| '----'||answers.answerid|| '----' ||answers.upvotes|| '----' ||answers.downvotes|| '----' ||answers.timeanswered|| '----' ||answers.answerimage|| '----' || array_to_string(answers.groupcomments, '*****')|| '----' ||userswhoanswered.userid|| '----' ||answers.markedcorrect) usersandanswers, count(answers.answer) abc FROM users INNER JOIN questions ON users.userid = questions.userid LEFT JOIN (SELECT answers.userid, answers.answerid, answers.questionid, answers.answer, answers.timeanswered, answers.answerimage, votesanswers.upvotes, votesanswers.downvotes, ARRAY_AGG(userswhocommented.fullname||':::::'||comments.commentid||':::::'||comments.comment||':::::'||comments.timecommented||':::::'||userswhocommented.userid ORDER BY comments.timecommented ASC) groupcomments, markedcorrect FROM answers LEFT JOIN comments ON answers.answerid=comments.answerid LEFT JOIN users userswhocommented ON comments.userid=userswhocommented.userid LEFT JOIN (SELECT a.answerid, COALESCE(sum(CASE WHEN votes.upvote=1 THEN 1 ELSE 0 END), 0) upvotes, COALESCE(sum(CASE WHEN votes.downvote=1 THEN 1 ELSE 0 END), 0) downvotes FROM answers a LEFT JOIN votes ON a.answerid=votes.answerid GROUP BY a.answerid) votesanswers ON answers.answerid = votesanswers.answerid GROUP BY answers.answerid, votesanswers.upvotes, votesanswers.downvotes) answers ON questions.questionid = answers.questionid LEFT JOIN users userswhoanswered ON answers.userid = userswhoanswered.userid WHERE questions.questionid=%s GROUP BY users.userid, users.fullname, questions.questionid, questions.questiontitle, questions.questiondescription;"
             cur.execute(getQuestion_sql, (questionid,))
             # if there are no rows fetchall returns an empty list.
             a_question = cur.fetchone()
@@ -79,7 +84,7 @@ class question():
             print(err)
     
     @staticmethod
-    def editQuestion(con_cur, title, description, imageurl, questionid, userid):
+    def editQuestion(con_cur, title, description, imageurl, questionid, userid, tags, current_app, upload_folder):
         """A method to edit a question"""
         try:
             con = con_cur[0]
@@ -92,9 +97,11 @@ class question():
                 if questionToEdit['userid'] != userid:
                     return 'You can not edit this question but only the owner'
                 if questionToEdit['questionimage'] != 'noimagekey':
-                    remove(questionToEdit['questionimage'])
-                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid"
-                editedQuestionData = (title, description, imageurl, questionid,)
+                    uploads_dir = os.path.join(current_app.root_path, upload_folder)
+                    image_path = os.path.join(uploads_dir, questionToEdit['questionimage'])
+                    remove(image_path)
+                editQuestion_sql = "UPDATE questions SET questiontitle=%s, questiondescription=%s, questionimage=%s, tags=%s WHERE questionid=%s RETURNING questionid, questiontitle, questiondescription, timeposted, userid, tags, questionimage"
+                editedQuestionData = (title, description, imageurl, tags, questionid)
                 cur.execute(editQuestion_sql, editedQuestionData)
                 con.commit()
                 editedQuestion = cur.fetchone()
@@ -135,4 +142,56 @@ class question():
         except Exception as err:
             print(err)
     
-    
+    @staticmethod
+    def mark_answer_correct(con_cur, userid, questionid, answerid):
+
+        ''' This method marks an answer correct, the question author is the only user
+            authorized to do so.
+            userid -> primary key of the question author.
+            questionid -> the primary key of the question.
+            answerid -> primary key of the answer.
+            markedcorrectvalue -> the boolean value of the correct answer.
+        '''
+
+        try:
+            
+            con = con_cur[0]
+            cur = con_cur[1]
+            # SQL query to find the valid question author
+            find_valid_author_question_answer_sql = "SELECT users.userid, questions.questionid, answers.answerid, answers.markedcorrect FROM users INNER JOIN questions ON users.userid=questions.userid INNER JOIN answers ON questions.questionid=answers.questionid WHERE users.userid=%s AND questions.questionid=%s AND answers.answerid=%s"
+            cur.execute(find_valid_author_question_answer_sql, [userid,questionid,answerid,])
+            valid_author = cur.fetchone()
+            if valid_author:
+                # sql checks for an answer marked correct.
+                find_answer_marked_correct_sql = "SELECT  answers.answerid, answers.markedcorrect FROM questions INNER JOIN answers ON questions.questionid=answers.questionid WHERE questions.questionid=%s AND answers.markedcorrect='yes'"
+                cur.execute(find_answer_marked_correct_sql, [questionid,])
+                answer_marked_correct = cur.fetchone()
+                # checks if answer is already marked correct
+                if answer_marked_correct:
+                    # this umarks the correct answer
+                    unmark_correct_answer_sql = "UPDATE answers SET markedcorrect='no' WHERE answerid=%s RETURNING markedcorrect"
+                    cur.execute(unmark_correct_answer_sql, [answer_marked_correct['answerid'],])
+                    con.commit()
+                    unmarked_answer = cur.fetchone()
+                    if unmarked_answer:
+                        # this marks the new correct answer
+                        mark_correct_answer_sql = "UPDATE answers SET markedcorrect='yes' WHERE answerid=%s RETURNING markedcorrect"
+                        cur.execute(mark_correct_answer_sql, [answerid,])
+                        con.commit()
+                        marked_correct_answer = cur.fetchone()
+                        if marked_correct_answer:
+                            return 'marked correct'
+                else:
+                    # this marks the new correct answer if none of the answers were already
+                    # marked correct
+                    mark_correct_answer_sql = "UPDATE answers SET markedcorrect='yes' WHERE answerid=%s RETURNING markedcorrect"
+                    cur.execute(mark_correct_answer_sql, [answerid,])
+                    con.commit()
+                    marked_correct_answer = cur.fetchone()
+                    if marked_correct_answer:
+                        return 'marked correct'
+            else:
+                return 'not valid'
+
+        except Exception as err:
+            print(err)   
