@@ -10,6 +10,10 @@ from app.decorators import token_required
 import jwt
 import datetime
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+
 
 # A blueprint named 'users' to register and login in users
 
@@ -124,8 +128,8 @@ def signup():
                     ), 400
 
                 else:
-                    print(f"FROM ENV DB URL: -> {os.getenv('DATABASE_URL')}")
-                    print(f"FROM CONFIG DB URL: -> {current_app.config['DATABASE_URI']}")
+                    logging.debug(f"FROM ENV DB URL: -> {os.getenv('DATABASE_URL')}")
+                    logging.debug(f"FROM CONFIG DB URL: -> {current_app.config['DATABASE_URI']}")
                     displayUser = {}
                     displayUser.update(
                         {

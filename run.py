@@ -12,6 +12,9 @@ from dotenv import load_dotenv
 from livereload import Server
 from flask_mail import Mail
 import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 # Create .env file path.
 dotenv_path = join(dirname(__file__), '.env')
