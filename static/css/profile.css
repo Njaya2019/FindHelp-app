@@ -1,0 +1,689 @@
+/* The body tag */
+body{
+    margin: 0px;
+    font-family: 'Times New Roman', Times, serif;
+    color: black;
+}
+
+/* container */
+#body-container{
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-row-gap: 5px;
+    grid-template-rows: 40px auto;
+    grid-template-areas: 
+    "nav"
+    "body";
+}
+
+/*===================================================
+                    NAVIGATION BAR
+=====================================================*/
+#body-container #nav{
+    grid-area: nav;
+    border: 1px solid lightblue;
+    background-color: rgba(60, 179, 113, 0.6); 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Navigation items */
+#body-container #nav #right-item{
+    text-decoration-line: none;
+    font-size: 17px;
+    color: white;
+    font-weight: bold;
+    background-color: rgba(0, 0, 255, 0.5);
+    padding: 6px;
+    transition: 0.4s ease-in-out;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+/* Navigation items on hover */
+#body-container #nav #right-item:hover{
+    background-color: rgba(0, 0, 255, 0.8);
+}
+
+/* left navigation item */
+#body-container #nav #left-item{
+    text-decoration-line: none;
+    font-size: 25px;
+    color: rgba(134, 89, 45, 1);
+    font-weight: 900;
+}
+
+/*============================================= 
+                    BODY DIV
+===============================================*/
+#body-container #body{
+    grid-area: body;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: auto;
+    grid-template-areas:
+    "leftbar"
+    "contentbody";
+    height: 100vh;
+
+}
+
+/* Left bar */
+#body-container #body #left-bar{
+    grid-area: leftbar;
+    background-color: rgba(133, 133, 173, 0.3);
+}
+
+/* Menu items */
+#body-container #body #left-bar #menu-items{
+    /* width: 148px; */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: 20px;
+    grid-row-gap: 10px;
+    margin: 12px 18px 0px 18px;
+    padding: 0px;
+    background-color: white;
+    border-radius: 4px;
+}
+
+/* Menu buttons */
+#body-container #body #left-bar #menu-items button{
+    margin-right: 0;
+    cursor: pointer;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 11px;
+    background-color: rgba(173, 216, 230, 0.2);
+    border: 1px solid rgba(173, 216, 230, 0.2);
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    outline: none;
+    transition: 0.4s ease-in-out;
+}
+
+/* Active menu button */
+#body-container #body #left-bar #menu-items .active{
+    /* border-top: 1px solid rgba(173, 216, 230, 1); */
+    border-bottom: 4px solid rgba(0, 0, 255, 0.4);
+    /* border-right:4px solid rgba(0, 0, 255, 0.8); */
+    /* border-right:1px solid rgba(173, 216, 230, 1); */
+    background-color: rgba(173, 216, 230, 0.1);
+    padding-bottom: 8px;
+}
+
+/* Content section */
+#body-container #body #content{
+    grid-area: contentbody;
+    height: 100vh;
+    /* border-left: 0.5px solid rgba(0, 0, 0, 0.3); */
+    background-color: rgba(133, 133, 173, 0.3);
+}
+
+/* Update heading */
+#body-container #body #content #update-div h3{
+    color: rgba(0, 0, 0, 0.7);
+    text-align: center;
+    font-size: 18px;
+    background-color: white;
+    margin: 15px 18px 0px 18px;
+    padding: 5px 0px 5px 0px;
+    border-radius: 10px;
+    /* border: 1px solid blue; */
+}
+
+/*====================================================== 
+                    UPDATE FORM
+========================================================*/
+/* update div */
+#body-container #body #content #update-div{
+    display: none;
+}
+#body-container #body #content #update-div #form-div{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+    "update-form-div"
+    "left-div"
+    "left-div";
+    margin: 10px 18px 10px 18px;
+}
+#body-container #body #content #update-div #form-div #left-div{
+    grid-area: left-div;
+    background-color: white;
+}
+
+#body-container #body #content #update-div #form-div #right-div{
+    grid-area: right-div;
+}
+#body-container #body #content #update-div #update-form-div{
+    grid-area: update-form-div;
+    padding-bottom: 0;
+}
+/* Error container */
+#body-container #body #content #update-div #error{
+    background-color: white;
+    color: red;
+    text-align: center;
+    margin-bottom: 5px;
+    display: none;
+}
+
+/* The update form div */
+#body-container #body #content #update-div #update-form{
+    padding: 5px;
+    border-radius: 6px;
+    display: grid;
+    grid-template-columns: minmax(50px, 1fr);
+    grid-auto-rows: 30px;
+    grid-row-gap: 10px;
+    grid-template-areas: 
+    "usernamelabel"
+    "usernamebox"
+    "emaillabel"
+    "emailbox"
+    "rolelabel"
+    "rolebox"
+    "imagebox"
+    "updatebutton";
+    background-color: white;
+}
+
+
+/* username label */
+#body-container #body #content #update-form #username-label{
+    grid-area: usernamelabel;
+}
+
+/* username textbox */
+#body-container #body #content #update-form #username{
+    grid-area: usernamebox;
+}
+
+/* email label */
+#body-container #body #content #update-form #email-label{
+    grid-area: emaillabel;
+}
+
+/* email textbox */
+#body-container #body #content #update-form #email{
+    grid-area: emailbox;
+}
+
+/* role label */
+#body-container #body #content #update-form #role-label{
+    grid-area: rolelabel;
+}
+
+/* role textbox */
+#body-container #body #content #update-form #role{
+    grid-area: rolebox;
+    border-radius: 3px;
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+}
+
+/* image textbox */
+#body-container #body #content #update-form #image-div{
+    grid-area: imagebox;
+}
+
+/* Update submit button */
+#body-container #body #content #update-form #update-button{
+    grid-area: updatebutton;
+    background-color: rgba(0, 0, 255, 0.5);
+    border: 0.2px solid rgba(0, 0, 255, 0.5);
+    border-radius: 2px;
+    cursor: pointer;
+    color: white;
+    transition: 0.4s ease-in-out;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Update submit button on hover*/
+#body-container #body #content #update-form #update-button:hover{
+    background-color: blue;
+}
+
+/* update form text boxes */
+#body-container #body #content #update-div #update-form input[type="text"]{
+    outline: none;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    /* background-color: rgba(102, 153, 153, 0.3); */
+}
+
+/* update form labels */
+#body-container #body #content #update-div #update-form label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+/* edit label button */
+#body-container #body #content #update-form #edit-button-label{
+    grid-area: edit-button;
+    text-decoration: underline;
+    color: rgba(60, 179, 113, 0.6);
+    transition: 0.6s ease-in-out;
+    /* border: 1px solid black; */
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* edit label button on hover*/
+#body-container #body #content #update-form #edit-button-label:hover{ 
+    color: rgba(0,0,0,0.6)
+}
+
+/* Upload picture div */
+#body-container #body #content #update-div #update-form #image-div{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    background-color: rgba(0,0,0,0.3);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* upload picture input element */
+#body-container #body #content #update-div #update-form #image-div input{
+    width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+    cursor: pointer;
+    font-size: 1.25em;
+    font-weight: 700;
+    color: white;
+    display: inline-block;
+}
+
+/* Upload picture label */
+#body-container #body #content #update-div #update-form #image-div label{
+    margin-right: 0px;
+    height: 30px;
+    cursor: pointer;
+    border-radius: 3px;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    transition: 0.4s ease-in-out;
+}
+
+/* Upload picture label on hover */
+#body-container #body #content #update-div #update-form #image-div label:hover{
+    background-color: rgba(0,0,255,0.5);;
+}
+
+/* upload picture text */
+#body-container #body #content #update-div #update-form #image-div label p{
+    background-color: white;
+    padding: 2px;
+    border-radius: 3px;
+    margin-left: 10px;
+}
+
+/* =======================================================
+                  PROFILE INFORMATION
+========================================================== */
+#body-container #body #content #profile-div{
+    display: none;
+}
+
+#body-container #body #content .profile-div{
+    display: grid;
+    grid-template-columns: 2fr 1fr 2fr;
+    grid-template-rows: 40px 40px auto 40px;
+    grid-row-gap: 10px;
+    grid-template-areas:
+    "profile-info-head profile-info-head profile-info-head"
+    "info-heading info-heading info-heading"
+    "info-container info-container info-container"
+    "stats stats stats"
+    "stats-info-container stats-info-container stats-info-container";
+}
+
+#body-container #body #content .profile-div #info-container{
+    grid-area: info-container;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "profile-info";
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 20px 5px 20px;
+}
+
+/* Basic information */
+#body-container #body #content .profile-div #profile-info{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 35px;
+    grid-row-gap: 5px;
+    grid-column-gap: 5px;
+    grid-area: profile-info;
+    /* border: 1px solid red; */
+}
+
+/* Profile information values */
+#body-container #body #content .profile-div #profile-info .info-value{
+    background-color: rgba(245,245,245, 1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding-left: 4px;
+}
+
+
+/* information label */
+#body-container #body #content .profile-div #profile-info .info-label{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+    /* border: 1px solid brown; */
+}
+
+/* profile information heading */
+#body-container #body #content .profile-div #profile-info-heading{
+    padding-top: 5px;
+    color: rgba(0, 0, 0, 0.5);
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    grid-area: profile-info-head;
+}
+
+
+/* The profile information heading */
+#body-container #body #content .profile-div #profile-info-head{
+    grid-area: info-heading;
+    background-color: white;
+    margin: 5px 20px 5px 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    padding-left: 10px;
+}
+
+/* The profile stats heading */
+#body-container #body #content .profile-div #profile-stats{
+    grid-area: stats;
+    background-color: white;
+    margin: 5px 20px 5px 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding-left: 10px;
+    color:rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* status container */
+#body-container #body #content .profile-div #info-stats-container{
+    grid-area: stats-info-container;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+    "status-info";
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    padding: 5px;
+    border-radius: 5px;
+    margin: 5px 20px 5px 20px;
+}
+
+/* status information */
+#body-container #body #content .profile-div #profile-info-stats{
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 35px;
+    grid-row-gap: 5px;
+    grid-column-gap: 5px;
+    grid-area: status-info;
+}
+
+/* status information values */
+#body-container #body #content .profile-div #profile-info-stats .info-value{
+    background-color: rgba(245,245,245, 1);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    padding-left: 4px;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+/* gives the counts color */
+#body-container #body #content .profile-div #profile-info-stats .questionscoount{
+    color: rgba(0, 0, 255, 0.8);
+}
+
+#body-container #body #content .profile-div #profile-info-stats .answerscoount{
+    color:rgba(134, 89, 45, 1);
+}
+
+#body-container #body #content .profile-div #profile-info-stats .correctanswerscoount{
+    color:rgba(60, 179, 113, 0.6);
+}
+
+
+/* status information label */
+#body-container #body #content .profile-div #profile-info-stats .info-label{
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+    font-weight: bold;
+    font-size: 14px;
+}
+
+#body-container #body #content .profile-div .profile-info-sub-heading{
+    font-size: 21px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: rgba(0, 0, 0, 0.5);
+}
+#body-container #body #content #questions-div{
+    display: block;
+}
+
+/* ==================================
+    THE LOADING CIRCLE
+====================================== */
+
+#loader{
+    display: none;
+    top: 15%;
+    left: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+    /* height: 40px;
+    width: 40px; */
+    /* border: 1px solid black; */
+}
+
+#loader .loading {
+    border: 10px solid rgba(0, 0, 255, 0.5);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border-top-color: rgba(60, 179, 113, 0.6);
+    border-left-color:  rgba(60, 179, 113, 0.6);
+    animation: info-spinner 1s infinite ease-in;
+ }
+
+ @keyframes info-spinner{
+    0%{
+       transform: rotate(0deg);
+    }
+    100%{
+        transform: rotate(360deg);
+    }
+
+}
+
+/* ======================================================================
+                              MEDIA QUERIES
+ ========================================================================= */
+
+@media (min-width: 768px){
+
+    /* Body div */
+    #body-container #body{
+        grid-template-columns: 0.1fr 1fr;
+        grid-column-gap: 5px;
+        grid-template-areas:
+        "leftbar contentbody"
+        "leftbar contentbody";
+    }
+
+    /* Menu items */
+    #body-container #body #left-bar #menu-items{
+        width: 148px;
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-auto-rows: 20px;
+        grid-row-gap: 10px;
+        margin-top: 12px;
+        margin-right: 0;
+        padding: 0px 5px 0px 0px;
+        margin: 7px 8px 0px 5px;
+    }
+
+    /* Active menu button */
+    #body-container #body #left-bar #menu-items .active{
+        border-top: 1px solid rgba(173, 216, 230, 1);
+        border-bottom: 1px solid rgba(173, 216, 230, 1);
+        border-right:4px solid rgba(0, 0, 255, 0.8);
+        background-color: rgba(173, 216, 230, 0.1);
+    }
+
+    /* The update form div */
+    #body-container #body #content #update-div #form-div{
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-areas: 
+        "update-form-div update-form-div update-form-div";
+        margin: 5px 50px 5px 50px;
+        /* border: 1px solid red; */
+    }
+
+    /* Update heading */
+    #body-container #body #content #update-div h3{
+        color: rgba(0, 0, 0, 0.7);
+        text-align: center;
+        font-size: 20px;
+        background-color: white;
+        margin: 5px 50px 5px 50px;
+        padding: 5px 0px 5px 0px;
+        border-radius: 10px;
+    }
+    /* The update form element*/
+    #body-container #body #content #update-div #update-form{
+        grid-template-columns: 0.5fr 2fr 0.5fr 2fr;
+        grid-auto-rows: 30px;
+        grid-row-gap: 10px;
+        grid-column-gap: 5px;
+        grid-template-areas: 
+        "usernamelabel usernamebox emaillabel emailbox"
+        "rolelabel rolebox . imagebox"
+        ". . . updatebutton";
+        /* border: 1px solid green; */
+    }
+
+    /* update form labels */
+    #body-container #body #content #update-div #update-form label{
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        font-size: 13px;
+    }
+
+    /* profile information heading */
+    #body-container #body #content .profile-div #profile-info-heading{
+        font-size: 28px;
+    }
+
+    /* Basic information container */
+    #body-container #body #content .profile-div #profile-info{
+        grid-template-columns: 1fr 2fr 1fr 2fr;
+        grid-template-rows: 35px 35px;
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+        grid-area: profile-info;
+    }
+
+    /* information label */
+    #body-container #body #content .profile-div #profile-info .info-label{
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        align-items: center;
+        font-size: 14px;
+    }
+
+    /* Profile information values */
+    #body-container #body #content .profile-div #profile-info .info-value{
+        background-color: rgba(245,245,245, 1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+    }
+
+    /* status information */
+    #body-container #body #content .profile-div #profile-info-stats{
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr 2fr;
+        grid-template-rows: 35px 35px;
+        grid-row-gap: 5px;
+        grid-column-gap: 5px;
+        grid-area: status-info;
+    }
+
+    /* status information values */
+    #body-container #body #content .profile-div #profile-info-stats .info-value{
+        background-color: rgba(245,245,245, 1);
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+    }
+
+
+    /* status information label */
+    #body-container #body #content .profile-div #profile-info-stats .info-label{
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: start;
+        align-items: center;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+}

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/questionanswers.css') }}">
+    <title></title>
+</head>
+<body>
+    <!-- Container -->
+    <div id="container">
+        <!-- Navigation -->
+        <div id="nav">
+
+            <!-- left link. link to Home page -->
+            <a id="left-link" href="{{ url_for('questions.home_view_questions') }}">Help</a>
+            <!-- Right link. link to user's view page -->
+            <a id="right-link" href="{{ url_for('questions.home_view_questions') }}">questions</a>
+            
+        </div>
+        <!-- end of navigation -->
+        <!-- Body -->
+        <div id="body-container">
+            <!-- flash messages -->
+            <div id="flash-messages">
+                
+            </div>
+            <!-- question and it's description container -->
+            <div id="title-description-container">
+            </div>
+            <div id="answers-heading">
+                <h3>Answers</h3>
+            </div>
+            <!-- Answers container -->
+            <div id="answers-container">
+
+            </div>
+            <!-- End of all answers container -->
+            <!--===============================posting an answer header ==============================-->
+            <div id="post-answer-heading">
+                <h3>Post an answer</h3>
+            </div>
+            <!-- errors -->
+            <div id="answer-errors">
+                <li></li>
+            </div>
+            <!--container to post answers-->
+            <div id="answers-form-container">
+                <form  method="POST" id="submit-answer-form">
+                    <textarea name="answer" id="answer" cols="30" rows="10" placeholder="Post an answer"></textarea>
+                    <!-- Display answer image container -->
+                    <div class="answer-image">
+                        <img id="the-answer-image" class="the-answer-image" src="" alt="the answer image">
+                    </div>
+                    <div id="submit-answer">
+                        <div class="answer-image-container">
+                            <input type="file" name="image" id="answer-image-btn" class="answer-image-btn">
+                            <label for="answer-image-btn">
+                                <div class="answer-upload-image">
+                                    <img src="{{ url_for('static', filename='img/upload.png') }}"  alt="image" srcset="">
+                                </div>  
+                                Choose...
+                            </label>
+                        </div>
+                        <input type="submit" value="Post" name="submit-answer-input">
+                    </div>
+                </form>
+            </div>
+            <!-- Loading spinner -->
+            <div id="loader">
+                <div class="loading">
+
+                </div>
+            </div>
+        </div>
+        <!-- end of body -->
+        <!-- Left side bar -->
+        <div id="left-side-bar">
+        </div>
+        <!-- end of left side bar -->
+        <!-- rigt side bar -->
+        <div id="right-side-bar">
+        </div>
+        <!-- end of right side bar -->
+        <!-- footer -->
+        <div id="footer">
+            &#9400; Find-Help 2020
+        </div>
+        <!-- end of footer -->
+    </div>
+    <!-- end of container -->
+    <script src="{{ url_for('static', filename='js/questionanswers.js' ) }}"></script>
+</body>
+</html>

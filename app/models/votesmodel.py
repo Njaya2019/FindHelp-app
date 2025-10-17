@@ -29,7 +29,7 @@ class votes():
                 elif answerExists['upvote'] == 1 and answerExists['downvote'] == 0 and answerExists['userid'] == userid and answerExists['answerid'] == answerid:
                     return  'already upvoted'
                 # if he/she had downvoted, it change the vote from a downvote to a upvote
-                elif answerExists['userid'] == userid and answerExists['answerid'] == answerid and answerExists['upvote'] == 0 and answerExists['downvote'] == -1:
+                elif answerExists['userid'] == userid and answerExists['answerid'] == answerid and answerExists['upvote'] == 0 and answerExists['downvote'] == 1:
                     updateToUpVoteAnswer_sql = "UPDATE votes SET upvote=1, downvote=0 WHERE userid=%s and answerid=%s RETURNING userid, answerid, upvote, downvote"
                     cur.execute(updateToUpVoteAnswer_sql, (userid, answerid))
                     con.commit()
@@ -60,17 +60,17 @@ class votes():
                 answerExists= cur.fetchone()
                 # If user hasn't down voted on the answer, he down votes for the first time
                 if type(answerExists) == type(None):
-                    downVoteAnswer_sql = "INSERT INTO votes(userid, answerid, upvote, downvote) VALUES(%s,%s,0,-1) RETURNING userid, answerid, upvote, downvote"
+                    downVoteAnswer_sql = "INSERT INTO votes(userid, answerid, upvote, downvote) VALUES(%s,%s,0,1) RETURNING userid, answerid, upvote, downvote"
                     cur.execute(downVoteAnswer_sql, (userid, answerid))
                     con.commit()
                     downVotedAnswer = cur.fetchone()
                     return downVotedAnswer
                 # Restricts a user from adding a down vote twice to an answer
-                elif answerExists['upvote'] == 0 and answerExists['downvote'] == -1 and answerExists['userid'] == userid and answerExists['answerid'] == answerid:
+                elif answerExists['upvote'] == 0 and answerExists['downvote'] == 1 and answerExists['userid'] == userid and answerExists['answerid'] == answerid:
                     return  'already downvoted'
                 # If he had up voted, the vote is changed from an up vote to a down vote
                 elif answerExists['upvote'] == 1 and answerExists['downvote'] == 0 and answerExists['userid'] == userid and answerExists['answerid'] == answerid:
-                    updateToDownVoteAnswer_sql = "UPDATE votes SET upvote=0, downvote=-1 WHERE userid=%s and answerid=%s RETURNING userid, answerid, upvote, downvote"
+                    updateToDownVoteAnswer_sql = "UPDATE votes SET upvote=0, downvote=1 WHERE userid=%s and answerid=%s RETURNING userid, answerid, upvote, downvote"
                     cur.execute(updateToDownVoteAnswer_sql, (userid, answerid))
                     con.commit()
                     updatedToDownVotedAnswer = cur.fetchone()

@@ -1,4 +1,4 @@
-from flask import request, jsonify, Blueprint, current_app
+from flask import request, jsonify, Blueprint, current_app, render_template
 from app.validators.validate import regularExValidation, jsonvalues
 from app.models.dataBase import db
 from app.models.answersmodel import answer
@@ -14,14 +14,12 @@ def answer_question(current_user_id, questionid):
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     if request.method == 'POST':
         answerData = request.form.to_dict()
-        dataAvailable = jsonvalues.emptyValues(**answerData)
+        # dataAvailable = jsonvalues.emptyValues(**answerData)
         keysAvailable = jsonvalues.jsonKeys(**answerData)
         requiredKeys = ('answer',)
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **answerData)
-        if not dataAvailable:
-            return jsonify({'status':400, 'error':'Please provide an answer first'}), 400
-        elif not keysAvailable:
-            return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400
+        if not keysAvailable:
+           return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400
         elif not isvalidKey:
             return jsonify({'status':400, 'error':'please provide a valid answer key'}), 400
         else:
@@ -29,8 +27,17 @@ def answer_question(current_user_id, questionid):
             spaceCharacters = jsonvalues.absoluteSpaceCharacters(*spaceAsAnswer)
             if spaceCharacters:
                 return jsonify({'status':400, 'error':'The answer value can not be space characters'}), 400
+            elif not answerData['answer']:
+                return jsonify({'status':400, 'error':'Please provide an answer first'}), 400
             else:
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
+                if image_url == 'invalid extension':
+                    return jsonify(
+                        {
+                            "status":400, 
+                            "error": "Please provide an image with the following extensions, 'png', 'jpg', 'jpeg' or 'gif'"
+                        }
+                    ), 400
                 if not image_url:
                     return jsonify({"status":400, "error":"The file key doesn't exist"}), 400
                 newAnswer = answer.postAnAnswer(con_cur, current_user_id, questionid, answerData['answer'], image_url)
@@ -51,13 +58,11 @@ def editAnswer(current_user_id, answerid):
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
     if request.method == 'PUT':
         answerEditedData = request.form.to_dict()
-        dataAvailable = jsonvalues.emptyValues(**answerEditedData)
+        # dataAvailable = jsonvalues.emptyValues(**answerEditedData)
         keysAvailable = jsonvalues.jsonKeys(**answerEditedData)
         requiredKeys = ('answer',)
         isvalidKey = jsonvalues.validKeys(*requiredKeys, **answerEditedData)
-        if not dataAvailable:
-            return jsonify({'status':400, 'error':'Please provide values for your answer'}), 400
-        elif not keysAvailable:
+        if not keysAvailable:
             return jsonify({'status':400, 'error':'Please provide answer as a key'}), 400
         elif not isvalidKey:
             return jsonify({'status':400, 'error':'please provide a valid answer key'}), 400
@@ -67,29 +72,45 @@ def editAnswer(current_user_id, answerid):
             if spaceCharacters:
                 return jsonify({'status':400, 'error':'The answer value can not be space characters'}), 400
             else:
+                if not answerEditedData['answer']:
+                    return jsonify({'status':400, 'error':'Please provide values for your answer'}), 400
                 image_url = jsonvalues.upload_Image(request, 'image', {'png', 'jpg', 'jpeg', 'gif'}, current_app, current_app.config['UPLOAD_FOLDER'])
                 if not image_url:
                     return jsonify({"status":400, "error":"The file key doesn't exist"}), 400
-                editedAnswer = answer.editAnAnswer(con_cur, current_user_id, answerid, answerEditedData['answer'], image_url)
+                if image_url == 'invalid extension':
+                        return jsonify(
+                        {
+                            "status":400, 
+                            "error": "Please provide an image with the following extensions, 'png', 'jpg', 'jpeg' or 'gif'"
+                        }
+                    ), 400
+                editedAnswer = answer.editAnAnswer(con_cur, current_user_id, answerid, answerEditedData['answer'], image_url, current_app, current_app.config['UPLOAD_FOLDER'])
                 if type(editedAnswer) == str:
                     return jsonify({'status':403, 'error':editedAnswer}), 403
                 if not editedAnswer:
                     return jsonify({'status':404, 'error':'The answer you want to edit dosen\'t exist'}), 404
                 datetime_answer_editedAt = editedAnswer['timeanswered']
                 datetime_answer_editedAt_string = datetime_answer_editedAt.strftime('%B %d, %Y')
-                answerEdited = {'questionAnswered':editedAnswer['questionid'], 'answerEdited':editedAnswer['answer'], 'answerEditedAt':datetime_answer_editedAt_string, 'user':editedAnswer['userid']}
+                answerEdited = {'questionAnswered':editedAnswer['questionid'], 'answerEdited':editedAnswer['answer'], 'answerEditedAt':datetime_answer_editedAt_string, 'user':editedAnswer['userid'], 'editedimage':editedAnswer['answerimage']}
                 return jsonify({'status':200,'answeredited':answerEdited}), 200
 
 # An endpoint to delete an answer.
 @answers_blueprint.route('/answers/<int:answerid>', methods = ['DELETE'])
 @token_required
 def delete_answer(current_user_id, answerid):
+    print(current_user_id)
     con_cur = db.connectToDatabase(current_app.config['DATABASE_URI'])
-    answerDeleted = answer.deleteAnswer(con_cur, answerid, current_user_id)
+    answerDeleted = answer.deleteAnswer(
+        con_cur,
+        answerid,
+        current_user_id,
+        current_app.config['UPLOAD_FOLDER'],
+        current_app
+    )
     if answerDeleted == 'forbidden':
-        return jsonify({'status':403, 'error':'You can not delete other users\' answers'})
+        return jsonify({'status':403, 'error':'You can not delete other users\' answers'}), 403
     if answerDeleted == 'notfound':
         # 204 The server has successfully fulfilled the request and that there is no additional content to send in the response payload body.
         return jsonify({'status':404, 'error':'Sorry the answer you are trying to delete doesn\'t exist'}), 404
-    return jsonify({'status':204, 'message':'The answer has been successfully deleted'}), 204
+    return jsonify({'status':200, 'message':'The answer has been successfully deleted'}), 200
     

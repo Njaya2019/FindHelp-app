@@ -105,7 +105,7 @@ class TestEditQuetions():
     def test_question_posted(client, token):
         """ Test if a question has been successfully posted """
         TestEditQuetions.headers['x-access-token'] = token
-        response=client.post("/questions", headers = TestEditQuetions.headers, data=dict(title=TestEditQuetions.editedTitle, description=TestEditQuetions.editedDescription), content_type="multipart/form-data")
+        response=client.post("/questions", headers = TestEditQuetions.headers, data=dict(title=TestEditQuetions.editedTitle, description=TestEditQuetions.editedDescription, tags='{}'), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==201
         assert data["question"]["questionId"] == 2
@@ -117,7 +117,7 @@ class TestEditQuetions():
     def test_empty_values(client, token):
         """ Tests if user has submitted all required data """
         TestEditQuetions.headers['x-access-token'] = token
-        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(title="", description=""), content_type="multipart/form-data")
+        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(title="", description="", tags='{}'), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == 'Please provide values for title and description'
@@ -126,7 +126,7 @@ class TestEditQuetions():
     def test_missing_keys(client, token):
         """ Tests if any data key is missing """
         TestEditQuetions.headers['x-access-token'] = token
-        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(description=TestEditQuetions.editedDescription), content_type="multipart/form-data")
+        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(description=TestEditQuetions.editedDescription, tags='{}'), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == 'please provide a valid question title or description'
@@ -135,7 +135,7 @@ class TestEditQuetions():
     def test_valid_keys(client, token):
         """ Test if all required keys were submitted """
         TestEditQuetions.headers['x-access-token'] = token
-        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(questiontitle=TestEditQuetions.editedTitle, description=TestEditQuetions.editedDescription), content_type="multipart/form-data")
+        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(questiontitle=TestEditQuetions.editedTitle, description=TestEditQuetions.editedDescription, tags='{}'), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == 'please provide a valid question title or description'
@@ -153,7 +153,7 @@ class TestEditQuetions():
     def test_spaceCharacter_values(client, token):
         """ Test if any of data submitted is a space character """
         TestEditQuetions.headers['x-access-token'] = token
-        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(title="  ", description="  "), content_type="multipart/form-data")
+        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(title="  ", description="  ", tags='{}'), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==400
         assert data["error"] == 'The question\'s title and description values can not be space characters'
@@ -162,7 +162,7 @@ class TestEditQuetions():
     def test_EditedPost(client, token):
         """ Test if the question was edited and submitted succesfully"""
         TestEditQuetions.headers['x-access-token'] = token
-        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(title = 'I\'m having this error "name is not defined".', description = 'What might be the cause'), content_type="multipart/form-data")
+        response=client.put("/questions/1", headers = TestEditQuetions.headers, data=dict(title = 'I\'m having this error "name is not defined".', description = 'What might be the cause', tags='{}'), content_type="multipart/form-data")
         data=json.loads(response.data)
         assert response.status_code==200
         assert data["editedquestion"]['questionId'] == 1
