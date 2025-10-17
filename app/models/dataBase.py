@@ -1,6 +1,9 @@
 import psycopg2
 import os
 import psycopg2.extras as psyExtras
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 class db():
     # set DB_URL=dbname=userdb user=postgres host=localhost password=a1990n
@@ -16,8 +19,10 @@ class db():
         except KeyError:
             message = "Expected database environment variable '{}' not set.".format(db_parameters)
             print(message)
+            logging.debug(f"ERROR FROM CONNECTING TO DATABASE: {message}")
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
+            logging.debug(f"ERROR FROM CONNECTING TO DATABASE: {error}")
         else:
             cur = con.cursor(cursor_factory=psyExtras.DictCursor)
             return (con, cur)
@@ -52,12 +57,14 @@ class db():
             for table in tables:
                 cur.execute(table)
                 print('TABLE CREATED')
+                logging.debug("TABLE CREATED")
             # close communication with the PostgreSQL database server
             # cur.close()
             # commit the changes. Saves data to the database permanently.
             con.commit()
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
+            logging.debug(f"ERROR FROM CREATING TABLES: {error}")
         else:
             pass
         finally:
