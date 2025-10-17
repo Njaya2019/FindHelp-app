@@ -124,8 +124,8 @@ def signup():
                     ), 400
 
                 else:
-                    print(f"FROM ENV DB URL: {os.getenv('DATABASE_URL')}")
-                    print(f"FROM CONFIG DB URL: {current_app.config['DATABASE_URI']}")
+                    print(f"FROM ENV DB URL: -> {os.getenv('DATABASE_URL')}")
+                    print(f"FROM CONFIG DB URL: -> {current_app.config['DATABASE_URI']}")
                     displayUser = {}
                     displayUser.update(
                         {
