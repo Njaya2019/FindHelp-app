@@ -11,6 +11,7 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 from livereload import Server
 from flask_mail import Mail
+import os
 
 # Create .env file path.
 dotenv_path = join(dirname(__file__), '.env')
@@ -78,6 +79,8 @@ def index():
 #     print(url_for('prof_ile', username = 'Andrew Njaya'))
 
 if __name__ == "__main__":
+    print(f"FROM ENV DB URL: {os.getenv('DATABASE_URL')}")
+    print(f"FROM CONFIG DB URL: {app.config['DATABASE_URI']}")
     con_cur = db.connectToDatabase(app.config['DATABASE_URI'])
     db.createTables(con_cur)
     # db.dropTables()
