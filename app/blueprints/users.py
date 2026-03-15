@@ -66,7 +66,7 @@ def signup():
             return jsonify(
                 {
                     'status':400,
-                    'error':'password and confirmpassword do not match'
+                    'error':'password and confirm password do not match'
                 }
             ), 400
         else:
@@ -691,4 +691,8 @@ def show_user_status(current_user_id):
     else:
 
         return jsonify({'status': 400, 'report': report}), 400
-  
+
+
+@signin.route("/health")
+def health():
+    return jsonify({'status': "ok"}), 200
