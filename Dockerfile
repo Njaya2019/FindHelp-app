@@ -23,4 +23,11 @@ RUN pip install -r requirements.txt
 EXPOSE 10000
 
 # Run your Flask app
-CMD ["gunicorn", "run:app", "--bind", "0.0.0.0:10000"]
+# At the end
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Make it executable **inside the container**
+RUN chmod +x /app/entrypoint.sh
+
+CMD ["/app/entrypoint.sh"]
+# CMD ["gunicorn", "run:app", "--bind", "0.0.0.0:10000"]

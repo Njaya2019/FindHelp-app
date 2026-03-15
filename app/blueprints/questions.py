@@ -326,7 +326,7 @@ def all_questions_count_answers(current_user_id):
             new_question_dictionary_copy = new_question_dictionary.copy()
             all_questions_list.append(new_question_dictionary_copy)
         return jsonify({'status': 200, 'questions': all_questions_list}), 200
-    return jsonify({'status':404, 'error':'Sorry there are no questions yet'}), 404
+    return jsonify({'status':200, 'error':'Sorry there are no questions yet'}), 200
 
 # An endpoint to delete a question.
 @questions_blueprint.route('/questions/<int:questionid>', methods = ['DELETE'])

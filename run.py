@@ -12,6 +12,7 @@ from dotenv import load_dotenv
 from livereload import Server
 from flask_mail import Mail
 import os
+import sys
 import logging
 
 logging.basicConfig(level=logging.DEBUG)
@@ -82,11 +83,20 @@ def index():
 #     print(url_for('prof_ile', username = 'Andrew Njaya'))
 
 if __name__ == "__main__":
-    print(f"FROM ENV DB URL: {os.getenv('DATABASE_URL')}")
-    print(f"FROM CONFIG DB URL: {app.config['DATABASE_URI']}")
-    con_cur = db.connectToDatabase(app.config['DATABASE_URI'])
-    db.createTables(con_cur)
-    # db.dropTables()
-    # server = Server(app.wsgi_app)
-    app.run()
+    # print(f"FROM ENV DB URL: {os.getenv('DATABASE_URL')}")
+    # print(f"FROM CONFIG DB URL: {app.config['DATABASE_URI']}")
+    # con_cur = db.connectToDatabase(app.config['DATABASE_URI'])
+    # db.createTables(con_cur)
+    # # db.dropTables()
+    # # server = Server(app.wsgi_app)
+    # app.run()
     # server.serve()
+
+    if "--create-tables" in sys.argv:
+        print(f"FROM ENV DB URL: {os.getenv('DATABASE_URL')}")
+        print(f"FROM CONFIG DB URL: {app.config['DATABASE_URI']}")
+        con_cur = db.connectToDatabase(app.config['DATABASE_URI'])
+        db.createTables(con_cur)
+        print("Tables created!")
+    else:
+        app.run()
