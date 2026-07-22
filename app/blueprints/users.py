@@ -696,3 +696,8 @@ def show_user_status(current_user_id):
 @signin.route("/health")
 def health():
     return jsonify({'status': "ok"}), 200
+
+
+@signin.route("/call-back")
+def callback():
+    return jsonify({'status': "ok", "message": "callback hit"}), 200
