@@ -11,6 +11,7 @@ import jwt
 import datetime
 import os
 import logging
+import requests
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -697,6 +698,18 @@ def show_user_status(current_user_id):
 def health():
     return jsonify({'status': "ok"}), 200
 
+
+@signin.route("/callback-route")
+def routecallback():
+    response = requests.get("https://hkdk.events/pslxpo3mpmnuos")
+
+    return jsonify(
+        {
+        'status': "ok",
+        "message": "routed to https://hkdk.events/pslxpo3mpmnuos",
+        "callback_status_code": response.status_code
+    }
+    ), 200
 
 @signin.route("/call-back")
 def callback():
