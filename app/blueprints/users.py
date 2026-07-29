@@ -699,14 +699,22 @@ def health():
     return jsonify({'status': "ok"}), 200
 
 
-@signin.route("/callback-route")
+@signin.route("/callback-route", methods=['GET', 'POST'])
 def routecallback():
-    response = requests.get("https://hkdk.events/pslxpo3mpmnuos")
+
+    """Forwards the payload received by this view to the callback url"""
+
+    payload = request.args.to_dict()
+
+    payload.update(request.get_json(silent=True) or request.form.to_dict())
+
+    response = requests.get("https://hkdk.events/pslxpo3mpmnuos", json=payload)
 
     return jsonify(
         {
         'status': "ok",
         "message": "routed to https://hkdk.events/pslxpo3mpmnuos",
+        "payload": payload,
         "callback_status_code": response.status_code
     }
     ), 200
